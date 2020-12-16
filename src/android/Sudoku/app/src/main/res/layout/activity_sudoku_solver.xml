@@ -1,0 +1,127 @@
+<!--
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SudokuSolver">
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/GridLayout1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:orientation="horizontal"
+        tools:context=".GridXMLActivity" >
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <GridLayout
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/SudokuGridLayout"
+        android:layout_marginTop="25dp"
+        android:layout_width="405dp"
+        android:layout_height="405dp"
+        android:columnCount="9"
+        android:rowCount="9"
+        android:orientation="horizontal"
+        tools:context=".GridXMLActivity">
+    </GridLayout>
+    <GridLayout
+        android:layout_marginTop="25dp"
+        android:layout_width="405dp"
+        android:layout_height="45dp"
+        android:columnCount="9"
+        android:rowCount="1">
+        <Button
+            android:id="@+id/userButton1"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:text="1" />
+
+        <Button
+            android:id="@+id/userButton2"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:text="2" />
+        <Button
+            android:id="@+id/userButton3"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:text="3" />
+        <Button
+            android:id="@+id/userButton4"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:text="4" />
+        <Button
+            android:id="@+id/userButton5"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="4"
+            android:text="5" />
+        <Button
+            android:id="@+id/userButton6"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="5"
+            android:text="6" />
+        <Button
+            android:id="@+id/userButton7"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="6"
+            android:text="7" />
+        <Button
+            android:id="@+id/userButton8"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="7"
+            android:text="8" />
+        <Button
+            android:id="@+id/userButton9"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_row="0"
+            android:layout_column="8"
+            android:text="9" />
+    </GridLayout>
+    <LinearLayout
+        android:layout_marginTop="25dp"
+        android:layout_width="400dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Solve Sudoku"
+            android:orientation="horizontal" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="Revert"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+</LinearLayout>
