@@ -1,5 +1,9 @@
 package dgs_software.sudoku;
 
+import android.util.Pair;
+
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,9 +48,10 @@ public class Sudoku {
             for (int j = 0; j < field[i].length; j++) {
                 if (field[i][j].GetValue() == 0) {
                     boolean[] possibleNumbers = GetPossibleNumbers( i, j);
-                    for (int k = 0; k < possibleNumbers.length; k++) {
-                        if (possibleNumbers[k]) {
-                            field[i][j].SetValue(k + 1);
+                    Integer[] randomOrderIndices = CreateRandomOrderIndices(possibleNumbers.length);
+                    for (int k = 0; k < randomOrderIndices.length; k++) {
+                        if (possibleNumbers[randomOrderIndices[k]]) {
+                            field[i][j].SetValue(randomOrderIndices[k] + 1);
                             if (GetSolution()) {
                                 // Solution found -> Reach it back up
                                 return true;
@@ -107,7 +112,6 @@ public class Sudoku {
         return true;
     }
 
-
     // Returns true if there are no collisions between numbers in the Sudoku, false if there is any error
     protected boolean SudokuIsValid() {
         // Check rows for duplicate entries
@@ -162,5 +166,36 @@ public class Sudoku {
 
         // No errors found
         return true;
+    }
+
+    // Returns a list of <row,column> pairs that are in conflict with any other cell in the sudoku
+    protected LinkedList<Pair<Integer, Integer>> GetListOfWrongValues() {
+        LinkedList<Pair<Integer, Integer>> wrongCells = new LinkedList<Pair<Integer, Integer>>();
+        for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[i].length; j++) {
+                if (field[i][j].GetIsEmpty() == true) {
+                    continue;
+                }
+                boolean[] possibleNumbers = GetPossibleNumbers(i,j);
+                for (int k = 0; k < possibleNumbers.length; k++) {
+                    if (possibleNumbers[field[i][j].GetValue()-1] == false) { // The entered number is not possible
+                        wrongCells.add(new Pair<Integer, Integer>(i,j));
+                    }
+                }
+            }
+        }
+        return wrongCells;
+    }
+
+    // Creates an array of the given length with the indices from 0:length-1 in random order
+    private static Integer[] CreateRandomOrderIndices(int length) {
+        Integer[] indices = new Integer[length];
+        for (int i = 0; i < length; i++) {
+            indices[i] = i;
+        }
+        List list = Arrays.asList(indices);
+        Collections.shuffle(list);
+        list.toArray(indices);
+        return indices;
     }
 }

@@ -6,6 +6,7 @@ public class Cell {
     private int value = 0;
     private boolean isEmpty = true;
     private Button button;
+    private boolean isFixedValue = false;
 
     public int GetValue() {
         return this.value;
@@ -40,5 +41,13 @@ public class Cell {
 
     public void SetButton(Button button) {
         this.button = button;
+    }
+
+    public boolean GetIsFixedValue() {
+        return this.isFixedValue;
+    }
+
+    public void SetIsFixedValue(boolean isFixed) {
+        this.isFixedValue = isFixed;
     }
 }

@@ -5,38 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 
+import org.w3c.dom.Text;
+
+import java.util.Hashtable;
+import java.util.Set;
+
 public class SudokuSolver extends AppCompatActivity {
     public static final int
-            ACTIVE_COLOR_BACKGROUND = Color.parseColor("#FF7F50"),
+            ACTIVE_COLOR_BACKGROUND = Color.parseColor("#ffffcc"),
             ACTIVE_COLOR_FONT = Color.parseColor("#6495ED"),
             INACTIVE_COLOR_BACKGROUND = Color.parseColor("#FFFFFF"),
-            INACTIVE_COLOR_FONT = Color.parseColor("#000000");
+            INACTIVE_COLOR_FONT_FIXED = Color.parseColor("#000000"),
+            INACTIVE_COLOR_FONT_NONFIXED = Color.parseColor("#3CB371"),
+            INACTIVE_COLOR_FONT_EMPTY = Color.parseColor("#A9A9A9");
 
     private Cell activeCell = null;
-    private Sudoku sudoku;
-
-    public Cell GetActiveCell() {
-        return this.activeCell;
-    }
-
-    public void SetActiveCell(Cell cell) {
-        this.activeCell = activeCell;
-    }
-
-    public Sudoku GetSudoku() {
-        return this.sudoku;
-    }
-
-    public void SetSudoku(Sudoku sudoku) {
-        this.sudoku = sudoku;
-    }
+    private Sudoku sudokuModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,14 +39,23 @@ public class SudokuSolver extends AppCompatActivity {
         setContentView(R.layout.activity_sudoku_solver);
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
-        // Create a new Sudoku object with an all empty field
+        // CREATE SUDOKU MODEL
         Cell[][] field = new Cell[sudokuGrid.getRowCount()][sudokuGrid.getColumnCount()];
         for (int i = 0; i < sudokuGrid.getRowCount(); i++) {
             for (int j = 0; j < sudokuGrid.getColumnCount(); j++) {
                 field[i][j] = new Cell();
             }
         }
-        sudoku = new Sudoku(field);
+        sudokuModel = new Sudoku(field);
+
+        // SUDOKU GRID
+        ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        float screenWidth = displayMetrics.widthPixels; // Screen width in pixels
+        float sudokuGridPixelSize = 0.98f*screenWidth; // Sudoku grid shall fill the screen width
+        gridLayoutParams.height = (int) sudokuGridPixelSize;
+        gridLayoutParams.width = (int) sudokuGridPixelSize;
+        sudokuGrid.setLayoutParams(gridLayoutParams);
 
         for (int i = 0; i < sudokuGrid.getRowCount(); i++) {
             for (int j = 0; j < sudokuGrid.getColumnCount(); j++) {
@@ -59,7 +63,7 @@ public class SudokuSolver extends AppCompatActivity {
                 final int col = j;
 
                 Button button = new Button(getApplicationContext());
-                button.setText("1");
+                button.setText("");
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -67,43 +71,173 @@ public class SudokuSolver extends AppCompatActivity {
                     }
                 });
 
-                GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
-                layoutParams.height = CalcDPValue(44, getApplicationContext());
-                layoutParams.width = CalcDPValue(44, getApplicationContext());
 
-                layoutParams.setGravity(Gravity.CENTER); // Optional, if you want the text to be centered within the cell
-                sudokuGrid.addView(button, i * sudokuGrid.getColumnCount() + j, layoutParams);
-                sudoku.GetField()[i][j].SetButton(button);
+
+
+                int buttonSize = (int) (sudokuGridPixelSize/9.0f);
+                ViewGroup.LayoutParams buttonLayoutParams = new ViewGroup.LayoutParams(buttonSize, buttonSize);
+                sudokuGrid.addView(button, i * sudokuGrid.getColumnCount() + j, buttonLayoutParams);
+                sudokuModel.GetField()[i][j].SetButton(button);
+                //button.setBackgroundResource();
+                button.setText("");
             }
         }
-    }
 
-    // Returns the text of the given button as int
-    private static int GetButtonTextAsInteger(Button button) {
-        CharSequence sequence = button.getText();
-        final StringBuilder sb = new StringBuilder(sequence.length());
-        sb.append(sequence);
-        return Integer.parseInt(sb.toString());
+        // INPUTBUTTONS: Create and set OnClickedActions
+        Hashtable<String, Button> buttonDict = new Hashtable<String, Button>();
+        buttonDict.put("1",(Button) findViewById(R.id.userButton1));
+        buttonDict.put("2",(Button) findViewById(R.id.userButton2));
+        buttonDict.put("3",(Button) findViewById(R.id.userButton3));
+        buttonDict.put("4",(Button) findViewById(R.id.userButton4));
+        buttonDict.put("5",(Button) findViewById(R.id.userButton5));
+        buttonDict.put("6",(Button) findViewById(R.id.userButton6));
+        buttonDict.put("7",(Button) findViewById(R.id.userButton7));
+        buttonDict.put("8",(Button) findViewById(R.id.userButton8));
+        buttonDict.put("9",(Button) findViewById(R.id.userButton9));
+        Set<String> keys = buttonDict.keySet();
+        for (final String key: keys) {
+            Button button = buttonDict.get(key);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    InputButtonClickedAction(Integer.parseInt(key));
+                }
+            });
+
+            int buttonSize = (int) (screenWidth/((float) keys.size()));
+            ViewGroup.LayoutParams buttonLayoutParams = button.getLayoutParams();
+            buttonLayoutParams.width = buttonSize;
+            //buttonLayoutParams.height = buttonSize;
+        }
+
+        // SOLVE SUDOKU BUTTON
+        Button solveSudokuButton = (Button) findViewById(R.id.solveSudokuButton);
+        solveSudokuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SolveSudokuButonClicked();
+            }
+        });
+
+        // CLEAR CELL BUTTON
+        Button clearCellButton = (Button) findViewById(R.id.clearCellButton);
+        clearCellButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ClearCellButtonClicked();
+            }
+        });
+
+        // RESET SOLUTION BUTTON
+        Button resetSolutionButton = (Button) findViewById(R.id.resetSolutionButton);
+        resetSolutionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResetSolutionButtonClicked();
+            }
+        });
+
+        RefreshUI();
     }
 
     public void SudokuButtonClickedAction(int row, int col) {
-        int cellValue = GetButtonTextAsInteger(sudoku.GetField()[row][col].GetButton());
+        /*int cellValue = GetButtonTextAsInteger(sudoku.GetField()[row][col].GetButton());
         String newText = Integer.toString(++cellValue);
         sudoku.GetField()[row][col].GetButton().setText(newText);
         sudoku.GetField()[row][col].GetButton().setText(newText);
         sudoku.GetField()[row][col].GetButton().setBackgroundColor(ACTIVE_COLOR_BACKGROUND);
         sudoku.GetField()[row][col].GetButton().setTextColor(ACTIVE_COLOR_FONT);
-        sudoku.GetField()[row][col].GetButton().setTypeface(null, Typeface.BOLD);
+        sudoku.GetField()[row][col].GetButton().setTypeface(null, Typeface.BOLD);*/
+        if (sudokuModel.GetField() == null || sudokuModel.GetField()[row][col] == null) {
+            return;
+        }
+        if (activeCell != null && sudokuModel.GetField()[row][col].equals(activeCell)) {
+            activeCell = null;
+        } else {
+            activeCell = sudokuModel.GetField()[row][col];
+        }
+
+        RefreshUI();
     }
 
-    private static int CalcDPValue(int value, Context context) {
-        return (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                value,
-                context.getResources().getDisplayMetrics());
+    public void InputButtonClickedAction(int number) {
+        DeleteNonFixedValues();
+        if (activeCell != null) {
+            int row = 0, col = 0;
+            for (int i = 0; i < sudokuModel.GetField().length; i++) {
+                for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
+                    if (sudokuModel.GetField()[i][j].equals(activeCell)) {
+                        row = i;
+                        col = j;
+                        break;
+                    }
+                }
+            }
+
+            sudokuModel.GetField()[row][col].SetValue(number);
+            sudokuModel.GetField()[row][col].SetIsFixedValue(true);
+        }
+        RefreshUI();
     }
 
+    public void SolveSudokuButonClicked() {
+        sudokuModel.GetSolution();
+        RefreshUI();
+    }
+
+    public void ClearCellButtonClicked() {
+        if (activeCell != null) {
+            activeCell.SetValue(0);
+            activeCell.SetIsFixedValue(false);
+        }
+        RefreshUI();
+    }
+
+    public void ResetSolutionButtonClicked() {
+        DeleteNonFixedValues();
+        RefreshUI();
+    }
+
+    private void DeleteNonFixedValues() {
+        for (int i = 0; i < sudokuModel.GetField().length; i++) {
+            for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
+                if (sudokuModel.GetField()[i][j].GetIsFixedValue() == false) {
+                    sudokuModel.GetField()[i][j].SetValue(0);
+                }
+            }
+        }
+    }
+
+    // Sets all values of the User Interface according to the model of the sudoku
     private void RefreshUI() {
+        for (int i = 0; i < sudokuModel.GetField().length; i++) {
+            for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
+                Button button = sudokuModel.GetField()[i][j].GetButton();
 
+                if (sudokuModel.GetField()[i][j].GetIsEmpty()) {
+                    button.setText(" ");
+                    button.setTextColor(INACTIVE_COLOR_FONT_EMPTY);
+                } else {
+                    button.setText(Integer.toString(sudokuModel.GetField()[i][j].GetValue()));
+                }
+                button.setBackgroundColor(INACTIVE_COLOR_BACKGROUND);
+
+                if (sudokuModel.GetField()[i][j].GetIsFixedValue()) {
+                    button.setTextColor(INACTIVE_COLOR_FONT_FIXED);
+                } else if (sudokuModel.GetField()[i][j].GetIsEmpty()) { // TODO: DELETE CASE
+                    button.setTextColor(INACTIVE_COLOR_FONT_EMPTY);
+                } else {
+                    button.setTextColor(INACTIVE_COLOR_FONT_NONFIXED);
+                }
+
+                Drawable buttonDrawable = getApplicationContext().getResources().getDrawable(R.drawable.sudoku_grid_button);
+                button.setBackground(buttonDrawable);
+            }
+        }
+        if (activeCell != null) {
+            Button button = activeCell.GetButton();
+            button.setBackgroundColor(ACTIVE_COLOR_BACKGROUND);
+            button.setTextColor(ACTIVE_COLOR_FONT);
+        }
     }
 }

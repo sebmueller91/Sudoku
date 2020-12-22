@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button playSudokuButton = (Button) findViewById(R.id.PlaySudokuButton);
-        Button solveSudokuButton = (Button) findViewById(R.id.SolveSudokuButton);
+        Button solveSudokuButton = (Button) findViewById(R.id.solveSudokuButton);
 
         solveSudokuButton.setOnClickListener(new View.OnClickListener() {
             @Override
