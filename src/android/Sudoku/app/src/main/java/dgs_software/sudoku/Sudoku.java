@@ -19,7 +19,30 @@ public class Sudoku {
     }
 
     public Sudoku(Difficulty difficulty) {
-        // TODO
+        if (difficulty == difficulty.EASY) {
+            // TODO: Read easySudokus.xml and choose a random sudoku from file
+
+        }
+        int[][] sudokuInt = new int[][] {new int[] {6,0,0,8,9,3,0,0,0},
+                new int[] {2,0,0,0,0,0,0,8,5},
+                new int[] {3,0,0,0,0,0,0,0,9},
+                new int[] {0,0,9,7,5,1,0,3,6},
+                new int[] {0,0,8,0,6,0,0,1,0},
+                new int[] {0,0,1,0,2,0,0,7,0},
+                new int[] {0,5,0,0,0,0,7,0,0},
+                new int[] {0,7,0,0,0,9,4,2,3},
+                new int[] {0,4,0,1,7,2,0,5,0},};
+
+        Cell[][] sudokuCell = new Cell[9][9];
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                sudokuCell[i][j] = new Cell();
+                sudokuCell[i][j].SetValue(sudokuInt[i][j]);
+                sudokuCell[i][j].SetIsFixedValue(true);
+            }
+        }
+
+        this.field = sudokuCell;
     }
 
     public Cell[][] GetField() {

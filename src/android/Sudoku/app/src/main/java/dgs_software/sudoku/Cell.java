@@ -13,6 +13,10 @@ public class Cell {
     }
 
     public void SetValue(int value) {
+        if (value == this.value) {
+            return;
+        }
+
         if (value == 0) {
             this.value = value;
             this.isEmpty = true;
