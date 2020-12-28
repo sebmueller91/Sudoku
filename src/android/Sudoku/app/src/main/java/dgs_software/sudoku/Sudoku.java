@@ -1,5 +1,11 @@
 package dgs_software.sudoku;
+import android.content.Context;
+import android.os.Build;
 
+import androidx.annotation.RequiresApi;
+
+import java.io.IOException;
+import java.io.InputStream;
 import android.util.Pair;
 
 import java.util.Arrays;
@@ -18,31 +24,35 @@ public class Sudoku {
         this.field = field;
     }
 
-    public Sudoku(Difficulty difficulty) {
-        if (difficulty == difficulty.EASY) {
-            // TODO: Read easySudokus.xml and choose a random sudoku from file
-
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public Sudoku(Difficulty difficulty, Context context) {
+        InputStream fileStream = null;
+        switch (difficulty) {
+            case EASY:
+                fileStream = context.getResources().openRawResource(R.raw.sudokus_easy);
+                break;
+            case NORMAL:
+                fileStream = context.getResources().openRawResource(R.raw.sudokus_normal);
+                break;
+            case HARD:
+                fileStream = context.getResources().openRawResource(R.raw.sudokus_hard);
+                break;
         }
-        int[][] sudokuInt = new int[][] {new int[] {6,0,0,8,9,3,0,0,0},
-                new int[] {2,0,0,0,0,0,0,8,5},
-                new int[] {3,0,0,0,0,0,0,0,9},
-                new int[] {0,0,9,7,5,1,0,3,6},
-                new int[] {0,0,8,0,6,0,0,1,0},
-                new int[] {0,0,1,0,2,0,0,7,0},
-                new int[] {0,5,0,0,0,0,7,0,0},
-                new int[] {0,7,0,0,0,9,4,2,3},
-                new int[] {0,4,0,1,7,2,0,5,0},};
-
-        Cell[][] sudokuCell = new Cell[9][9];
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                sudokuCell[i][j] = new Cell();
-                sudokuCell[i][j].SetValue(sudokuInt[i][j]);
-                sudokuCell[i][j].SetIsFixedValue(true);
-            }
+        String fileContent = "";
+        try {
+            fileContent = Utils.InputStreamToString(fileStream);
+        } catch (IOException e) {
+            System.err.println("IOException when reading sudoku file: " + e.getMessage());
+            e.printStackTrace();
+            return;
         }
+        LinkedList<int[][]> sudokuList = Utils.FileContentToSudokuList(fileContent);
 
-        this.field = sudokuCell;
+        // Choose a random sudoku from the list and set it as sudoku attribute
+        double numberSudokus = (double) sudokuList.size();
+        int randomIndex = (int) (Math.random()*numberSudokus);
+        int[][] sudoku = sudokuList.get(randomIndex);
+        this.field = Utils.IntToCellArray(sudoku, true);
     }
 
     public Cell[][] GetField() {

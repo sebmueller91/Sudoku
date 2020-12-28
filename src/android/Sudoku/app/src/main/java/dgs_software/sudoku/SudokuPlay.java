@@ -2,6 +2,7 @@ package dgs_software.sudoku;
 
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Hashtable;
@@ -27,6 +29,7 @@ public class SudokuPlay extends AppCompatActivity {
     private Cell activeCell = null;
     private Sudoku sudokuModel;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +37,7 @@ public class SudokuPlay extends AppCompatActivity {
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
         // CREATE SUDOKU MODEL
-        sudokuModel = new Sudoku(Sudoku.Difficulty.EASY);
+        sudokuModel = new Sudoku(Sudoku.Difficulty.EASY, getApplicationContext());
 
         // SUDOKU GRID
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
@@ -58,9 +61,6 @@ public class SudokuPlay extends AppCompatActivity {
                         SudokuButtonClickedAction(row, col);
                     }
                 });
-
-
-
 
                 int buttonSize = (int) (sudokuGridPixelSize/9.0f);
                 ViewGroup.LayoutParams buttonLayoutParams = new ViewGroup.LayoutParams(buttonSize, buttonSize);

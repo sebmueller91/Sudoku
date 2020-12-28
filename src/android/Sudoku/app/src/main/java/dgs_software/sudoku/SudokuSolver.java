@@ -43,7 +43,7 @@ public class SudokuSolver extends AppCompatActivity {
         Cell[][] field = new Cell[sudokuGrid.getRowCount()][sudokuGrid.getColumnCount()];
         for (int i = 0; i < sudokuGrid.getRowCount(); i++) {
             for (int j = 0; j < sudokuGrid.getColumnCount(); j++) {
-                field[i][j] = new Cell();
+                field[i][j] = new Cell(0);
             }
         }
         sudokuModel = new Sudoku(field);

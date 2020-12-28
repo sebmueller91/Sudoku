@@ -8,6 +8,10 @@ public class Cell {
     private Button button;
     private boolean isFixedValue = false;
 
+    public Cell(int value) {
+        SetValue(value);
+    }
+
     public int GetValue() {
         return this.value;
     }
