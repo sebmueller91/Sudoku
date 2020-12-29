@@ -42,6 +42,7 @@ public class Utils {
             }
             sudokuList.add(sudoku);
         }
+
         return sudokuList;
     }
 

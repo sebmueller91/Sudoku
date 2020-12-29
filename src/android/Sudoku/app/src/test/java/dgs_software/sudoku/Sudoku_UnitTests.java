@@ -1,13 +1,11 @@
 package dgs_software.sudoku;
 
 import org.junit.Test;
-
 import java.util.Arrays;
-
 import static org.junit.Assert.assertEquals;
 
 
-class Sudoku_UnitTests {
+public class Sudoku_UnitTests {
 	// Empty
 	private int[][] sudoku1 = new int[][] {new int[] {0,0,0,0,0,0,0,0,0}, 
 		   								   new int[] {0,0,0,0,0,0,0,0,0},
@@ -127,42 +125,42 @@ class Sudoku_UnitTests {
 	// GetPossibleNumbersForCell		   						      
 	//*********************************************************************************************
 	@Test
-	void GetSolution_Solvable1() {
+	public void GetSolution_Solvable1() {
 	    sudoku = CreateSudokuFromInts(sudoku1);
 		boolean result = sudoku.GetSolution();
 		assertEquals(result, true);			
 	}			   						
 			   						
 	@Test
-	void GetSolution_Solvable2() {
+	public void GetSolution_Solvable2() {
         sudoku = CreateSudokuFromInts(sudoku7);
         boolean result = sudoku.GetSolution();
 		assertEquals(result, true);			
 	}	
 	
 	@Test
-	void GetSolution_Solvable3() {
+	public void GetSolution_Solvable3() {
         sudoku = CreateSudokuFromInts(sudoku8);
         boolean result = sudoku.GetSolution();
 		assertEquals(result, true);			
 	}			
 	
 	@Test
-	void GetSolution_Solvable4() {
+	public void GetSolution_Solvable4() {
         sudoku = CreateSudokuFromInts(sudoku9);
         boolean result = sudoku.GetSolution();
 		assertEquals(result, true);			
 	}		
 	
 	@Test
-	void GetSolution_Solvable5() {
+	public void GetSolution_Solvable5() {
         sudoku = CreateSudokuFromInts(sudoku10);
         boolean result = sudoku.GetSolution();
 		assertEquals(result, true);			
 	}		
 	
 	@Test
-	void GetSolution_NonSolvable() {
+	public void GetSolution_NonSolvable() {
         sudoku = CreateSudokuFromInts(sudoku11);
         boolean result = sudoku.GetSolution();
         assertEquals(result, false);
@@ -173,14 +171,14 @@ class Sudoku_UnitTests {
 	// GetPossibleNumbersForCell		   						      
 	//*********************************************************************************************			   						       
 	@Test
-	void GetPossibleNumbersForCell_EmptySudoku() {
+	public void GetPossibleNumbersForCell_EmptySudoku() {
         sudoku = CreateSudokuFromInts(sudoku1);
 		boolean[] result = sudoku.GetPossibleNumbers(2,2);
 		assertEquals(Arrays.equals(result, new boolean[] {true,true,true,true,true,true,true,true,true}), true);			
 	}
 	
 	@Test
-	void GetPossibleNumbersForCell_RegularTest() {
+	public void GetPossibleNumbersForCell_RegularTest() {
         sudoku = CreateSudokuFromInts(sudoku2);
 		boolean[] result = sudoku.GetPossibleNumbers(2,2);
 		assertEquals(Arrays.equals(result, new boolean[] {true,true,false,false,true,true,false,true,true}), true);			
@@ -192,42 +190,42 @@ class Sudoku_UnitTests {
 	// SudokuContainsNoErrors		   						      
 	//*********************************************************************************************		
 	@Test
-	void SudokuContainsNoErrors_NoErrorEmpty() {
+	public void SudokuContainsNoErrors_NoErrorEmpty() {
         sudoku = CreateSudokuFromInts(sudoku1);
 		boolean result = sudoku.SudokuIsValid();
 		assertEquals(result, true);			
 	}
 	
 	@Test
-	void SudokuContainsNoErrors_NoErrorFilled() {
+	public void SudokuContainsNoErrors_NoErrorFilled() {
         sudoku = CreateSudokuFromInts(sudoku2);
 		boolean result = sudoku.SudokuIsValid();
 		assertEquals(result, true);			
 	}
 	
 	@Test
-	void SudokuContainsNoErrors_RowError() {
+	public void SudokuContainsNoErrors_RowError() {
         sudoku = CreateSudokuFromInts(sudoku3);
 		boolean result = sudoku.SudokuIsValid();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	void SudokuContainsNoErrors_ColumnError() {
+	public void SudokuContainsNoErrors_ColumnError() {
         sudoku = CreateSudokuFromInts(sudoku4);
 		boolean result = sudoku.SudokuIsValid();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	void SudokuContainsNoErrors_BoxError() {
+	public void SudokuContainsNoErrors_BoxError() {
         sudoku = CreateSudokuFromInts(sudoku5);
 		boolean result = sudoku.SudokuIsValid();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	void SudokuContainsNoErrors_Solved() {
+	public void SudokuContainsNoErrors_Solved() {
         sudoku = CreateSudokuFromInts(sudoku6);
 		boolean result = sudoku.SudokuIsValid();
 		assertEquals(result, true);			
@@ -238,21 +236,21 @@ class Sudoku_UnitTests {
 	// SudokuIsCompletelyFilled 						      
 	//*********************************************************************************************		
 	@Test
-	void SudokuIsCompletelyFilled_False_Empty() {
+	public void SudokuIsCompletelyFilled_False_Empty() {
         sudoku = CreateSudokuFromInts(sudoku1);
 		boolean result = sudoku.SudokuIsCompletelyFilled();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	void SudokuIsCompletelyFilled_False_PatrtiallyFilled() {
+	public void SudokuIsCompletelyFilled_False_PatrtiallyFilled() {
         sudoku = CreateSudokuFromInts(sudoku5);
 		boolean result = sudoku.SudokuIsCompletelyFilled();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	void SudokuIsCompletelyFilled_False_Solved() {
+	public void SudokuIsCompletelyFilled_False_Solved() {
         sudoku = CreateSudokuFromInts(sudoku6);
 		boolean result = sudoku.SudokuIsCompletelyFilled();
 		assertEquals(result, true);			
@@ -263,8 +261,7 @@ class Sudoku_UnitTests {
 	    Cell[][] cellArray = new Cell[field.length][field.length];
 	    for (int i = 0; i < field.length; i++) {
 	        for (int j = 0; j < field.length; j++) {
-	            cellArray[i][j] = new Cell();
-                cellArray[i][j].SetValue(field[i][j]);
+	            cellArray[i][j] = new Cell(field[i][j]);
             }
         }
 	    return new Sudoku(cellArray);

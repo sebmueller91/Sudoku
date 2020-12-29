@@ -1,11 +1,13 @@
 package dgs_software.sudoku;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -29,6 +31,16 @@ public class SudokuPlay extends AppCompatActivity {
     private Cell activeCell = null;
     private Sudoku sudokuModel;
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +49,19 @@ public class SudokuPlay extends AppCompatActivity {
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
         // CREATE SUDOKU MODEL
-        sudokuModel = new Sudoku(Sudoku.Difficulty.EASY, getApplicationContext());
+        Bundle b = getIntent().getExtras();
+        int value = -1; // or other values
+        if(b != null)
+            value = b.getInt("difficulty");
+        Sudoku.Difficulty difficulty = null;
+        if (value == 1) {
+            difficulty = Sudoku.Difficulty.EASY;
+        } else if (value == 2) {
+            difficulty = Sudoku.Difficulty.NORMAL;
+        } else {
+            difficulty = Sudoku.Difficulty.HARD;
+        }
+        sudokuModel = new Sudoku(difficulty, getApplicationContext());
 
         // SUDOKU GRID
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
