@@ -1,0 +1,2 @@
+cd %JAVA_HOME%\bin
+keytool.exe -genkeypair -alias dgs_software -keyalg RSA -keysize 2048 -validity 20000 -storetype pkcs12 -keystore "C:\dgs_software_certificate.p12" -storepass
