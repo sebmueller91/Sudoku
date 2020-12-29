@@ -24,3 +24,15 @@ steps:
     PathtoPublish: 'src/android/Sudoku/app/build'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/TEST-*.xml'
+
+- task: AndroidSigning@3
+  inputs:
+    apkFiles: '**/*.apk'
+    apksignerKeystoreFile: 'dgs_software_certificate.p12'
+    apksignerKeystorePassword: '$(CodeSigningPassword)'
+    apksignerKeystoreAlias: 'dgs_software'
