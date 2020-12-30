@@ -21,7 +21,6 @@ steps:
     publishJUnitResults: false
     testResultsFiles: '**/TEST-*.xml'
     tasks: 'assembleRelease'
-    
 - task: Gradle@2
   displayName: Run Tests
   inputs:
@@ -37,24 +36,6 @@ steps:
   inputs:
     testResultsFormat: 'JUnit'
     testResultsFiles: '**/TEST-*.xml'
-    
-- task: AndroidSigning@3
-  displayName: Sign APKs
-  inputs:
-    apkFiles: '**/*.apk'
-    apksign: true
-    apksignerKeystoreFile: 'dgs_software_certificate.p12'
-    apksignerKeystorePassword: '$(CodeSigningPassword)'
-    apksignerKeystoreAlias: 'dgs_software'
-
-- task: PowerShell@2
-  displayName: Rename APKs
-  inputs:
-    targetType: 'inline'
-    script: |
-      Get-ChildItem "$($ProjectToBuild)" -Recurse | 
-          Where {$_.Name -Match '-unsigned.apk'} | 
-          Rename-Item -NewName {$_.name -replace '-unsigned','' } 
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifacts
