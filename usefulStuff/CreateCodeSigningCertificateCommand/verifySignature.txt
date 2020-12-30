@@ -1,0 +1,1 @@
+C:\ProgramData\AndroidSDKs\build-tools\30.0.2>apksigner.bat verify --print-certs <file>
