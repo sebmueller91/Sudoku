@@ -5,6 +5,12 @@
 
 name: $(BuildDefinitionName)_$(Date:yyyyMMdd)
 
+trigger: none
+
+variables:
+- name: ProjectToBuild
+  value: src/android/Sudoku/
+
 pool:
   vmImage: 'windows-latest'
 
