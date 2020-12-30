@@ -8,8 +8,6 @@ name: $(BuildDefinitionName)_$(Date:yyyyMMdd)
 trigger:
 - main
 
-trigger: none
-
 variables:
 - name: ProjectToBuild
   value: src/android/Sudoku/
