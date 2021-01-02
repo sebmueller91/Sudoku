@@ -1,7 +1,11 @@
-package dgs_software.sudoku;
+package dgs_software.sudoku.model;
 
 import org.junit.Test;
 import java.util.Arrays;
+
+import dgs_software.sudoku.model.Cell;
+import dgs_software.sudoku.model.Sudoku;
+
 import static org.junit.Assert.assertEquals;
 
 

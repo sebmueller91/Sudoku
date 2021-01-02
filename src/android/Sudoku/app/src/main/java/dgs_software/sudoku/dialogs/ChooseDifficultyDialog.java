@@ -1,21 +1,23 @@
-package dgs_software.sudoku;
+package dgs_software.sudoku.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 
-public class DialogChooseDifficulty extends Dialog {
+import dgs_software.sudoku.R;
+import dgs_software.sudoku.activities.SudokuPlayActivity;
+
+public class ChooseDifficultyDialog extends Dialog {
 
     public Activity c;
     public Dialog d;
     public Button yes, no;
 
-    public DialogChooseDifficulty(Activity a) {
+    public ChooseDifficultyDialog(Activity a) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
@@ -32,7 +34,7 @@ public class DialogChooseDifficulty extends Dialog {
         easyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SudokuPlay.class);
+                Intent intent = new Intent(v.getContext(), SudokuPlayActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("difficulty",1);
                 intent.putExtras(bundle);
@@ -42,7 +44,7 @@ public class DialogChooseDifficulty extends Dialog {
         normalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SudokuPlay.class);
+                Intent intent = new Intent(v.getContext(), SudokuPlayActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("difficulty",2);
                 intent.putExtras(bundle);
@@ -53,17 +55,12 @@ public class DialogChooseDifficulty extends Dialog {
         hardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), SudokuPlay.class);
+                Intent intent = new Intent(v.getContext(), SudokuPlayActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("difficulty",3);
                 intent.putExtras(bundle);
                 c.startActivity(intent);
             }
         });
-//        yes = (Button) findViewById(R.id.btn_yes);
-//        no = (Button) findViewById(R.id.btn_no);
-//        yes.setOnClickListener(this);
-//        no.setOnClickListener(this);
-
     }
 }

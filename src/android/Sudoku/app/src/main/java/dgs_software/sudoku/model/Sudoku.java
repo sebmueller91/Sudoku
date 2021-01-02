@@ -1,4 +1,4 @@
-package dgs_software.sudoku;
+package dgs_software.sudoku.model;
 import android.content.Context;
 import android.os.Build;
 
@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+
+import dgs_software.sudoku.R;
+import dgs_software.sudoku.utils.Utils;
 
 public class Sudoku {
     public enum Difficulty {
@@ -134,7 +137,7 @@ public class Sudoku {
     }
 
     // Returns true if all cells of the field are containing a number, false otherwise (if any cell is empty)
-    protected boolean SudokuIsCompletelyFilled() {
+    public boolean SudokuIsCompletelyFilled() {
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
                 if (field[i][j].GetValue() == 0) {
@@ -146,7 +149,7 @@ public class Sudoku {
     }
 
     // Returns true if there are no collisions between numbers in the Sudoku, false if there is any error
-    protected boolean SudokuIsValid() {
+    public boolean SudokuIsValid() {
         // Check rows for duplicate entries
         for (int i = 0; i < 9; i++) {
             boolean[] numbers = new boolean[9];
@@ -202,7 +205,7 @@ public class Sudoku {
     }
 
     // Returns a list of <row,column> pairs that are in conflict with any other cell in the sudoku
-    protected LinkedList<Pair<Integer, Integer>> GetListOfWrongValues() {
+    public LinkedList<Pair<Integer, Integer>> GetListOfWrongValues() {
         LinkedList<Pair<Integer, Integer>> wrongCells = new LinkedList<Pair<Integer, Integer>>();
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {

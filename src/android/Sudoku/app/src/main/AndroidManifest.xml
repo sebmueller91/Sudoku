@@ -10,14 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SudokuSolver"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.SudokuSolverActivity"
+            android:parentActivityName=".activities.MainMenuActivity">
         </activity>
         <activity
-            android:name=".SudokuPlay"
-            android:parentActivityName=".MainActivity">
+            android:name=".activities.SudokuPlayActivity"
+            android:parentActivityName=".activities.MainMenuActivity">
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainMenuActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -1,9 +1,8 @@
-package dgs_software.sudoku;
+package dgs_software.sudoku.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -13,55 +12,51 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Hashtable;
 import java.util.Set;
 
-public class SudokuPlay extends AppCompatActivity {
+import dgs_software.sudoku.R;
+import dgs_software.sudoku.model.Cell;
+import dgs_software.sudoku.model.Sudoku;
+
+public abstract class SudokuBaseActivity extends AppCompatActivity {
     public static final int
             ACTIVE_COLOR_BACKGROUND = Color.parseColor("#ffffcc"),
             ACTIVE_COLOR_FONT = Color.parseColor("#6495ED"),
             INACTIVE_COLOR_BACKGROUND = Color.parseColor("#FFFFFF"),
             INACTIVE_COLOR_FONT_FIXED = Color.parseColor("#000000"),
             INACTIVE_COLOR_FONT_NONFIXED = Color.parseColor("#3CB371"),
-            INACTIVE_COLOR_FONT_EMPTY = Color.parseColor("#A9A9A9");
+            INACTIVE_COLOR_FONT_EMPTY = Color.parseColor("#A9A9A9"); // TODO: Move to ressource file
 
-    private Cell activeCell = null;
-    private Sudoku sudokuModel;
+    protected Cell activeCell = null;
+    protected Sudoku sudokuModel;
 
+    protected abstract void SetContentView();
+    protected abstract Sudoku CreateSudokuModel();
+    protected abstract void InstantiateButtons();
+    public abstract void SudokuButtonClickedAction(int row, int col);
+    public abstract void InputButtonClickedAction(int number);
+
+    // When back key pressed -> Return to main menu instead of dialogs
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
             startActivity(intent);
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sudoku_play);
+        SetContentView();
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
         // CREATE SUDOKU MODEL
-        Bundle b = getIntent().getExtras();
-        int value = -1; // or other values
-        if(b != null)
-            value = b.getInt("difficulty");
-        Sudoku.Difficulty difficulty = null;
-        if (value == 1) {
-            difficulty = Sudoku.Difficulty.EASY;
-        } else if (value == 2) {
-            difficulty = Sudoku.Difficulty.NORMAL;
-        } else {
-            difficulty = Sudoku.Difficulty.HARD;
-        }
-        sudokuModel = new Sudoku(difficulty, getApplicationContext());
+        sudokuModel = CreateSudokuModel();
 
         // SUDOKU GRID
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
@@ -123,107 +118,13 @@ public class SudokuPlay extends AppCompatActivity {
             //buttonLayoutParams.height = buttonSize;
         }
 
-        // SOLVE SUDOKU BUTTON
-        Button displayErrorsButton = (Button) findViewById(R.id.displayErrorsButton);
-        displayErrorsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DisplayErrorsButtonClicked();
-            }
-        });
-
-        // CLEAR CELL BUTTON
-        Button clearCellButton = (Button) findViewById(R.id.clearCellButton);
-        clearCellButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ClearCellButtonClicked();
-            }
-        });
-
-        // RESET SOLUTION BUTTON
-        Button checkSolutionButton = (Button) findViewById(R.id.checkSolutionButton);
-        checkSolutionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkSolutionButtonClicked();
-            }
-        });
+        InstantiateButtons();
 
         RefreshUI();
-    }
-
-    public void SudokuButtonClickedAction(int row, int col) {
-        /*int cellValue = GetButtonTextAsInteger(sudoku.GetField()[row][col].GetButton());
-        String newText = Integer.toString(++cellValue);
-        sudoku.GetField()[row][col].GetButton().setText(newText);
-        sudoku.GetField()[row][col].GetButton().setText(newText);
-        sudoku.GetField()[row][col].GetButton().setBackgroundColor(ACTIVE_COLOR_BACKGROUND);
-        sudoku.GetField()[row][col].GetButton().setTextColor(ACTIVE_COLOR_FONT);
-        sudoku.GetField()[row][col].GetButton().setTypeface(null, Typeface.BOLD);*/
-        if (sudokuModel.GetField() == null || sudokuModel.GetField()[row][col] == null) {
-            return;
-        }
-        if (activeCell != null && sudokuModel.GetField()[row][col].equals(activeCell)) {
-            activeCell = null;
-        } else {
-            activeCell = sudokuModel.GetField()[row][col];
-        }
-
-        RefreshUI();
-    }
-
-    public void InputButtonClickedAction(int number) {
-        if (activeCell != null) {
-            int row = 0, col = 0;
-            for (int i = 0; i < sudokuModel.GetField().length; i++) {
-                for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
-                    if (sudokuModel.GetField()[i][j].equals(activeCell)) {
-                        row = i;
-                        col = j;
-                        break;
-                    }
-                }
-            }
-
-            sudokuModel.GetField()[row][col].SetValue(number);
-            sudokuModel.GetField()[row][col].SetIsFixedValue(false);
-        }
-        RefreshUI();
-    }
-
-    public void DisplayErrorsButtonClicked() {
-        //TODO
-    }
-
-    public void ClearCellButtonClicked() {
-        if (activeCell != null) {
-            activeCell.SetValue(0);
-            activeCell.SetIsFixedValue(false);
-        }
-        RefreshUI();
-    }
-
-    public void checkSolutionButtonClicked() {
-        if (sudokuModel.SudokuIsValid() && sudokuModel.SudokuIsCompletelyFilled()) {
-            // TODO: Dialog: Du hast gewonnen!
-        } else {
-            // TODO: Dialog: Du hast Verloren!
-        }
-    }
-
-    private void DeleteNonFixedValues() {
-        for (int i = 0; i < sudokuModel.GetField().length; i++) {
-            for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
-                if (sudokuModel.GetField()[i][j].GetIsFixedValue() == false) {
-                    sudokuModel.GetField()[i][j].SetValue(0);
-                }
-            }
-        }
     }
 
     // Sets all values of the User Interface according to the model of the sudoku
-    private void RefreshUI() {
+    protected void RefreshUI() {
         for (int i = 0; i < sudokuModel.GetField().length; i++) {
             for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
                 Button button = sudokuModel.GetField()[i][j].GetButton();
