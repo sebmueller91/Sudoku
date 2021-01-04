@@ -1,4 +1,5 @@
 package dgs_software.sudoku.model;
+
 import android.content.Context;
 import android.os.Build;
 
@@ -6,6 +7,7 @@ import androidx.annotation.RequiresApi;
 
 import java.io.IOException;
 import java.io.InputStream;
+
 import android.util.Pair;
 
 import java.util.Arrays;
@@ -53,7 +55,7 @@ public class Sudoku {
 
         // Choose a random sudoku from the list and set it as sudoku attribute
         double numberSudokus = (double) sudokuList.size();
-        int randomIndex = (int) (Math.random()*numberSudokus);
+        int randomIndex = (int) (Math.random() * numberSudokus);
         int[][] sudoku = sudokuList.get(randomIndex);
         this.field = Utils.IntToCellArray(sudoku, true);
     }
@@ -83,7 +85,7 @@ public class Sudoku {
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
                 if (field[i][j].GetValue() == 0) {
-                    boolean[] possibleNumbers = GetPossibleNumbers( i, j);
+                    boolean[] possibleNumbers = GetPossibleNumbers(i, j);
                     Integer[] randomOrderIndices = CreateRandomOrderIndices(possibleNumbers.length);
                     for (int k = 0; k < randomOrderIndices.length; k++) {
                         if (possibleNumbers[randomOrderIndices[k]]) {
@@ -212,11 +214,9 @@ public class Sudoku {
                 if (field[i][j].GetIsEmpty() == true) {
                     continue;
                 }
-                boolean[] possibleNumbers = GetPossibleNumbers(i,j);
-                for (int k = 0; k < possibleNumbers.length; k++) {
-                    if (possibleNumbers[field[i][j].GetValue()-1] == false) { // The entered number is not possible
-                        wrongCells.add(new Pair<Integer, Integer>(i,j));
-                    }
+                boolean[] possibleNumbers = GetPossibleNumbers(i, j);
+                if (possibleNumbers[field[i][j].GetValue() - 1] == false) { // The entered number is not possible
+                    wrongCells.add(new Pair<Integer, Integer>(i, j));
                 }
             }
         }

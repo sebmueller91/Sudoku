@@ -39,6 +39,7 @@
         android:columnCount="9"
         android:rowCount="9"
         android:orientation="horizontal"
+        android:stateListAnimator="@null"
         tools:context=".GridXMLActivity">
     </GridLayout>
     <GridLayout

@@ -1,6 +1,7 @@
 package dgs_software.sudoku.utils;
 
 import android.os.Build;
+import android.util.Pair;
 import androidx.annotation.RequiresApi;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,11 +13,38 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 import dgs_software.sudoku.model.Cell;
+import dgs_software.sudoku.model.Sudoku;
 
 public class Utils {
     private static final String SUDOKU_DELIMITER = ";", ROW_DELIMITER = "-", NUMBER_DELIMITER = ",";
 
+    // Checks if an element with the same position exists in the list
+    public static boolean ListContainsElement(LinkedList<Pair<Integer, Integer>> list, Pair<Integer, Integer> element) {
+        if (list == null || element == null) {
+            return false;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).equals(element)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    // Searches the sudoku field for the given cell and returns its row and column as a pair
+    public static Pair<Integer, Integer> GetPositionOfCell(Cell cell, Sudoku sudoku) {
+        if (cell == null || sudoku == null || sudoku.GetField() == null) {
+            return null;
+        }
+        for (int i = 0; i < sudoku.GetField().length; i++) {
+            for (int j = 0; j < sudoku.GetField()[i].length; j++) {
+                if (sudoku.GetField()[i][j] == cell) {
+                    return new Pair(i,j);
+                }
+            }
+        }
+        return null;
+    }
 
     // Converts the given input stream (e.g. a file) to a String
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
