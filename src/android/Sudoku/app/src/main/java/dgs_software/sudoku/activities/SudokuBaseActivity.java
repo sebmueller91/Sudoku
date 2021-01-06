@@ -33,12 +33,13 @@ import dgs_software.sudoku.utils.Utils;
 
 public abstract class SudokuBaseActivity extends AppCompatActivity {
     public static final int
-            ACTIVE_COLOR_BACKGROUND = Color.parseColor("#ffffcc"),
             ACTIVE_COLOR_FONT = Color.parseColor("#6495ED"),
             INACTIVE_COLOR_BACKGROUND = Color.parseColor("#FFFFFF"),
             INACTIVE_COLOR_FONT_FIXED = Color.parseColor("#000000"),
             INACTIVE_COLOR_FONT_NONFIXED = Color.parseColor("#3CB371"),
             HIGHLIGHTED_COLOR_BACKGROUND = Color.LTGRAY; // TODO: Move to ressource file
+
+    private static int ACTIVE_COLOR_BACKGROUND;
 
     private static final int STROKE_WIDTH_MID_BORDER = 4;
     private static final int STROKE_WIDTH_BIG_BORDER = STROKE_WIDTH_MID_BORDER * 2;
@@ -77,6 +78,9 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
         // CREATE SUDOKU MODEL
         sudokuModel = CreateSudokuModel();
+
+        // TODO: GET all colors from ressource file
+        ACTIVE_COLOR_BACKGROUND = getResources().getColor(R.color.sudoku_button_active_background);
 
         // SUDOKU GRID
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();

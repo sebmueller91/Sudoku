@@ -3,6 +3,8 @@ package dgs_software.sudoku.dialogs;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -28,6 +30,9 @@ public class ChooseDifficultyDialog extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_choose_difficulty);
+
+        this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         Button easyButton = (Button) findViewById(R.id.button_easy);
         Button normalButton = (Button) findViewById(R.id.button_normal);
         Button hardButton = (Button) findViewById(R.id.button_hard);

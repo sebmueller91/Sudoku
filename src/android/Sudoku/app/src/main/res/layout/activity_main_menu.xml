@@ -34,13 +34,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/menu_button"
+            style="@style/menu_button_style"
             android:text="Play Sudoku"
-            android:textColor="#ffffff"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/solveSudokuButton" >
 
-            app:layout_constraintBottom_toTopOf="@+id/solveSudokuButton" />
+        </Button>
 
         <Button
             android:id="@+id/solveSudokuButton"
@@ -48,11 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:background="@drawable/menu_button"
+            style="@style/menu_button_style"
             android:text="Solve existing Sudoku"
-            android:textColor="#ffffff"
-            android:textSize="15sp"
-            android:textStyle="bold" />
+             />
 
     </LinearLayout>
 
