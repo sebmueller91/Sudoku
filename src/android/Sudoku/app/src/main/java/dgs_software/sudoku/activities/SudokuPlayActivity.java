@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.Set;
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
+import dgs_software.sudoku.utils.Utils;
 
 public class SudokuPlayActivity extends SudokuBaseActivity {
 
@@ -29,12 +31,22 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         setContentView(R.layout.activity_sudoku_play);
     }
 
+    private boolean m_makeNotes = false;
+
+    public boolean getMakeNotes() {
+        return m_makeNotes;
+    }
+
+    public void setMakeNotes(boolean makeNotes) {
+        m_makeNotes = makeNotes;
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     protected Sudoku CreateSudokuModel() {
         // CREATE SUDOKU MODEL
         Bundle b = getIntent().getExtras();
         int value = -1; // or other values
-        if(b != null)
+        if (b != null)
             value = b.getInt("difficulty");
         Sudoku.Difficulty difficulty = null;
         if (value == 1) {
@@ -48,12 +60,12 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     protected void InstantiateButtons() {
-        // SOLVE SUDOKU BUTTON
-        Button displayErrorsButton = (Button) findViewById(R.id.displayErrorsButton);
-        displayErrorsButton.setOnClickListener(new View.OnClickListener() {
+        // MAKE NOTES BUTTON
+        Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
+        makeNoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DisplayErrorsButtonClicked();
+                makeNoteButtonClickedAction();
             }
         });
 
@@ -76,14 +88,33 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         });
     }
 
+    @Override
+    public Button[] CreateNoteButtons(int row, int col) {
+        if (sudokuModel == null || sudokuModel.GetField() == null) {
+            return null;
+        }
+        Cell[][] field = sudokuModel.GetField();
+
+        Button[] noteButtons = new Button[9];
+        for (int k = 0; k < noteButtons.length; k++) {
+            noteButtons[k] = new Button(getApplicationContext());
+        }
+        field[row][col].SetNoteButtons(noteButtons);
+
+        return noteButtons;
+    }
+
+    public void makeNoteButtonClickedAction() {
+        setMakeNotes(!getMakeNotes());
+        Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
+        if (getMakeNotes()) {
+            makeNoteButton.setBackgroundColor(Color.GREEN);
+        } else {
+            makeNoteButton.setBackgroundColor(Color.GRAY);
+        }
+    }
+
     public void SudokuButtonClickedAction(int row, int col) {
-        /*int cellValue = GetButtonTextAsInteger(sudoku.GetField()[row][col].GetButton());
-        String newText = Integer.toString(++cellValue);
-        sudoku.GetField()[row][col].GetButton().setText(newText);
-        sudoku.GetField()[row][col].GetButton().setText(newText);
-        sudoku.GetField()[row][col].GetButton().setBackgroundColor(ACTIVE_COLOR_BACKGROUND);
-        sudoku.GetField()[row][col].GetButton().setTextColor(ACTIVE_COLOR_FONT);
-        sudoku.GetField()[row][col].GetButton().setTypeface(null, Typeface.BOLD);*/
         if (sudokuModel.GetField() == null || sudokuModel.GetField()[row][col] == null) {
             return;
         }
@@ -97,20 +128,26 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     public void InputButtonClickedAction(int number) {
-        if (activeCell != null) {
-            int row = 0, col = 0;
-            for (int i = 0; i < sudokuModel.GetField().length; i++) {
-                for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
-                    if (sudokuModel.GetField()[i][j].equals(activeCell)) {
-                        row = i;
-                        col = j;
-                        break;
-                    }
-                }
-            }
+        if (activeCell == null) {
+            return;
+        }
 
+        // Get row and column of active cell
+        Pair<Integer, Integer> activeCellPosition = Utils.GetPositionOfCell(activeCell, sudokuModel);
+        int row = activeCellPosition.first, col = activeCellPosition.second;
+
+        if (getMakeNotes() == false) {
             sudokuModel.GetField()[row][col].SetValue(number);
             sudokuModel.GetField()[row][col].SetIsFixedValue(false);
+        } else {
+            if (sudokuModel.GetField()[row][col].GetIsEmpty() == false) {
+                return; // It is not possible to overwrite a filled cell with a note
+            }
+
+            sudokuModel.GetField()[row][col].SetValue(0); // TODO: Schönere Lösung suchen
+            boolean[] activeNotes = sudokuModel.GetField()[row][col].getActiveNotes();
+            activeNotes[number-1] = !activeNotes[number-1];
+            sudokuModel.GetField()[row][col].setActiveNotes(activeNotes);
         }
         RefreshUI();
     }
@@ -120,11 +157,17 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     public void ClearCellButtonClicked() {
-        if (activeCell != null) {
-            activeCell.SetValue(0);
-            activeCell.SetIsFixedValue(false);
+        if (activeCell != null && sudokuModel != null && sudokuModel.GetField() != null) {
+            Pair<Integer, Integer> activeCellPosition = Utils.GetPositionOfCell(activeCell, sudokuModel);
+            int row = activeCellPosition.first, col = activeCellPosition.second;
+            if (sudokuModel.GetField()[row][col].GetIsFixedValue() == false) {
+                activeCell.SetValue(0);
+                activeCell.SetIsFixedValue(false);
+            }
+            sudokuModel.GetField()[row][col].ResetActiveNotes();
+
+            RefreshUI();
         }
-        RefreshUI();
     }
 
     public void checkSolutionButtonClicked() {

@@ -7,4 +7,9 @@
     <color name="colorAccent">#03DAC5</color>
 
     <color name="sudoku_button_active_background">#ffffcc</color>
+    <color name="sudoku_button_active_font">#6495ED</color>
+    <color name="sudoku_button_inactive_background">#FFFFFF</color>
+    <color name="sudoku_button_inactive_font_fixed">#000000</color>
+    <color name="sudoku_button_inactive_font_nonfixed">#3CB371</color>
+    <color name="sudoku_button_highlighted_background">#dfdfea</color>
 </resources>

@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Pair;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.Set;
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
+import dgs_software.sudoku.utils.Utils;
 
 public class SudokuSolverActivity extends SudokuBaseActivity {
     protected void SetContentView() {
@@ -62,6 +64,11 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         });
     }
 
+    @Override
+    public Button[] CreateNoteButtons(int row, int col) {
+        return null; // No note buttons needed
+    }
+
     public void SudokuButtonClickedAction(int row, int col) {
         if (sudokuModel.GetField() == null || sudokuModel.GetField()[row][col] == null) {
             return;
@@ -78,16 +85,8 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
     public void InputButtonClickedAction(int number) {
         DeleteNonFixedValues();
         if (activeCell != null) {
-            int row = 0, col = 0;
-            for (int i = 0; i < sudokuModel.GetField().length; i++) {
-                for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
-                    if (sudokuModel.GetField()[i][j].equals(activeCell)) {
-                        row = i;
-                        col = j;
-                        break;
-                    }
-                }
-            }
+            Pair<Integer, Integer> activeCellPosition = Utils.GetPositionOfCell(activeCell, sudokuModel);
+            int row = activeCellPosition.first, col = activeCellPosition.second;
 
             sudokuModel.GetField()[row][col].SetValue(number);
             sudokuModel.GetField()[row][col].SetIsFixedValue(true);
