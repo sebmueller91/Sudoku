@@ -5,11 +5,13 @@ import java.util.Arrays;
 
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
+import dgs_software.sudoku.utils.Utils;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class Sudoku_UnitTests {
+	// region Define TestData
 	// Empty
 	private int[][] sudoku1 = new int[][] {new int[] {0,0,0,0,0,0,0,0,0}, 
 		   								   new int[] {0,0,0,0,0,0,0,0,0},
@@ -122,152 +124,134 @@ public class Sudoku_UnitTests {
 			   						new int[] {1,7,3,5,5,4,2,6,8},
 			   						new int[] {5,2,0,0,0,3,0,4,7},
 			   						new int[] {4,9,6,2,7,8,5,3,1}};
+	// endregion Define TestData
 
-	private static Sudoku sudoku;
-								   
-	//*********************************************************************************************
-	// GetPossibleNumbersForCell		   						      
-	//*********************************************************************************************
+	// region Tests
+	// region getSolution()
 	@Test
-	public void GetSolution_Solvable1() {
-	    sudoku = CreateSudokuFromInts(sudoku1);
-		boolean result = sudoku.GetSolution();
+	public void getSolution_Solvable1() {
+	    Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku1,false));
+		boolean result = sudoku.getSolution();
 		assertEquals(result, true);			
 	}			   						
 			   						
 	@Test
-	public void GetSolution_Solvable2() {
-        sudoku = CreateSudokuFromInts(sudoku7);
-        boolean result = sudoku.GetSolution();
+	public void getSolution_Solvable2() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku7,false));
+		boolean result = sudoku.getSolution();
 		assertEquals(result, true);			
 	}	
 	
 	@Test
-	public void GetSolution_Solvable3() {
-        sudoku = CreateSudokuFromInts(sudoku8);
-        boolean result = sudoku.GetSolution();
+	public void getSolution_Solvable3() {
+        Sudoku sudoku =new Sudoku(Utils.intToCellArray(sudoku8,false));
+        boolean result = sudoku.getSolution();
 		assertEquals(result, true);			
 	}			
 	
 	@Test
-	public void GetSolution_Solvable4() {
-        sudoku = CreateSudokuFromInts(sudoku9);
-        boolean result = sudoku.GetSolution();
+	public void getSolution_Solvable4() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku9,false));
+        boolean result = sudoku.getSolution();
 		assertEquals(result, true);			
 	}		
 	
 	@Test
-	public void GetSolution_Solvable5() {
-        sudoku = CreateSudokuFromInts(sudoku10);
-        boolean result = sudoku.GetSolution();
+	public void getSolution_Solvable5() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku10,false));
+        boolean result = sudoku.getSolution();
 		assertEquals(result, true);			
 	}		
 	
 	@Test
-	public void GetSolution_NonSolvable() {
-        sudoku = CreateSudokuFromInts(sudoku11);
-        boolean result = sudoku.GetSolution();
+	public void getSolution_NonSolvable() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku11,false));
+        boolean result = sudoku.getSolution();
         assertEquals(result, false);
 	}		
-	//*********************************************************************************************
-		   									   							       
-	//*********************************************************************************************
-	// GetPossibleNumbersForCell		   						      
-	//*********************************************************************************************			   						       
+	// endregion
+
+	// region getPossibleNumbers()
 	@Test
-	public void GetPossibleNumbersForCell_EmptySudoku() {
-        sudoku = CreateSudokuFromInts(sudoku1);
-		boolean[] result = sudoku.GetPossibleNumbers(2,2);
+	public void getPossibleNumbersForCell_EmptySudoku() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku1,false));
+		boolean[] result = sudoku.getPossibleNumbers(2,2);
 		assertEquals(Arrays.equals(result, new boolean[] {true,true,true,true,true,true,true,true,true}), true);			
 	}
 	
 	@Test
-	public void GetPossibleNumbersForCell_RegularTest() {
-        sudoku = CreateSudokuFromInts(sudoku2);
-		boolean[] result = sudoku.GetPossibleNumbers(2,2);
+	public void getPossibleNumbersForCell_RegularTest() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku2,false));
+		boolean[] result = sudoku.getPossibleNumbers(2,2);
 		assertEquals(Arrays.equals(result, new boolean[] {true,true,false,false,true,true,false,true,true}), true);			
 	}
-	//*********************************************************************************************
+	// endregion
 
-	
-	//*********************************************************************************************
-	// SudokuContainsNoErrors		   						      
-	//*********************************************************************************************		
+	// region isValid()
 	@Test
 	public void SudokuContainsNoErrors_NoErrorEmpty() {
-        sudoku = CreateSudokuFromInts(sudoku1);
-		boolean result = sudoku.SudokuIsValid();
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku1,false));
+		boolean result = sudoku.isValid();
 		assertEquals(result, true);			
 	}
 	
 	@Test
 	public void SudokuContainsNoErrors_NoErrorFilled() {
-        sudoku = CreateSudokuFromInts(sudoku2);
-		boolean result = sudoku.SudokuIsValid();
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku2,false));
+		boolean result = sudoku.isValid();
 		assertEquals(result, true);			
 	}
 	
 	@Test
 	public void SudokuContainsNoErrors_RowError() {
-        sudoku = CreateSudokuFromInts(sudoku3);
-		boolean result = sudoku.SudokuIsValid();
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku3,false));
+		boolean result = sudoku.isValid();
 		assertEquals(result, false);			
 	}
 	
 	@Test
 	public void SudokuContainsNoErrors_ColumnError() {
-        sudoku = CreateSudokuFromInts(sudoku4);
-		boolean result = sudoku.SudokuIsValid();
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku4,false));
+		boolean result = sudoku.isValid();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	public void SudokuContainsNoErrors_BoxError() {
-        sudoku = CreateSudokuFromInts(sudoku5);
-		boolean result = sudoku.SudokuIsValid();
+	public void sudokuContainsNoErrors_BoxError() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku5,false));
+		boolean result = sudoku.isValid();
 		assertEquals(result, false);			
 	}
 	
 	@Test
-	public void SudokuContainsNoErrors_Solved() {
-        sudoku = CreateSudokuFromInts(sudoku6);
-		boolean result = sudoku.SudokuIsValid();
+	public void sudokuContainsNoErrors_Solved() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku6,false));
+		boolean result = sudoku.isValid();
 		assertEquals(result, true);			
 	}
-	//*********************************************************************************************
-	
-	//*********************************************************************************************
-	// SudokuIsCompletelyFilled 						      
-	//*********************************************************************************************		
-	@Test
-	public void SudokuIsCompletelyFilled_False_Empty() {
-        sudoku = CreateSudokuFromInts(sudoku1);
-		boolean result = sudoku.SudokuIsCompletelyFilled();
-		assertEquals(result, false);			
-	}
-	
-	@Test
-	public void SudokuIsCompletelyFilled_False_PatrtiallyFilled() {
-        sudoku = CreateSudokuFromInts(sudoku5);
-		boolean result = sudoku.SudokuIsCompletelyFilled();
-		assertEquals(result, false);			
-	}
-	
-	@Test
-	public void SudokuIsCompletelyFilled_False_Solved() {
-        sudoku = CreateSudokuFromInts(sudoku6);
-		boolean result = sudoku.SudokuIsCompletelyFilled();
-		assertEquals(result, true);			
-	}
-	//*********************************************************************************************
+	// endregion
 
-    private static Sudoku CreateSudokuFromInts(int[][] field) {
-	    Cell[][] cellArray = new Cell[field.length][field.length];
-	    for (int i = 0; i < field.length; i++) {
-	        for (int j = 0; j < field.length; j++) {
-	            cellArray[i][j] = new Cell(field[i][j]);
-            }
-        }
-	    return new Sudoku(cellArray);
-    }
+	// region isCompletelyFilled()
+	@Test
+	public void sudokuIsCompletelyFilled_False_Empty() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku1,false));
+		boolean result = sudoku.isCompletelyFilled();
+		assertEquals(result, false);			
+	}
+	
+	@Test
+	public void sudokuIsCompletelyFilled_False_PatrtiallyFilled() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku5,false));
+		boolean result = sudoku.isCompletelyFilled();
+		assertEquals(result, false);			
+	}
+	
+	@Test
+	public void sudokuIsCompletelyFilled_False_Solved() {
+        Sudoku sudoku = new Sudoku(Utils.intToCellArray(sudoku6,false));
+		boolean result = sudoku.isCompletelyFilled();
+		assertEquals(result, true);			
+	}
+	// endregion
+	// endregion Tests
 }

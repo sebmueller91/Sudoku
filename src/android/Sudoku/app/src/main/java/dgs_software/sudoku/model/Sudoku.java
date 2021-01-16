@@ -3,11 +3,10 @@ package dgs_software.sudoku.model;
 import android.content.Context;
 import android.os.Build;
 
-import androidx.annotation.RequiresApi;
-
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.provider.ContactsContract;
 import android.util.Pair;
 
 import java.util.Arrays;
@@ -16,85 +15,98 @@ import java.util.LinkedList;
 import java.util.List;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.data.DataProvider;
 import dgs_software.sudoku.utils.Utils;
 
 public class Sudoku {
+    // region Enum Difficulty declaration
     public enum Difficulty {
-        EASY, NORMAL, HARD;
+        EASY(1), MEDIUM(2), HARD(3);
+
+        private int m_difficulty;
+
+        Difficulty(int difficulty) {
+            this.m_difficulty = difficulty;
+        }
+
+        public int getIntVal() {
+            return m_difficulty;
+        }
+
+
+        public static Difficulty intValToDifficulty(int value) {
+            if (value == Difficulty.EASY.getIntVal()) {
+                return Difficulty.EASY;
+            } else if (value == Difficulty.MEDIUM.getIntVal()) {
+                return Difficulty.MEDIUM;
+            } else if (value == Difficulty.HARD.getIntVal()) {
+                return Difficulty.HARD;
+            } else {
+                return null;
+            }
+        }
+    }
+    // endregion ENUM Difficulty declaration
+
+    // region Attributes
+    private Cell[][] m_field = null;
+
+    public Cell[][] getField() {
+        return this.m_field;
     }
 
-    private Cell[][] field = null;
+    public void setField(Cell[][] field) {
+        this.m_field = field;
+    }
+    // endregion Attributes
 
+    // region Constructors
     public Sudoku(Cell[][] field) {
-        this.field = field;
+        setField(field);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public Sudoku(Difficulty difficulty, Context context) {
-        InputStream fileStream = null;
-        switch (difficulty) {
-            case EASY:
-                fileStream = context.getResources().openRawResource(R.raw.sudokus_easy);
-                break;
-            case NORMAL:
-                fileStream = context.getResources().openRawResource(R.raw.sudokus_normal);
-                break;
-            case HARD:
-                fileStream = context.getResources().openRawResource(R.raw.sudokus_hard);
-                break;
-        }
-        String fileContent = "";
-        try {
-            fileContent = Utils.InputStreamToString(fileStream);
-        } catch (IOException e) {
-            System.err.println("IOException when reading sudoku file: " + e.getMessage());
-            e.printStackTrace();
-            return;
-        }
-        LinkedList<int[][]> sudokuList = Utils.FileContentToSudokuList(fileContent);
+        // Retrieve list of sudokus from data file
+        DataProvider dataProvider = new DataProvider(context);
+        LinkedList<int[][]> sudokuList =  dataProvider.getSudokuListFromFile(difficulty);
 
         // Choose a random sudoku from the list and set it as sudoku attribute
         double numberSudokus = (double) sudokuList.size();
         int randomIndex = (int) (Math.random() * numberSudokus);
         int[][] sudoku = sudokuList.get(randomIndex);
-        this.field = Utils.IntToCellArray(sudoku, true);
+        setField(Utils.intToCellArray(sudoku, true));
     }
+    // endregion Constructors
 
-    public Cell[][] GetField() {
-        return this.field;
-    }
-
-    public void SetField(Cell[][] field) {
-        this.field = field;
-    }
+    // region Methods
 
     // Returns true if a solution for the given Field was found, false if no solution for the given Field exists
     // For the true case, the variable "field" will be filled with the found solution
-    public boolean GetSolution() {
+    public boolean getSolution() {
         // Some error in sudoku -> Can not be solved
-        if (!SudokuIsValid()) {
+        if (!isValid()) {
             return false;
         }
 
         // No errors + completely filled -> we have found a solution
-        if (SudokuIsCompletelyFilled()) {
+        if (isCompletelyFilled()) {
             return true;
         }
 
         // Try every possibility
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                if (field[i][j].GetValue() == 0) {
-                    boolean[] possibleNumbers = GetPossibleNumbers(i, j);
-                    Integer[] randomOrderIndices = CreateRandomOrderIndices(possibleNumbers.length);
+        for (int i = 0; i < getField().length; i++) {
+            for (int j = 0; j < getField()[i].length; j++) {
+                if (getField()[i][j].getValue() == 0) {
+                    boolean[] possibleNumbers = getPossibleNumbers(i, j);
+                    Integer[] randomOrderIndices = Utils.createRandomOrderIndices(possibleNumbers.length);
                     for (int k = 0; k < randomOrderIndices.length; k++) {
                         if (possibleNumbers[randomOrderIndices[k]]) {
-                            field[i][j].SetValue(randomOrderIndices[k] + 1);
-                            if (GetSolution()) {
+                            getField()[i][j].setValue(randomOrderIndices[k] + 1);
+                            if (getSolution()) {
                                 // Solution found -> Reach it back up
                                 return true;
                             }
-                            field[i][j].SetValue(0);
+                            getField()[i][j].setValue(0);
                         }
                     }
                     return false;
@@ -105,7 +117,7 @@ public class Sudoku {
     }
 
     // Returns an arrary of boolean with length 9 that indicates which numbers could be added into this cell without breaking the Sudoku rules
-    protected boolean[] GetPossibleNumbers(int row, int col) {
+    public boolean[] getPossibleNumbers(int row, int col) {
         // Array that contains pre-set of possible numbers
         boolean[] possibleNumbers = new boolean[9];
         for (int i = 0; i < 9; i++) {
@@ -114,12 +126,12 @@ public class Sudoku {
 
         for (int i = 0; i < 9; i++) {
             // Remove numbers that are present in column
-            if (i != col && field[row][i].GetValue() != 0) {
-                possibleNumbers[field[row][i].GetValue() - 1] = false;
+            if (i != col && getField()[row][i].getValue() != 0) {
+                possibleNumbers[getField()[row][i].getValue() - 1] = false;
             }
             // Remove numbers that are present in row
-            if (i != row && field[i][col].GetValue() != 0) {
-                possibleNumbers[field[i][col].GetValue() - 1] = false;
+            if (i != row && getField()[i][col].getValue() != 0) {
+                possibleNumbers[getField()[i][col].getValue() - 1] = false;
             }
         }
 
@@ -129,8 +141,8 @@ public class Sudoku {
         // Traverse block and remove present numbers
         for (int i = blockStartRow; i < blockStartRow + 3; i++) {
             for (int j = blockStartCol; j < blockStartCol + 3; j++) {
-                if (i != row && j != col && field[i][j].GetValue() != 0) {
-                    possibleNumbers[field[i][j].GetValue() - 1] = false;
+                if (i != row && j != col && getField()[i][j].getValue() != 0) {
+                    possibleNumbers[getField()[i][j].getValue() - 1] = false;
                 }
             }
         }
@@ -138,11 +150,16 @@ public class Sudoku {
         return possibleNumbers;
     }
 
+    // Returns true if the sudoku is completely filled without any error
+    public boolean isSolved() {
+        return isCompletelyFilled() && isValid();
+    }
+
     // Returns true if all cells of the field are containing a number, false otherwise (if any cell is empty)
-    public boolean SudokuIsCompletelyFilled() {
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                if (field[i][j].GetValue() == 0) {
+    public boolean isCompletelyFilled() {
+        for (int i = 0; i < getField().length; i++) {
+            for (int j = 0; j < getField()[i].length; j++) {
+                if (getField()[i][j].getValue() == 0) {
                     return false;
                 }
             }
@@ -151,14 +168,14 @@ public class Sudoku {
     }
 
     // Returns true if there are no collisions between numbers in the Sudoku, false if there is any error
-    public boolean SudokuIsValid() {
+    public boolean isValid() {
         // Check rows for duplicate entries
         for (int i = 0; i < 9; i++) {
             boolean[] numbers = new boolean[9];
             for (int j = 0; j < 9; j++) {
-                if (field[i][j].GetValue() != 0) { // Only check if cell is not empty
-                    if (numbers[field[i][j].GetValue() - 1] == false) { // Number has not been present in this row before
-                        numbers[field[i][j].GetValue() - 1] = true; // Mark number as present in this row
+                if (getField()[i][j].getValue() != 0) { // Only check if cell is not empty
+                    if (numbers[getField()[i][j].getValue() - 1] == false) { // Number has not been present in this row before
+                        numbers[getField()[i][j].getValue() - 1] = true; // Mark number as present in this row
                     } else {
                         return false; // Number is present twice in this row
                     }
@@ -170,9 +187,9 @@ public class Sudoku {
         for (int i = 0; i < 9; i++) {
             boolean[] numbers = new boolean[9];
             for (int j = 0; j < 9; j++) {
-                if (field[j][i].GetValue() != 0) { // Only if cell is not empty
-                    if (numbers[field[j][i].GetValue() - 1] == false) { // Numbers has not been present in this column
-                        numbers[field[j][i].GetValue() - 1] = true; // Mark number as present in this column
+                if (getField()[j][i].getValue() != 0) { // Only if cell is not empty
+                    if (numbers[getField()[j][i].getValue() - 1] == false) { // Numbers has not been present in this column
+                        numbers[getField()[j][i].getValue() - 1] = true; // Mark number as present in this column
                     } else {
                         return false; // Number is present twice in this column
                     }
@@ -189,9 +206,9 @@ public class Sudoku {
                 boolean[] numbers = new boolean[9];
                 for (int ii = i; ii < i + 3; ii++) {
                     for (int jj = j; jj < j + 3; jj++) {
-                        if (field[ii][jj].GetValue() != 0) { // Only if cell is not empty
-                            if (numbers[field[ii][jj].GetValue() - 1] == false) { // Number has not been present in this block
-                                numbers[field[ii][jj].GetValue() - 1] = true; // Mark number as present in this block
+                        if (getField()[ii][jj].getValue() != 0) { // Only if cell is not empty
+                            if (numbers[getField()[ii][jj].getValue() - 1] == false) { // Number has not been present in this block
+                                numbers[getField()[ii][jj].getValue() - 1] = true; // Mark number as present in this block
                             } else { // Number is present twice in this block
                                 return false;
                             }
@@ -207,15 +224,15 @@ public class Sudoku {
     }
 
     // Returns a list of <row,column> pairs that are in conflict with any other cell in the sudoku
-    public LinkedList<Pair<Integer, Integer>> GetListOfWrongValues() {
+    public LinkedList<Pair<Integer, Integer>> getListOfWrongValues() {
         LinkedList<Pair<Integer, Integer>> wrongCells = new LinkedList<Pair<Integer, Integer>>();
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                if (field[i][j].GetIsEmpty() == true) {
+        for (int i = 0; i < getField().length; i++) {
+            for (int j = 0; j < getField()[i].length; j++) {
+                if (getField()[i][j].getIsEmpty() == true) {
                     continue;
                 }
-                boolean[] possibleNumbers = GetPossibleNumbers(i, j);
-                if (possibleNumbers[field[i][j].GetValue() - 1] == false) { // The entered number is not possible
+                boolean[] possibleNumbers = getPossibleNumbers(i, j);
+                if (possibleNumbers[getField()[i][j].getValue() - 1] == false) { // The entered number is not possible
                     wrongCells.add(new Pair<Integer, Integer>(i, j));
                 }
             }
@@ -223,15 +240,16 @@ public class Sudoku {
         return wrongCells;
     }
 
-    // Creates an array of the given length with the indices from 0:length-1 in random order
-    private static Integer[] CreateRandomOrderIndices(int length) {
-        Integer[] indices = new Integer[length];
-        for (int i = 0; i < length; i++) {
-            indices[i] = i;
+    // Deletes all values which
+    public void deleteNonFixedValues() {
+        for (int i = 0; i < getField().length; i++) {
+            for (int j = 0; j < getField()[i].length; j++) {
+                if (getField()[i][j].getIsFixedValue() == false) {
+                    getField()[i][j].setValue(0);
+                }
+            }
         }
-        List list = Arrays.asList(indices);
-        Collections.shuffle(list);
-        list.toArray(indices);
-        return indices;
     }
+
+    // endregion Methods
 }

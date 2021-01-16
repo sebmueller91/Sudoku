@@ -22,11 +22,14 @@ import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
 
 public class SudokuSolverActivity extends SudokuBaseActivity {
-    protected void SetContentView() {
+
+    @Override
+    protected void setContentView() {
         setContentView(R.layout.activity_sudoku_solver);
     }
 
-    protected Sudoku CreateSudokuModel() {
+    @Override
+    protected Sudoku createSudokuModel() {
         Cell[][] field = new Cell[9][9];
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
@@ -35,13 +38,15 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         }
         return new Sudoku(field);
     }
-    protected void InstantiateButtons() {
+
+    @Override
+    protected void instantiateButtons() {
         // SOLVE SUDOKU BUTTON
         Button solveSudokuButton = (Button) findViewById(R.id.solveSudokuButton);
         solveSudokuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SolveSudokuButonClicked();
+                solveSudokuButonClicked();
             }
         });
 
@@ -50,7 +55,7 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         clearCellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClearCellButtonClicked();
+                clearCellButtonClicked();
             }
         });
 
@@ -59,66 +64,56 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         resetSolutionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResetSolutionButtonClicked();
+                resetSolutionButtonClicked();
             }
         });
     }
 
     @Override
-    public Button[] CreateNoteButtons(int row, int col) {
-        return null; // No note buttons needed
+    protected GridLayout createNestedGridLayout(int row, int col, int buttonSize) {
+        return null; // No nested grid needed for the solver
     }
 
-    public void SudokuButtonClickedAction(int row, int col) {
-        if (sudokuModel.GetField() == null || sudokuModel.GetField()[row][col] == null) {
+    public void sudokuButtonClickedAction(int row, int col) {
+        if (getSudokuModel().getField() == null || getSudokuModel().getField()[row][col] == null) {
             return;
         }
-        if (activeCell != null && sudokuModel.GetField()[row][col].equals(activeCell)) {
-            activeCell = null;
+        if (getActiveCell() != null && getSudokuModel().getField()[row][col].equals(getActiveCell())) {
+            setActiveCell(null);
         } else {
-            activeCell = sudokuModel.GetField()[row][col];
+            setActiveCell(getSudokuModel().getField()[row][col]);
         }
 
-        RefreshUI();
+        refreshUI(true);
     }
 
-    public void InputButtonClickedAction(int number) {
-        DeleteNonFixedValues();
-        if (activeCell != null) {
-            Pair<Integer, Integer> activeCellPosition = Utils.GetPositionOfCell(activeCell, sudokuModel);
+    public void inputButtonClickedAction(int number) {
+        getSudokuModel().deleteNonFixedValues();
+        if (getActiveCell() != null) {
+            Pair<Integer, Integer> activeCellPosition = Utils.getPositionOfCell(getActiveCell(), getSudokuModel());
             int row = activeCellPosition.first, col = activeCellPosition.second;
 
-            sudokuModel.GetField()[row][col].SetValue(number);
-            sudokuModel.GetField()[row][col].SetIsFixedValue(true);
+            getSudokuModel().getField()[row][col].setValue(number);
+            getSudokuModel().getField()[row][col].setIsFixedValue(true);
         }
-        RefreshUI();
+        refreshUI(true);
     }
 
-    public void SolveSudokuButonClicked() {
-        sudokuModel.GetSolution();
-        RefreshUI();
+    public void solveSudokuButonClicked() {
+        getSudokuModel().getSolution();
+        refreshUI(true);
     }
 
-    public void ClearCellButtonClicked() {
-        if (activeCell != null) {
-            activeCell.SetValue(0);
-            activeCell.SetIsFixedValue(false);
+    public void clearCellButtonClicked() {
+        if (getActiveCell() != null) {
+            getActiveCell().setValue(0);
+            getActiveCell().setIsFixedValue(false);
         }
-        RefreshUI();
+        refreshUI();
     }
 
-    public void ResetSolutionButtonClicked() {
-        DeleteNonFixedValues();
-        RefreshUI();
-    }
-
-    private void DeleteNonFixedValues() {
-        for (int i = 0; i < sudokuModel.GetField().length; i++) {
-            for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
-                if (sudokuModel.GetField()[i][j].GetIsFixedValue() == false) {
-                    sudokuModel.GetField()[i][j].SetValue(0);
-                }
-            }
-        }
+    public void resetSolutionButtonClicked() {
+        getSudokuModel().deleteNonFixedValues();
+        refreshUI();
     }
 }

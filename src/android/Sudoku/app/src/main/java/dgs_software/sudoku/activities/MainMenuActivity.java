@@ -25,8 +25,6 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ChooseDifficultyDialog cdd=new ChooseDifficultyDialog(MainMenuActivity.this);
                 cdd.show();
-//                Intent intent = new Intent(v.getContext(), SudokuPlay.class);
-//                startActivity(intent);
             }
         });
 

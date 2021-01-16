@@ -1,4 +1,3 @@
-// region package declaration and imports
 package dgs_software.sudoku.activities;
 
 import android.content.Intent;
@@ -22,7 +21,6 @@ import android.util.Pair;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.drawable.DrawableCompat;
 
@@ -33,36 +31,83 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.config.Constants;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
-// endregion
 
 public abstract class SudokuBaseActivity extends AppCompatActivity {
-    private static final int STROKE_WIDTH_MID_BORDER = 4;
-    private static final int STROKE_WIDTH_BIG_BORDER = STROKE_WIDTH_MID_BORDER * 2;
-    private static final int STROKE_WIDTH_SMALL_BORDER = 2; // TODO: Auslagern
+    // region Enum Declaration
+    protected enum SudokuCellStates {
+        ACTIVE_FIXED, ACTIVE_NONFIXED,
+        INACTIVE_FIXED, INACTIVE_NONFIXED,
+        HIGHLIGHTED_FIXED, HIGHLIGHTED_NONFIXED,
+        FAULTY_FIXED, FAULTY_NONFIXED;
+    }
+    // endregion enum declaration
 
-    private static final int SUDOKU_BORDER_COLOR = Color.BLACK;
+    // region Attributes
+    // region ActiveCell
+    private Cell m_activeCell = null;
 
-    protected Cell activeCell = null;
-    protected Sudoku sudokuModel;
+    public Cell getActiveCell() {
+        return this.m_activeCell;
+    }
+
+    public void setActiveCell(Cell activeCell) {
+        this.m_activeCell = activeCell;
+    }
+    // endregion ActiveCell
+
+    // region sudokuModel
+    private Sudoku m_sudokuModel;
+
+    public Sudoku getSudokuModel() {
+        return m_sudokuModel;
+    }
+
+    public void setSudokuModel(Sudoku sudokuModel) {
+        this.m_sudokuModel = sudokuModel;
+    }
+    // endregion sudokuModel
+
+    // region sudokuButtonArray
+    // Used to store a 9x9 array of Buttons that are also contained in the SudokuGrid of the UI
+    // This duplicate storage is done because of easier accessibility of the buttons
+    private Button[][] m_sudokuButtonArray;
+
+    public Button[][] getSudokuButtonArray() {
+        return this.m_sudokuButtonArray;
+    }
+
+    public void setSudokuButtonArray(Button[][] sudokuButtonArray) {
+        this.m_sudokuButtonArray = sudokuButtonArray;
+    }
+    // endregion sudokuButtonArray
+    // endregion Attributes
 
     //region Abstract method signatures
-    protected abstract void SetContentView();
+    // Each subclass must set it's own content view
+    protected abstract void setContentView();
 
-    protected abstract Sudoku CreateSudokuModel();
+    // Subclasses must create it's own sudokuModel
+    protected abstract Sudoku createSudokuModel();
 
-    protected abstract void InstantiateButtons();
+    // Initialize all subclass-specific Buttons and it's event handlers
+    protected abstract void instantiateButtons();
 
-    public abstract void SudokuButtonClickedAction(int row, int col);
+    // Event Handler for the buttons inside the sudoku grid
+    public abstract void sudokuButtonClickedAction(int row, int col);
 
-    public abstract void InputButtonClickedAction(int number);
+    // Event Handler for the input buttons (1-9)
+    public abstract void inputButtonClickedAction(int number);
 
-    public abstract Button[] CreateNoteButtons(int row, int col);
+    // Create the nested GridLayout for one Button (used for the notes) if it is used by the subclass
+    protected abstract GridLayout createNestedGridLayout(int row, int col, int buttonSize);
     //endregion
 
-    // When back key pressed -> Return to main menu instead of dialogs
+    // region Methods
+    // When back key pressed -> Return to main menu instead of the previous dialogs
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -73,76 +118,60 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     protected void onCreate(Bundle savedInstanceState) {
+        // Initializations
         super.onCreate(savedInstanceState);
-        SetContentView();
+        setContentView();
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
-        // CREATE SUDOKU MODEL
-        sudokuModel = CreateSudokuModel();
+        // Create Sudoku Model
+        setSudokuModel(createSudokuModel());
 
-        // SUDOKU GRID
+        // Create Sudoku Grid for the UI
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float screenWidth = displayMetrics.widthPixels; // Screen width in pixels
-        float sudokuGridPixelSize = 0.98f * screenWidth; // Sudoku grid shall fill the screen width
-        gridLayoutParams.height = (int) sudokuGridPixelSize;
-        gridLayoutParams.width = (int) sudokuGridPixelSize;
+        float screenHeight = displayMetrics.heightPixels; // Screen height in pixels
+        float sudokuGridPixelSize = Constants.SUDOKU_GRID_SIZE_PERCENTAGE * Math.min(screenWidth, screenHeight); // Sudoku grid shall fill the screen, either in horizontal or vertical layout
+        gridLayoutParams.height = Math.round(sudokuGridPixelSize);
+        gridLayoutParams.width = Math.round(sudokuGridPixelSize);
         sudokuGrid.setLayoutParams(gridLayoutParams);
 
+        // Fill Sudoku Grids
+        setSudokuButtonArray(new Button[9][9]);
         for (int i = 0; i < sudokuGrid.getRowCount(); i++) {
             for (int j = 0; j < sudokuGrid.getColumnCount(); j++) {
                 final int row = i;
                 final int col = j;
                 int buttonSize = (int) (sudokuGridPixelSize / 9.0f);
 
-                // Create Relative Layout
+                // Create Relative Layout (Used as wrapper to place the regular Sudoku Button and the 3x3 note-Buttons above each other
                 RelativeLayout relativeLayoutWrapper = new RelativeLayout(getApplicationContext());
                 ViewGroup.LayoutParams relativeLayoutWrapperParams = new ViewGroup.LayoutParams(buttonSize, buttonSize);
                 sudokuGrid.addView(relativeLayoutWrapper, i * sudokuGrid.getColumnCount() + j, relativeLayoutWrapperParams);
 
-                // Create Button
+                // Create button for the current cell
                 Button button = new Button(getApplicationContext());
-                button.setText("1");
-                button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                button.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.SUDOKU_BUTTON_TEXT_SIZE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SudokuButtonClickedAction(row, col);
+                        sudokuButtonClickedAction(row, col);
                     }
                 });
                 ViewGroup.LayoutParams buttonLayoutParams = new ViewGroup.LayoutParams(buttonSize, buttonSize);
-                sudokuModel.GetField()[i][j].SetButton(button);
+                getSudokuButtonArray()[i][j] = button;
 
                 // Create RelativeLayout params and place Button and nested grid on top of each other
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT, RelativeLayout.TRUE);
 
                 // Create nested Grid for Sudoku Play only that will take the buttons with the notes
-                // Will be null for SudokuSolver and not null for Sudoku PLay
-                Button[] noteButtons = CreateNoteButtons(i, j);
-                if (noteButtons != null) {
-                    // Create 3x3 nested Grid
-                    GridLayout nestedGridLayout = new GridLayout(getApplicationContext());
-                    nestedGridLayout.setRowCount(3);
-                    nestedGridLayout.setColumnCount(3);
+                // Will be null for SudokuSolver and not-null for Sudoku PLay
+                GridLayout nestedGridLayout = createNestedGridLayout(i,j, Math.round(buttonSize/3));
 
-                    // Fill 3x3 Grid
-                    for (int k = 0; k < noteButtons.length; k++) {
-                        ViewGroup.LayoutParams noteButtonLayoutParams = new ViewGroup.LayoutParams(buttonSize / 3, (int) buttonSize / 3);
-                        noteButtons[k].setTextSize(TypedValue.COMPLEX_UNIT_SP, 8);
-                        noteButtons[k].setPadding(0, 0, 0, 0);
-                        noteButtons[k].setTypeface(null, Typeface.BOLD);
-                        noteButtons[k].setStateListAnimator(null);
-                        noteButtons[k].setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                SudokuButtonClickedAction(row, col);
-                            }
-                        });
-                        nestedGridLayout.addView(noteButtons[k], k, noteButtonLayoutParams);
-                    }
+                // First add nestedGrid (if existent) and then the button to the relative layout wrapper
+                if (nestedGridLayout != null) {
                     relativeLayoutWrapper.addView(nestedGridLayout, params);
                 }
                 relativeLayoutWrapper.addView(button, params);
@@ -166,7 +195,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    InputButtonClickedAction(Integer.parseInt(key));
+                    inputButtonClickedAction(Integer.parseInt(key));
                 }
             });
 
@@ -175,81 +204,136 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
             buttonLayoutParams.width = buttonSize;
         }
 
-        InstantiateButtons();
+        instantiateButtons();
 
-        RefreshUI();
+        refreshUI();
+    }
+
+    // region Refresh UI Methods
+    // Refreshes the complete UI
+    protected void refreshUI() {
+        refreshUI(false);
     }
 
     // Sets all values of the User Interface according to the model of the sudoku
-    protected void RefreshUI() {
-        LinkedList<Pair<Integer, Integer>> cellsToHighlight = new LinkedList<Pair<Integer, Integer>>();
-        if (activeCell != null) {
-            Pair<Integer, Integer> activeCellPosition = Utils.GetPositionOfCell(activeCell, sudokuModel);
-            cellsToHighlight = GetListOfCellsToHighlight(activeCellPosition.first, activeCellPosition.second);
-        }
-        for (int i = 0; i < sudokuModel.GetField().length; i++) {
-            for (int j = 0; j < sudokuModel.GetField()[i].length; j++) {
-                Button button = sudokuModel.GetField()[i][j].GetButton();
-                int backgroundColor = getResources().getColor(R.color.sudoku_button_inactive_background);
-                int textColor = getResources().getColor(R.color.sudoku_button_inactive_font_fixed);
-                String buttonText = " ";
+    protected void refreshUI(boolean markFaultyCells) {
+        SudokuCellStates[][] cellStates = getCellStates(markFaultyCells);
 
-                if (sudokuModel.GetField()[i][j].GetIsEmpty() == false) {
-                    buttonText = Integer.toString(sudokuModel.GetField()[i][j].GetValue());
-                }
+        for (int i = 0; i < getSudokuModel().getField().length; i++) {
+            for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+                Button button = getSudokuButtonArray()[i][j];
+                int backgroundColor, textColor;
+                String buttonText = getButtonText(i, j);
 
-                if (sudokuModel.GetField()[i][j].GetIsFixedValue() == false) {
-                    textColor = getResources().getColor(R.color.sudoku_button_inactive_font_nonfixed);
-                }
-
-                if (Utils.ListContainsElement(cellsToHighlight, new Pair(i, j))) {
-                    backgroundColor = getResources().getColor(R.color.sudoku_button_highlighted_background);
-                }
-
-                if (activeCell != null && sudokuModel.GetField()[i][j] == activeCell) {
-                    backgroundColor = getResources().getColor(R.color.sudoku_button_active_background);
-                    textColor = getResources().getColor(R.color.sudoku_button_active_font);
+                switch (cellStates[i][j]) {
+                    case INACTIVE_FIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_inactive_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_inactive_font_fixed);
+                        break;
+                    case INACTIVE_NONFIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_inactive_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_inactive_font_nonfixed);
+                        break;
+                    case HIGHLIGHTED_FIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_highlighted_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_inactive_font_fixed);
+                        break;
+                    case HIGHLIGHTED_NONFIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_highlighted_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_inactive_font_nonfixed);
+                        break;
+                    case FAULTY_FIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_error_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_inactive_font_fixed);
+                        break;
+                    case FAULTY_NONFIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_error_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_inactive_font_nonfixed);
+                        break;
+                    case ACTIVE_FIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_active_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_active_font);
+                        break;
+                    case ACTIVE_NONFIXED:
+                        backgroundColor = getResources().getColor(R.color.sudoku_button_active_background);
+                        textColor = getResources().getColor(R.color.sudoku_button_active_font);
+                        break;
+                    default:
+                        return; // Should not happen
                 }
 
                 SetButtonProperties(i, j, button, backgroundColor, textColor, buttonText);
-
-                // If the cell is empty, the note fields must be drawn
-                Button[] noteButtons = sudokuModel.GetField()[i][j].GetNoteButtons();
-                if (noteButtons != null && sudokuModel.GetField()[i][j].GetIsEmpty()) {
-                    boolean[] activeNotes = sudokuModel.GetField()[i][j].getActiveNotes();
-                    for (int k = 0; k < noteButtons.length; k++) {
-                        String noteButtonText = "";
-                        if (activeNotes[k] == true) {
-                            noteButtonText = new Integer(k + 1).toString();
-                        }
-                        SetNoteButtonProperties(i * 3 + k / 3, j * 3 + k % 3, noteButtons[k], noteButtonText, backgroundColor);
-                    }
-                }
             }
         }
     }
 
-    private void SetNoteButtonProperties(int row, int col, Button button, String buttonText, int backgroundColor) {
-        if (button != null) {
-            button.setTextColor(Color.BLACK);
-            button.setText(buttonText);
-
-            GradientDrawable drawableInner = new GradientDrawable();
-            GradientDrawable drawableBorders = new GradientDrawable();
-            drawableInner.setColor(backgroundColor);
-            drawableBorders.setColor(SUDOKU_BORDER_COLOR);
-
-            Drawable[] layers = {drawableBorders, drawableInner};
-            LayerDrawable layerDrawable = new LayerDrawable(layers);
-
-            int[] borderThicknessValues = GetNoteButtonBorderThicknessValues(row, col);
-            layerDrawable.setLayerInset(1, borderThicknessValues[0], borderThicknessValues[1], borderThicknessValues[2], borderThicknessValues[3]);
-
-            button.setBackground(layerDrawable);
+    // Returns the text that needs to be assigned to the given button
+    private String getButtonText(int row, int col) {
+        if (getSudokuModel().getField()[row][col].getIsEmpty() == false) {
+            return Integer.toString(getSudokuModel().getField()[row][col].getValue());
+        } else {
+            return " ";
         }
     }
 
-    private void SetButtonProperties(int row, int col, Button button, int backgroundColor, int textColor, String text) {
+    // Returns a 9x9 list of cell states that assigns each sudoku cell it's current state
+    protected SudokuCellStates[][] getCellStates(boolean markFaultyCells) {
+        SudokuCellStates[][] cellStates = new SudokuCellStates[9][9];
+
+        LinkedList<Pair<Integer, Integer>> cellsToHighlight = new LinkedList<Pair<Integer, Integer>>();
+        LinkedList<Pair<Integer, Integer>> faultyCells = getSudokuModel().getListOfWrongValues();
+        if (getActiveCell() != null) {
+            Pair<Integer, Integer> activeCellPosition = Utils.getPositionOfCell(getActiveCell(), getSudokuModel());
+            cellsToHighlight = getListOfCellsToHighlight(activeCellPosition.first, activeCellPosition.second);
+        }
+
+        for (int i = 0; i < getSudokuModel().getField().length; i++) {
+            for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+                // Inactive Cell
+                if (getSudokuModel().getField()[i][j].getIsFixedValue()) {
+                    cellStates[i][j] = SudokuCellStates.INACTIVE_FIXED;
+                } else {
+                    cellStates[i][j] = SudokuCellStates.INACTIVE_NONFIXED;
+                }
+
+                // Highlight Cells
+                if (cellsToHighlight != null
+                        && Utils.listContainsElement(cellsToHighlight, new Pair(i, j))) {
+                    if (getSudokuModel().getField()[i][j].getIsFixedValue()) {
+                        cellStates[i][j] = SudokuCellStates.HIGHLIGHTED_FIXED;
+                    } else {
+                        cellStates[i][j] = SudokuCellStates.HIGHLIGHTED_NONFIXED;
+                    }
+                }
+
+                // Mark Faulty Cells
+                if (markFaultyCells
+                        && faultyCells != null
+                        && Utils.listContainsElement(faultyCells, new Pair(i, j))) {
+                    if (getSudokuModel().getField()[i][j].getIsFixedValue()) {
+                        cellStates[i][j] = SudokuCellStates.FAULTY_FIXED;
+                    } else {
+                        cellStates[i][j] = SudokuCellStates.FAULTY_NONFIXED;
+                    }
+                }
+
+                // ActiveCell
+                if (getActiveCell() != null && getSudokuModel().getField()[i][j] == getActiveCell()) {
+                    if (getSudokuModel().getField()[i][j].getIsFixedValue()) {
+                        cellStates[i][j] = SudokuCellStates.ACTIVE_FIXED;
+                    } else {
+                        cellStates[i][j] = SudokuCellStates.ACTIVE_NONFIXED;
+                    }
+                }
+
+            }
+        }
+
+        return cellStates;
+    }
+
+    // Updates all properties of one cell in the UI
+    private static void SetButtonProperties(int row, int col, Button button, int backgroundColor, int textColor, String text) {
         if (button != null) {
             button.setTextColor(textColor);
             button.setText(text);
@@ -257,114 +341,67 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
             GradientDrawable drawableInner = new GradientDrawable();
             GradientDrawable drawableBorders = new GradientDrawable();
             drawableInner.setColor(backgroundColor);
-            drawableBorders.setColor(SUDOKU_BORDER_COLOR);
+            drawableBorders.setColor(Constants.SUDOKU_BORDER_COLOR);
 
             Drawable[] layers = {drawableBorders, drawableInner};
             LayerDrawable layerDrawable = new LayerDrawable(layers);
 
-            int[] borderThicknessValues = GetBorderThicknessValues(row, col);
+            int[] borderThicknessValues = getBorderThicknessValues(row, col);
             layerDrawable.setLayerInset(1, borderThicknessValues[0], borderThicknessValues[1], borderThicknessValues[2], borderThicknessValues[3]);
 
             button.setBackground(layerDrawable);
         }
     }
 
-    private int[] GetNoteButtonBorderThicknessValues(int row, int col) {
+    // Returns an array of the border thickness values for the given cell in the order [left,top,right,bottom]
+    private static int[] getBorderThicknessValues(int row, int col) {
         int[] borders = new int[4];
 
         // Set Left Border Thickness
         if (col == 0) {
-            borders[0] = STROKE_WIDTH_BIG_BORDER;
-        } else if (col % 9 == 0) {
-            borders[0] = STROKE_WIDTH_MID_BORDER;
+            borders[0] = Constants.STROKE_WIDTH_BIG_BORDER;
         } else if (col % 3 == 0) {
-            borders[0] = STROKE_WIDTH_SMALL_BORDER;
+            borders[0] = Constants.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[0] = 0;
+            borders[0] = Constants.STROKE_WIDTH_SMALL_BORDER;
         }
 
         // Set Top Border Thickness
         if (row == 0) {
-            borders[1] = STROKE_WIDTH_BIG_BORDER;
-        } else if (row % 9 == 0) {
-            borders[1] = STROKE_WIDTH_MID_BORDER;
+            borders[1] = Constants.STROKE_WIDTH_BIG_BORDER;
         } else if (row % 3 == 0) {
-            borders[1] = STROKE_WIDTH_SMALL_BORDER;
+            borders[1] = Constants.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[1] = 0;
-        }
-
-        // Set Right Border Thickness
-        if (col == 26) {
-            borders[2] = STROKE_WIDTH_BIG_BORDER;
-        } else if (col % 9 == 8) {
-            borders[2] = STROKE_WIDTH_MID_BORDER;
-        } else if (col % 3 == 2) {
-            borders[2] = STROKE_WIDTH_SMALL_BORDER;
-        } else {
-            borders[2] = 0;
-        }
-
-        // Set Bottom Border Thickness
-        if (row == 26) {
-            borders[3] = STROKE_WIDTH_BIG_BORDER;
-        } else if (row % 9 == 8) {
-            borders[3] = STROKE_WIDTH_MID_BORDER;
-        } else if (row % 3 == 2) {
-            borders[3] = STROKE_WIDTH_SMALL_BORDER;
-        } else {
-            borders[3] = 0;
-        }
-
-        return borders;
-    }
-
-    private int[] GetBorderThicknessValues(int row, int col) {
-        int[] borders = new int[4];
-
-        // Set Left Border Thickness
-        if (col == 0) {
-            borders[0] = STROKE_WIDTH_BIG_BORDER;
-        } else if (col % 3 == 0) {
-            borders[0] = STROKE_WIDTH_MID_BORDER;
-        } else {
-            borders[0] = STROKE_WIDTH_SMALL_BORDER;
-        }
-
-        // Set Top Border Thickness
-        if (row == 0) {
-            borders[1] = STROKE_WIDTH_BIG_BORDER;
-        } else if (row % 3 == 0) {
-            borders[1] = STROKE_WIDTH_MID_BORDER;
-        } else {
-            borders[1] = STROKE_WIDTH_SMALL_BORDER;
+            borders[1] = Constants.STROKE_WIDTH_SMALL_BORDER;
         }
 
         // Set Right Border Thickness
         if (col == 8) {
-            borders[2] = STROKE_WIDTH_BIG_BORDER;
+            borders[2] = Constants.STROKE_WIDTH_BIG_BORDER;
         } else if (col % 3 == 2) {
-            borders[2] = STROKE_WIDTH_MID_BORDER;
+            borders[2] = Constants.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[2] = STROKE_WIDTH_SMALL_BORDER;
+            borders[2] = Constants.STROKE_WIDTH_SMALL_BORDER;
         }
 
         // Set Bottom Border Thickness
         if (row == 8) {
-            borders[3] = STROKE_WIDTH_BIG_BORDER;
+            borders[3] = Constants.STROKE_WIDTH_BIG_BORDER;
         } else if (row % 3 == 2) {
-            borders[3] = STROKE_WIDTH_MID_BORDER;
+            borders[3] = Constants.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[3] = STROKE_WIDTH_SMALL_BORDER;
+            borders[3] = Constants.STROKE_WIDTH_SMALL_BORDER;
         }
 
         return borders;
     }
 
-    private LinkedList<Pair<Integer, Integer>> GetListOfCellsToHighlight(int row, int col) {
+    // Returns a list of Cells that need to be highlighted
+    // All cells that are in the same row, column or block as the active cell will be highlighted
+    private LinkedList<Pair<Integer, Integer>> getListOfCellsToHighlight(int row, int col) {
         LinkedList<Pair<Integer, Integer>> list = new LinkedList<Pair<Integer, Integer>>();
-        for (int i = 0; i < sudokuModel.GetField().length; i++) {
-            for (int j = 0; j < sudokuModel.GetField().length; j++) {
+        for (int i = 0; i < getSudokuModel().getField().length; i++) {
+            for (int j = 0; j < getSudokuModel().getField().length; j++) {
                 if (i == row || j == col || (row / 3 == i / 3 && col / 3 == j / 3)) {
                     list.add(new Pair(i, j));
                 }
@@ -372,4 +409,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         }
         return list;
     }
+    // endregion Refresh UI Methods
+    // endregion Methods
 }

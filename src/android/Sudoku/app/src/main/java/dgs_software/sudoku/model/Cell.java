@@ -9,43 +9,36 @@ public class Cell {
     // The Value of the cell (valid values are 1-9 and 0 if the cell is empty)
     private int m_value = 0;
 
-    public int GetValue() {
+    public int getValue() {
         return this.m_value;
     }
 
-    public void SetValue(int value) {
+    public void setValue(int value) {
         if (value == 0) {
             this.m_value = value;
             this.SetIsEmpty(true);
-            if (this.GetButton() != null && GetNoteButtons() != null) {
-                this.GetButton().setVisibility(View.INVISIBLE);
-            }
         } else if (value >= 1 && value <= 9) {
             this.m_value = value;
             this.SetIsEmpty(false);
-            if (this.GetButton() != null) {
-                this.GetButton().setVisibility(View.VISIBLE);
-            }
-            ResetActiveNotes();
+            resetActiveNotes();
         } else {
             // Do nothing, should not happen
         }
     }
-
     // endregion Value
 
     // region isEmpty
     // Inicates if the cell is empty (equals a value of 0)
     private boolean m_isEmpty = true;
 
-    public boolean GetIsEmpty() {
+    public boolean getIsEmpty() {
         return this.m_isEmpty;
     }
 
     public void SetIsEmpty(boolean isEmpty) {
         this.m_isEmpty = isEmpty;
         if (this.m_isEmpty == true) {
-            if (GetValue() != 0) {
+            if (getValue() != 0) {
                 this.m_value = 0;
             }
         }
@@ -60,35 +53,12 @@ public class Cell {
     // SudokuPlay: The values on startup are fixed, the user entered values are non-fixed
     private boolean m_isFixedValue = false;
 
-    public boolean GetIsFixedValue() {
+    public boolean getIsFixedValue() {
         return this.m_isFixedValue;
     }
 
-    public void SetIsFixedValue(boolean isFixed) {
+    public void setIsFixedValue(boolean isFixed) {
         this.m_isFixedValue = isFixed;
-    }
-    // endregion
-
-    // region Button
-    // The button that corresponds to this cell
-    private Button m_button;
-
-    public Button GetButton() {
-        return this.m_button;
-    }
-
-    public void SetButton(Button button) {
-        this.m_button = button;
-    }
-    // endregion Button
-
-    // region NoteButtons
-    private Button[] m_noteButtons = null;
-    public Button[] GetNoteButtons() {
-        return m_noteButtons;
-    }
-    public void SetNoteButtons(Button[] noteButtons) {
-        m_noteButtons = noteButtons;
     }
     // endregion
 
@@ -103,7 +73,7 @@ public class Cell {
         this.m_activeNotes = activeNotes;
     }
 
-    public void ResetActiveNotes() {
+    public void resetActiveNotes() {
         boolean[] activeNotes = getActiveNotes();
         if (activeNotes != null) {
             for (int i = 0; i < activeNotes.length; i++) {
@@ -117,7 +87,7 @@ public class Cell {
 
     // region Constructor
     public Cell(int value) {
-        SetValue(value);
+        setValue(value);
     }
     // endregion Constructor
 }

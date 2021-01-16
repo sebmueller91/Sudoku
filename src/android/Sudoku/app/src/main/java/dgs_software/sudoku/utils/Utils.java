@@ -2,7 +2,6 @@ package dgs_software.sudoku.utils;
 
 import android.os.Build;
 import android.util.Pair;
-import androidx.annotation.RequiresApi;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,16 +9,18 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 
 public class Utils {
-    private static final String SUDOKU_DELIMITER = ";", ROW_DELIMITER = "-", NUMBER_DELIMITER = ",";
-
+    // region Methods
     // Checks if an element with the same position exists in the list
-    public static boolean ListContainsElement(LinkedList<Pair<Integer, Integer>> list, Pair<Integer, Integer> element) {
+    public static boolean listContainsElement(LinkedList<Pair<Integer, Integer>> list, Pair<Integer, Integer> element) {
         if (list == null || element == null) {
             return false;
         }
@@ -32,13 +33,13 @@ public class Utils {
     }
 
     // Searches the sudoku field for the given cell and returns its row and column as a pair
-    public static Pair<Integer, Integer> GetPositionOfCell(Cell cell, Sudoku sudoku) {
-        if (cell == null || sudoku == null || sudoku.GetField() == null) {
+    public static Pair<Integer, Integer> getPositionOfCell(Cell cell, Sudoku sudoku) {
+        if (cell == null || sudoku == null || sudoku.getField() == null) {
             return null;
         }
-        for (int i = 0; i < sudoku.GetField().length; i++) {
-            for (int j = 0; j < sudoku.GetField()[i].length; j++) {
-                if (sudoku.GetField()[i][j] == cell) {
+        for (int i = 0; i < sudoku.getField().length; i++) {
+            for (int j = 0; j < sudoku.getField()[i].length; j++) {
+                if (sudoku.getField()[i][j] == cell) {
                     return new Pair(i,j);
                 }
             }
@@ -46,51 +47,29 @@ public class Utils {
         return null;
     }
 
-    // Converts the given input stream (e.g. a file) to a String
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public static String InputStreamToString(InputStream inputStream) throws IOException {
-        StringBuilder stringBuilder = new StringBuilder();
-        try (Reader reader = new BufferedReader(new InputStreamReader
-                (inputStream, Charset.forName(StandardCharsets.UTF_8.name())))) {
-            int c = 0;
-            while ((c = reader.read()) != -1) {
-                stringBuilder.append((char) c);
-            }
-        }
-
-        return stringBuilder.toString();
-    }
-
-    // Expects a string that contains multiple sudokus that are seperated by the specified delimiters
-    // Returns a list of 2d int array sudokus
-    public static LinkedList<int[][]> FileContentToSudokuList(String fileContent) {
-        LinkedList<int[][]> sudokuList = new LinkedList<int[][]>();
-        String[] sudokus = fileContent.split(SUDOKU_DELIMITER);
-        for (int s = 0; s < sudokus.length; s++) {
-            int[][] sudoku = new int[9][9];
-            String[] rows = sudokus[s].split(ROW_DELIMITER);
-            for (int i = 0; i < rows.length; i++) {
-                String[] entries = rows[i].split(NUMBER_DELIMITER);
-                for (int j = 0; j < entries.length; j++) {
-                    sudoku[i][j] = Integer.parseInt(entries[j]);
-                }
-            }
-            sudokuList.add(sudoku);
-        }
-
-        return sudokuList;
-    }
-
     // Convertes a 2d int array to a 2d Cell array and sets the values of the cells accordingly
     // The valuesIsFixed attribute is given as second argument
-    public static Cell[][] IntToCellArray(int[][] intArray, boolean valuesFixed) {
+    public static Cell[][] intToCellArray(int[][] intArray, boolean valuesFixed) {
         Cell[][] cellArray = new Cell[intArray.length][intArray[0].length];
         for (int i = 0; i < cellArray.length; i++) {
             for (int j = 0; j < cellArray[i].length; j++) {
                 cellArray[i][j] = new Cell(intArray[i][j]);
-                cellArray[i][j].SetIsFixedValue(valuesFixed);
+                cellArray[i][j].setIsFixedValue(valuesFixed);
             }
         }
         return cellArray;
     }
+
+    // Creates an array of the given length with the indices from 0:length-1 in random order
+    public static Integer[] createRandomOrderIndices(int length) {
+        Integer[] indices = new Integer[length];
+        for (int i = 0; i < length; i++) {
+            indices[i] = i;
+        }
+        List list = Arrays.asList(indices);
+        Collections.shuffle(list);
+        list.toArray(indices);
+        return indices;
+    }
+    // endregion Methods
 }
