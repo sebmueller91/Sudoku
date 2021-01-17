@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.ViewCompat;
 
 import java.security.InvalidParameterException;
 import java.util.Hashtable;
@@ -128,6 +129,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                 }
             });
             nestedGridLayout.addView(noteButtons[k], k, noteButtonLayoutParams);
+            nestedGridLayout.bringChildToFront(noteButtons[k]);
         }
 
         return nestedGridLayout;
@@ -193,13 +195,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         if (getMakeNotes() == false) {
             getSudokuModel().getField()[row][col].setValue(number);
             getSudokuModel().getField()[row][col].setIsFixedValue(false);
-            getSudokuButtonArray()[row][col].setVisibility(View.VISIBLE);
         } else {
             if (getSudokuModel().getField()[row][col].getIsEmpty() == false) {
                 return; // It is not possible to overwrite a filled cell with a note
             }
-            getSudokuButtonArray()[row][col].setVisibility(View.INVISIBLE); // Make top layer button invisible so the 3x3 grid behind it is visible
-            getSudokuModel().getField()[row][col].setValue(0); // TODO: Schönere Lösung suchen
+            getSudokuModel().getField()[row][col].setValue(0);
             boolean[] activeNotes = getSudokuModel().getField()[row][col].getActiveNotes();
             if (activeNotes == null) {
                 activeNotes = new boolean[9];
@@ -241,11 +241,10 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     protected void refreshUI(boolean markFaultyCells) {
         super.refreshUI(markFaultyCells);
         SudokuCellStates[][] cellStates = getCellStates(markFaultyCells);
-
         for (int i = 0; i < getNoteButtons().length; i++) {
             for (int j = 0; j < getNoteButtons()[i].length; j++) {
                 // Only if the cell is empty, the note fields must be drawn
-                if (getNoteButtons() != null && getSudokuModel().getField()[i][j].getIsEmpty()) {
+                if (getNoteButtons() != null) {
                     boolean[] activeNotes = getSudokuModel().getField()[i][j].getActiveNotes();
                     for (int k = 0; k < getNoteButtons()[i][j].length; k++) {
                         String noteButtonText = "";
@@ -253,14 +252,14 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                             noteButtonText = new Integer(k + 1).toString();
                         }
 
-                        int noteButtonRow = i * 3 + k / 3, noteButtonColumn = j * 3 + k % 3;
                         int backgroundColor = getResources().getColor(R.color.sudoku_button_inactive_background);
                         if (cellStates[i][j] == SudokuCellStates.HIGHLIGHTED_FIXED || cellStates[i][j] == SudokuCellStates.HIGHLIGHTED_NONFIXED) {
                             backgroundColor = getResources().getColor(R.color.sudoku_button_highlighted_background);
                         } else if (cellStates[i][j] == SudokuCellStates.ACTIVE_FIXED || cellStates[i][j] == SudokuCellStates.ACTIVE_NONFIXED) {
                             backgroundColor = getResources().getColor(R.color.sudoku_button_active_background);
                         }
-                        SetNoteButtonProperties(noteButtonRow, noteButtonColumn, getNoteButtons()[i][j][k],noteButtonText, backgroundColor);
+                        
+                        SetNoteButtonProperties(getNoteButtons()[i][j][k], noteButtonText);
                     }
                 }
             }
@@ -268,76 +267,25 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     // Updates all properties of one note-cell in the UI
-    private void SetNoteButtonProperties(int row, int col, Button button, String buttonText, int backgroundColor) {
-        if (button != null) {
-            button.setTextColor(Color.BLACK); // TODO: Variabel machen
-            button.setText(buttonText);
+    private void SetNoteButtonProperties(Button noteButton, String buttonText) {
+        if (noteButton != null) {
+            noteButton.setTextColor(Color.BLACK); // TODO: Variabel machen
+            noteButton.setText(buttonText);
 
-            GradientDrawable drawableInner = new GradientDrawable();
-            GradientDrawable drawableBorders = new GradientDrawable();
-            drawableInner.setColor(backgroundColor);
-            drawableBorders.setColor(Constants.SUDOKU_BORDER_COLOR);
-
-            Drawable[] layers = {drawableBorders, drawableInner};
-            LayerDrawable layerDrawable = new LayerDrawable(layers);
-
-            int[] borderThicknessValues = getNoteButtonBorderThicknessValues(row, col);
-            layerDrawable.setLayerInset(1, borderThicknessValues[0], borderThicknessValues[1], borderThicknessValues[2], borderThicknessValues[3]);
-
-            button.setBackground(layerDrawable);
+            noteButton.setBackgroundColor(Color.TRANSPARENT);
         }
     }
 
-    // Returns an array of the border thickness values for the given note-cell in the order [left,top,right,bottom]
-    private static int[] getNoteButtonBorderThicknessValues(int row, int col) {
-        int[] borders = new int[4];
+    private void moveToBack(View myCurrentView) {
+        ViewGroup myViewGroup = ((ViewGroup) myCurrentView.getParent());
+        int index = myViewGroup.indexOfChild(myCurrentView);
+        for (int i = 0; i < index; i++) {
+            myViewGroup.bringChildToFront(myViewGroup.getChildAt(i));
 
-        // Set Left Border Thickness
-        if (col == 0) {
-            borders[0] = Constants.STROKE_WIDTH_BIG_BORDER;
-        } else if (col % 9 == 0) {
-            borders[0] = Constants.STROKE_WIDTH_MID_BORDER;
-        } else if (col % 3 == 0) {
-            borders[0] = Constants.STROKE_WIDTH_SMALL_BORDER;
-        } else {
-            borders[0] = 0;
         }
-
-        // Set Top Border Thickness
-        if (row == 0) {
-            borders[1] = Constants.STROKE_WIDTH_BIG_BORDER;
-        } else if (row % 9 == 0) {
-            borders[1] = Constants.STROKE_WIDTH_MID_BORDER;
-        } else if (row % 3 == 0) {
-            borders[1] = Constants.STROKE_WIDTH_SMALL_BORDER;
-        } else {
-            borders[1] = 0;
-        }
-
-        // Set Right Border Thickness
-        if (col == 26) {
-            borders[2] = Constants.STROKE_WIDTH_BIG_BORDER;
-        } else if (col % 9 == 8) {
-            borders[2] = Constants.STROKE_WIDTH_MID_BORDER;
-        } else if (col % 3 == 2) {
-            borders[2] = Constants.STROKE_WIDTH_SMALL_BORDER;
-        } else {
-            borders[2] = 0;
-        }
-
-        // Set Bottom Border Thickness
-        if (row == 26) {
-            borders[3] = Constants.STROKE_WIDTH_BIG_BORDER;
-        } else if (row % 9 == 8) {
-            borders[3] = Constants.STROKE_WIDTH_MID_BORDER;
-        } else if (row % 3 == 2) {
-            borders[3] = Constants.STROKE_WIDTH_SMALL_BORDER;
-        } else {
-            borders[3] = 0;
-        }
-
-        return borders;
+        myViewGroup.invalidate();
     }
+
     // endregion Refresh UI methods
     // endregion Methods
 }
