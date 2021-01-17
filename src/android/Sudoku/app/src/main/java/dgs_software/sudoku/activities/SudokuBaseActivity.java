@@ -125,6 +125,8 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         setContentView();
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
+        Constants.applyDisplaySizeToConstants(getResources().getDisplayMetrics());
+
         // Create Sudoku Model
         setSudokuModel(createSudokuModel());
 
