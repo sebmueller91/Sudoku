@@ -1,5 +1,6 @@
 package dgs_software.sudoku.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -26,6 +27,8 @@ import java.util.Set;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.dialogs.InfoDialog;
+import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
@@ -104,6 +107,17 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                 checkSolutionButtonClicked();
             }
         });
+
+        // PREFERENCES BUTTON
+        Button preferencesButton = (Button) findViewById(R.id.preferencesButton);
+        final SudokuPlayActivity activity = this;
+        preferencesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SudokuPlayPreferencesDialog preferencesDialog = new SudokuPlayPreferencesDialog(SudokuPlayActivity.this, activity);
+                preferencesDialog.show();
+            }
+        });
     }
 
     // region CreateNestedGridLayout
@@ -179,7 +193,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             setActiveCell(getSudokuModel().getField()[row][col]);
         }
 
-        refreshUI();
+        refreshUI(getShowFaultyCells(),getHighlightCells());
     }
 
     @Override
@@ -207,7 +221,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             activeNotes[number-1] = !activeNotes[number-1];
             getSudokuModel().getField()[row][col].setActiveNotes(activeNotes);
         }
-        refreshUI();
+        refreshUI(getShowFaultyCells(),getHighlightCells());
     }
 
     public void clearCellButtonClicked() {
@@ -220,7 +234,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             }
             getSudokuModel().getField()[row][col].resetActiveNotes();
 
-            refreshUI();
+            refreshUI(getShowFaultyCells(),getHighlightCells());
         }
     }
 
@@ -236,11 +250,12 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     // endregion OnClickListener methods
 
     // region Refresh UI methods
+
     // Refresh the note Buttons of the User Interface
     @Override
-    protected void refreshUI(boolean markFaultyCells) {
-        super.refreshUI(markFaultyCells);
-        SudokuCellStates[][] cellStates = getCellStates(markFaultyCells);
+    protected void refreshUI() {
+        super.refreshUI(getShowFaultyCells(), getHighlightCells());
+        SudokuCellStates[][] cellStates = getCellStates(getShowFaultyCells(), getHighlightCells());
         for (int i = 0; i < getNoteButtons().length; i++) {
             for (int j = 0; j < getNoteButtons()[i].length; j++) {
                 // Only if the cell is empty, the note fields must be drawn

@@ -48,6 +48,29 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     // endregion enum declaration
 
     // region Attributes
+    // region showFaultyCells
+    private boolean m_showFaultyCells = true; // TODO Default value
+    public boolean getShowFaultyCells() {
+        return m_showFaultyCells;
+    }
+
+    public void setShowFaultyCells(boolean showFaultyCells) {
+        this.m_showFaultyCells = showFaultyCells;
+        refreshUI();
+    }
+    // endregion showFaultyCells
+
+    // region highlightCells
+    private boolean m_highlightCells = true; // TODO Default value
+    public boolean getHighlightCells() {
+        return m_highlightCells;
+    }
+
+    public void setHighlightCells(boolean highlightCells) {
+        this.m_highlightCells = highlightCells;
+        refreshUI();
+    }
+
     // region ActiveCell
     private Cell m_activeCell = null;
 
@@ -88,6 +111,9 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     // endregion Attributes
 
     //region Abstract method signatures
+    // TODO: Comment
+    protected abstract void refreshUI();
+
     // Each subclass must set it's own content view
     protected abstract void setContentView();
 
@@ -217,13 +243,11 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
     // region Refresh UI Methods
     // Refreshes the complete UI
-    protected void refreshUI() {
-        refreshUI(false);
-    }
+
 
     // Sets all values of the User Interface according to the model of the sudoku
-    protected void refreshUI(boolean markFaultyCells) {
-        SudokuCellStates[][] cellStates = getCellStates(markFaultyCells);
+    protected void refreshUI(boolean markFaultyCells, boolean highlightCells) {
+        SudokuCellStates[][] cellStates = getCellStates(markFaultyCells, highlightCells);
 
         for (int i = 0; i < getSudokuModel().getField().length; i++) {
             for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
@@ -274,7 +298,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     }
 
     // Returns the text that needs to be assigned to the given button
-    private String getButtonText(int row, int col) {
+    protected String getButtonText(int row, int col) {
         if (getSudokuModel().getField()[row][col].getIsEmpty() == false) {
             return Integer.toString(getSudokuModel().getField()[row][col].getValue());
         } else {
@@ -283,7 +307,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     }
 
     // Returns a 9x9 list of cell states that assigns each sudoku cell it's current state
-    protected SudokuCellStates[][] getCellStates(boolean markFaultyCells) {
+    protected SudokuCellStates[][] getCellStates(boolean markFaultyCells, boolean highlightCells) {
         SudokuCellStates[][] cellStates = new SudokuCellStates[9][9];
 
         LinkedList<Pair<Integer, Integer>> cellsToHighlight = new LinkedList<Pair<Integer, Integer>>();
@@ -303,7 +327,8 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
                 }
 
                 // Highlight Cells
-                if (cellsToHighlight != null
+                if (highlightCells
+                        && cellsToHighlight != null
                         && Utils.listContainsElement(cellsToHighlight, new Pair(i, j))) {
                     if (getSudokuModel().getField()[i][j].getIsFixedValue()) {
                         cellStates[i][j] = SudokuCellStates.HIGHLIGHTED_FIXED;

@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.dialogs.InfoDialog;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -19,12 +20,13 @@ public class MainMenuActivity extends AppCompatActivity {
 
         Button playSudokuButton = (Button) findViewById(R.id.PlaySudokuButton);
         Button solveSudokuButton = (Button) findViewById(R.id.solveSudokuButton);
+        Button infoButton = (Button) findViewById(R.id.infoButton);
 
         playSudokuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChooseDifficultyDialog cdd=new ChooseDifficultyDialog(MainMenuActivity.this);
-                cdd.show();
+                ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(MainMenuActivity.this);
+                chooseDifficultyDialog.show();
             }
         });
 
@@ -33,6 +35,14 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(v.getContext(), SudokuSolverActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        infoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InfoDialog infoDialog = new InfoDialog(MainMenuActivity.this);
+                infoDialog.show();
             }
         });
     }

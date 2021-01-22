@@ -6,58 +6,66 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
     android:orientation="vertical">
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="SUDOKU"
-        android:textSize="50sp"/>
+        android:textSize="50sp" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:grid="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_weight="1">
+        android:orientation="vertical">
 
         <Space
             android:layout_width="10dp"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/PlaySudokuButton"
+            style="@style/menu_button_style"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            style="@style/menu_button_style"
             android:text="Play Sudoku"
-            app:layout_constraintBottom_toTopOf="@+id/solveSudokuButton" >
+            grid:layout_constraintBottom_toTopOf="@+id/solveSudokuButton">
 
         </Button>
 
         <Button
             android:id="@+id/solveSudokuButton"
+            style="@style/menu_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            style="@style/menu_button_style"
-            android:text="Solve existing Sudoku"
-             />
+            android:text="Solve existing Sudoku" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/infoButton"
+                style="@style/menu_button_style"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:text="i" />
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="\u00A9 DGS_Software"
         android:gravity="right"
         android:paddingRight="10dp"
-        android:paddingBottom="5dp"/>
+        android:paddingBottom="5dp"
+        android:text="\u00A9 DGS_Software" />
 
 </LinearLayout>

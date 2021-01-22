@@ -167,6 +167,16 @@
         android:textColor="#ffffff"
         android:background="@drawable/menu_button"
         android:text="Check solution" />
+        <Button
+            android:id="@+id/preferencesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:textColor="#ffffff"
+            android:background="@drawable/menu_button"
+            android:text="P" />
     </LinearLayout>
 
 </LinearLayout>

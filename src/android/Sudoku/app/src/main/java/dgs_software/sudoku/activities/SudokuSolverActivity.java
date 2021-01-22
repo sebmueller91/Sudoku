@@ -46,7 +46,7 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         solveSudokuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                solveSudokuButonClicked();
+                solveSudokuButtonClicked();
             }
         });
 
@@ -84,7 +84,7 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
             setActiveCell(getSudokuModel().getField()[row][col]);
         }
 
-        refreshUI(true);
+        refreshUI(true, true);
     }
 
     public void inputButtonClickedAction(int number) {
@@ -96,12 +96,12 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
             getSudokuModel().getField()[row][col].setValue(number);
             getSudokuModel().getField()[row][col].setIsFixedValue(true);
         }
-        refreshUI(true);
+        refreshUI(true, true);
     }
 
-    public void solveSudokuButonClicked() {
+    public void solveSudokuButtonClicked() {
         getSudokuModel().getSolution();
-        refreshUI(true);
+        refreshUI(true, true);
     }
 
     public void clearCellButtonClicked() {
@@ -115,5 +115,10 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
     public void resetSolutionButtonClicked() {
         getSudokuModel().deleteNonFixedValues();
         refreshUI();
+    }
+
+    @Override
+    protected void refreshUI() {
+        super.refreshUI(true,true);
     }
 }
