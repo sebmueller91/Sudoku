@@ -27,6 +27,7 @@ import java.util.Set;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.dialogs.InfoDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
 import dgs_software.sudoku.model.Cell;
@@ -36,6 +37,30 @@ import dgs_software.sudoku.utils.Utils;
 public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region Attributes
+    // region showFaultyCells
+    private boolean m_showFaultyCells = true; // TODO Default value
+    public boolean getShowFaultyCells() {
+        return m_showFaultyCells;
+    }
+
+    public void setShowFaultyCells(boolean showFaultyCells) {
+        this.m_showFaultyCells = showFaultyCells;
+        refreshUI();
+    }
+    // endregion showFaultyCells
+
+    // region highlightCells
+    private boolean m_highlightCells = true; // TODO Default value
+    public boolean getHighlightCells() {
+        return m_highlightCells;
+    }
+
+    public void setHighlightCells(boolean highlightCells) {
+        this.m_highlightCells = highlightCells;
+        refreshUI();
+    }
+    // endregion highlightCells
+
     // region makeNotes
     private boolean m_makeNotes = false;
 
@@ -61,6 +86,31 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     // endregion Attributes
 
     // region Methods
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Sudoku savedSudoku = getSaveDataProvider().loadSudokuPlay_sudoku();
+        if (savedSudoku == null) {
+            setSudokuModel(createSudokuModel());
+        } else {
+            setSudokuModel(savedSudoku);
+        }
+
+        // Load saved preferences
+        setShowFaultyCells(getSaveDataProvider().loadSudokuPlayPreferences_showFaultyCells(true));
+        setHighlightCells(getSaveDataProvider().loadSudokuPlayPreferences_highlightCells(true));
+
+        refreshUI();
+    }
+
+    @Override
+    protected void onPause() {
+        getSaveDataProvider().saveSudokuPlay_sudoku(getSudokuModel());
+
+        super.onPause();
+    }
+
     @Override
     protected void setContentView() {
         setContentView(R.layout.activity_sudoku_play);
@@ -151,10 +201,6 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // Creates a button array of length 9 to fill the 3x3 nestedGridLayout with the note buttons
     private  Button[] createNoteButtons(int row, int col) {
-        if (getSudokuModel() == null || getSudokuModel().getField() == null) {
-            return null;
-        }
-
         // If not button Field not yet existent, create it
         if (getNoteButtons() == null) {
             setNoteButtons(new Button[9][9][9]);
@@ -193,7 +239,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             setActiveCell(getSudokuModel().getField()[row][col]);
         }
 
-        refreshUI(getShowFaultyCells(),getHighlightCells());
+        refreshUI();
     }
 
     @Override
@@ -221,7 +267,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             activeNotes[number-1] = !activeNotes[number-1];
             getSudokuModel().getField()[row][col].setActiveNotes(activeNotes);
         }
-        refreshUI(getShowFaultyCells(),getHighlightCells());
+        refreshUI();
     }
 
     public void clearCellButtonClicked() {
@@ -234,7 +280,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             }
             getSudokuModel().getField()[row][col].resetActiveNotes();
 
-            refreshUI(getShowFaultyCells(),getHighlightCells());
+            refreshUI();
         }
     }
 

@@ -1,27 +1,18 @@
 package dgs_software.sudoku.model;
 
 import android.content.Context;
-import android.os.Build;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import android.provider.ContactsContract;
 import android.util.Pair;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
-import dgs_software.sudoku.R;
-import dgs_software.sudoku.data.DataProvider;
+import dgs_software.sudoku.data.RessourcesDataProvider;
 import dgs_software.sudoku.utils.Utils;
 
 public class Sudoku {
     // region Enum Difficulty declaration
     public enum Difficulty {
-        EASY(1), MEDIUM(2), HARD(3);
+        EASY(1), MEDIUM(2), HARD(3), NONE(4); // Difficulty NONE is used for user created sudokus (in SudokuSolver)
 
         private int m_difficulty;
 
@@ -49,6 +40,7 @@ public class Sudoku {
     // endregion ENUM Difficulty declaration
 
     // region Attributes
+    // region Field
     private Cell[][] m_field = null;
 
     public Cell[][] getField() {
@@ -58,16 +50,37 @@ public class Sudoku {
     public void setField(Cell[][] field) {
         this.m_field = field;
     }
+    // endregion Field
+
+    // region Difficulty
+    private Difficulty m_difficulty;
+
+    public Difficulty getDifficulty() {
+        return m_difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.m_difficulty = difficulty;
+    }
+
+    // endregion Difficulty
     // endregion Attributes
 
     // region Constructors
     public Sudoku(Cell[][] field) {
+        this(field, Difficulty.NONE);
+    }
+
+    public Sudoku(Cell[][] field, Difficulty difficulty) {
+        setDifficulty(difficulty);
         setField(field);
     }
 
     public Sudoku(Difficulty difficulty, Context context) {
+        setDifficulty(difficulty);
+
         // Retrieve list of sudokus from data file
-        DataProvider dataProvider = new DataProvider(context);
+        RessourcesDataProvider dataProvider = new RessourcesDataProvider(context);
         LinkedList<int[][]> sudokuList =  dataProvider.getSudokuListFromFile(difficulty);
 
         // Choose a random sudoku from the list and set it as sudoku attribute
@@ -76,6 +89,7 @@ public class Sudoku {
         int[][] sudoku = sudokuList.get(randomIndex);
         setField(Utils.intToCellArray(sudoku, true));
     }
+
     // endregion Constructors
 
     // region Methods

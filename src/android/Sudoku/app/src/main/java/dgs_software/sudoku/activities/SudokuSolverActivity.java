@@ -17,6 +17,7 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
@@ -29,15 +30,32 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
     }
 
     @Override
-    protected Sudoku createSudokuModel() {
-        Cell[][] field = new Cell[9][9];
-        for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                field[i][j] = new Cell(0);
-            }
-        }
-        return new Sudoku(field);
+    protected void onPause() {
+        getSaveDataProvider().saveSudokuSolver_sudoku(getSudokuModel());
+
+        super.onPause();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Sudoku savedSudoku = getSaveDataProvider().loadSudokuSolver_sudoku();
+        if (savedSudoku == null) {
+            Cell[][] field = new Cell[9][9];
+            for (int i = 0; i < field.length; i++) {
+                for (int j = 0; j < field[i].length; j++) {
+                    field[i][j] = new Cell(0);
+                }
+            }
+            setSudokuModel(new Sudoku(field));
+        } else {
+            setSudokuModel(savedSudoku);
+        }
+
+        refreshUI();
+    }
+
 
     @Override
     protected void instantiateButtons() {
@@ -84,7 +102,7 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
             setActiveCell(getSudokuModel().getField()[row][col]);
         }
 
-        refreshUI(true, true);
+        refreshUI();
     }
 
     public void inputButtonClickedAction(int number) {
@@ -96,20 +114,21 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
             getSudokuModel().getField()[row][col].setValue(number);
             getSudokuModel().getField()[row][col].setIsFixedValue(true);
         }
-        refreshUI(true, true);
+        refreshUI();
     }
 
     public void solveSudokuButtonClicked() {
         getSudokuModel().getSolution();
-        refreshUI(true, true);
+        refreshUI();
     }
 
     public void clearCellButtonClicked() {
         if (getActiveCell() != null) {
             getActiveCell().setValue(0);
             getActiveCell().setIsFixedValue(false);
+            getSudokuModel().deleteNonFixedValues();
+            refreshUI();
         }
-        refreshUI();
     }
 
     public void resetSolutionButtonClicked() {

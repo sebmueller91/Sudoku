@@ -13,11 +13,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.config.Constants;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
 
-public class DataProvider {
-    private static final String SUDOKU_DELIMITER = ";", ROW_DELIMITER = "-", NUMBER_DELIMITER = ",";
+public class RessourcesDataProvider {
 
     // region Attributes
     private Context m_context;
@@ -32,7 +32,7 @@ public class DataProvider {
     // endregion
 
     // region Constructor
-    public DataProvider(Context context) {
+    public RessourcesDataProvider(Context context) {
         setContext(context);
     }
     // endregion
@@ -60,7 +60,7 @@ public class DataProvider {
             e.printStackTrace();
             return null;
         }
-        return fileContentToSudokuList(fileContent);
+        return stringToSudokuList(fileContent);
     }
 
     // Converts the given input stream (e.g. a file) to a String
@@ -79,22 +79,29 @@ public class DataProvider {
 
     // Expects a string that contains multiple sudokus that are seperated by the specified delimiters
     // Returns a list of 2d int array sudokus
-    private static LinkedList<int[][]> fileContentToSudokuList(String fileContent) {
+    private static LinkedList<int[][]> stringToSudokuList(String fileContent) {
         LinkedList<int[][]> sudokuList = new LinkedList<int[][]>();
-        String[] sudokus = fileContent.split(SUDOKU_DELIMITER);
+        String[] sudokus = fileContent.split(Constants.SUDOKU_DELIMITER);
         for (int s = 0; s < sudokus.length; s++) {
-            int[][] sudoku = new int[9][9];
-            String[] rows = sudokus[s].split(ROW_DELIMITER);
-            for (int i = 0; i < rows.length; i++) {
-                String[] entries = rows[i].split(NUMBER_DELIMITER);
-                for (int j = 0; j < entries.length; j++) {
-                    sudoku[i][j] = Integer.parseInt(entries[j]);
-                }
-            }
+            int[][] sudoku = stringToSudoku(sudokus[s]);
             sudokuList.add(sudoku);
         }
 
         return sudokuList;
     }
+
+    // Converts a string into a sudoku
+    private static int[][] stringToSudoku(String string) {
+        int[][] sudoku = new int[9][9];
+        String[] rows = string.split(Constants.ROW_DELIMITER);
+        for (int i = 0; i < rows.length; i++) {
+            String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
+            for (int j = 0; j < entries.length; j++) {
+                sudoku[i][j] = Integer.parseInt(entries[j]);
+            }
+        }
+        return sudoku;
+    }
+
     // endregion Methods
 }

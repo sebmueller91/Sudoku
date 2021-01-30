@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import dgs_software.sudoku.config.Constants;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 
@@ -54,7 +55,9 @@ public class Utils {
         for (int i = 0; i < cellArray.length; i++) {
             for (int j = 0; j < cellArray[i].length; j++) {
                 cellArray[i][j] = new Cell(intArray[i][j]);
-                cellArray[i][j].setIsFixedValue(valuesFixed);
+                if (cellArray[i][j].getValue() != 0) {
+                    cellArray[i][j].setIsFixedValue(valuesFixed);
+                }
             }
         }
         return cellArray;
@@ -70,6 +73,17 @@ public class Utils {
         Collections.shuffle(list);
         list.toArray(indices);
         return indices;
+    }
+
+    // Converts the string to a boolean and returns the given defaultValue if no conversion is possible
+    public static boolean tryParseBoolean(String value, boolean defaultValue) {
+        if (value.toUpperCase().equals("TRUE")) {
+            return true;
+        } else if (value.toUpperCase().equals("FALSE")) {
+            return false;
+        } else {
+            return defaultValue;
+        }
     }
     // endregion Methods
 }

@@ -7,9 +7,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.dialogs.InfoDialog;
+import dgs_software.sudoku.model.Sudoku;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -25,8 +27,17 @@ public class MainMenuActivity extends AppCompatActivity {
         playSudokuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(MainMenuActivity.this);
-                chooseDifficultyDialog.show();
+                SaveDataProvider saveDataProvider = new SaveDataProvider(getApplicationContext());
+                Sudoku savedSudoku = saveDataProvider.loadSudokuPlay_sudoku();
+                if (savedSudoku == null) {
+                    // No saved sudoku available -> bring on "Select Difficulty" dialog
+                    ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(MainMenuActivity.this);
+                    chooseDifficultyDialog.show();
+                } else {
+                    // There is a saved sudoku -> Start SudokuPlay activity directly
+                    Intent intent = new Intent(getApplicationContext(), SudokuPlayActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.activities.SudokuPlayActivity;
+import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.model.Sudoku;
 
 public class SudokuPlayPreferencesDialog extends Dialog {
@@ -38,28 +39,29 @@ public class SudokuPlayPreferencesDialog extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_sudoku_play_preferences);
 
-        final Switch switch1 = (Switch) findViewById(R.id.switch1);
-        final Switch switch2 = (Switch) findViewById(R.id.switch2);
+        final Switch showFaultyCellsSwitch = (Switch) findViewById(R.id.showFaultyCellsSwitch);
+        final Switch highlightCellsSwitch = (Switch) findViewById(R.id.highlightCellsSwitch);
 
-        switch1.setChecked(getActivity().getShowFaultyCells());
-        switch2.setChecked(getActivity().getHighlightCells());
+        showFaultyCellsSwitch.setChecked(getActivity().getShowFaultyCells());
+        highlightCellsSwitch.setChecked(getActivity().getHighlightCells());
 
-        switch1.setOnClickListener(new View.OnClickListener() {
+        showFaultyCellsSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().setShowFaultyCells(!getActivity().getShowFaultyCells());
-                switch1.setChecked(getActivity().getShowFaultyCells());
+                showFaultyCellsSwitch.setChecked(getActivity().getShowFaultyCells());
+                getActivity().getSaveDataProvider().saveSudokuPlayPreferences_showFaultyCells(getActivity().getShowFaultyCells());
             }
         });
 
-        switch2.setOnClickListener(new View.OnClickListener() {
+        highlightCellsSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().setHighlightCells(!getActivity().getHighlightCells());
-                switch2.setChecked(getActivity().getHighlightCells());
+                highlightCellsSwitch.setChecked(getActivity().getHighlightCells());
+                getActivity().getSaveDataProvider().saveSudokuPlayPreferences_highlightCells(getActivity().getHighlightCells());
             }
         });
-        // TODO:
     }
 
 }

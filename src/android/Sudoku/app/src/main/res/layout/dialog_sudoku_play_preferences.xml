@@ -7,19 +7,26 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SETTINGS"/>
+        android:text="SETTINGS"
+        android:layout_margin="10dp"/>
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/showFaultyCellsSwitch"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Show faulty cells: " />
+        android:text="Show faulty cells: "
+        android:layout_marginHorizontal="10dp"/>
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp"/>
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/highlightCellsSwitch"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Highlight relevant cells: " />
+        android:text="Highlight relevant cells: "
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>

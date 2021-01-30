@@ -33,6 +33,7 @@ import java.util.Set;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
@@ -48,29 +49,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     // endregion enum declaration
 
     // region Attributes
-    // region showFaultyCells
-    private boolean m_showFaultyCells = true; // TODO Default value
-    public boolean getShowFaultyCells() {
-        return m_showFaultyCells;
-    }
-
-    public void setShowFaultyCells(boolean showFaultyCells) {
-        this.m_showFaultyCells = showFaultyCells;
-        refreshUI();
-    }
-    // endregion showFaultyCells
-
-    // region highlightCells
-    private boolean m_highlightCells = true; // TODO Default value
-    public boolean getHighlightCells() {
-        return m_highlightCells;
-    }
-
-    public void setHighlightCells(boolean highlightCells) {
-        this.m_highlightCells = highlightCells;
-        refreshUI();
-    }
-
     // region ActiveCell
     private Cell m_activeCell = null;
 
@@ -95,6 +73,18 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     }
     // endregion sudokuModel
 
+    // region SaveDataProvider
+    private SaveDataProvider m_saveDataProvider;
+
+    public SaveDataProvider getSaveDataProvider() {
+        return m_saveDataProvider;
+    }
+
+    public void setSaveDataProvider(SaveDataProvider saveDataProvider) {
+        this.m_saveDataProvider = saveDataProvider;
+    }
+    // endregion SaveDataProvider
+
     // region sudokuButtonArray
     // Used to store a 9x9 array of Buttons that are also contained in the SudokuGrid of the UI
     // This duplicate storage is done because of easier accessibility of the buttons
@@ -116,9 +106,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
     // Each subclass must set it's own content view
     protected abstract void setContentView();
-
-    // Subclasses must create it's own sudokuModel
-    protected abstract Sudoku createSudokuModel();
 
     // Initialize all subclass-specific Buttons and it's event handlers
     protected abstract void instantiateButtons();
@@ -152,9 +139,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
         Constants.applyDisplaySizeToConstants(getResources().getDisplayMetrics());
-
-        // Create Sudoku Model
-        setSudokuModel(createSudokuModel());
 
         // Create Sudoku Grid for the UI
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
@@ -238,7 +222,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
         instantiateButtons();
 
-        refreshUI();
+        setSaveDataProvider(new SaveDataProvider(getApplicationContext()));
     }
 
     // region Refresh UI Methods
@@ -249,8 +233,8 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     protected void refreshUI(boolean markFaultyCells, boolean highlightCells) {
         SudokuCellStates[][] cellStates = getCellStates(markFaultyCells, highlightCells);
 
-        for (int i = 0; i < getSudokuModel().getField().length; i++) {
-            for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
                 Button button = getSudokuButtonArray()[i][j];
                 int backgroundColor, textColor;
                 String buttonText = getButtonText(i, j);
