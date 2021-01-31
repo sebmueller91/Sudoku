@@ -1,141 +1,198 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
     android:background="#ffffff"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <GridLayout
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/SudokuGridLayout"
-        android:layout_marginTop="10dp"
-        android:layout_width="405dp"
-        android:layout_height="405dp"
-        app:layout_constraintDimensionRatio="1:1"
-        android:layout_centerHorizontal="true"
-        android:columnCount="9"
-        android:rowCount="9"
-        android:orientation="horizontal"
-        android:stateListAnimator="@null"
-        tools:context=".GridXMLActivity">
-    </GridLayout>
-    <GridLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="1"
+        android:layout_marginVertical="5dp">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_gravity="left">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elapsed time:"
+                android:layout_marginHorizontal="5dp"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/ElapsedTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Difficulty:"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/DifficultyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:text="Easy"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+    </GridLayout>
+
+    <GridLayout
+        android:id="@+id/SudokuGridLayout"
+        android:layout_width="405dp"
+        android:layout_height="405dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="0dp"
+        android:columnCount="9"
+        android:orientation="horizontal"
+        android:rowCount="9"
+        android:stateListAnimator="@null"
+        app:layout_constraintDimensionRatio="1:1"
+        tools:context=".GridXMLActivity"></GridLayout>
+
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:columnCount="9"
         android:rowCount="1">
 
         <Button
             android:id="@+id/userButton1"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="0"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="1"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="1" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/userButton2"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="1"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="2"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="2" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton3"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="2"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="3"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="3" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton4"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="3"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="4"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="4" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton5"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="4"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="5"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="5" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton6"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="5"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="6"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="6" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton7"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="6"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="7"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="7" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton8"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="7"
-            android:layout_height="wrap_content"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="8"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="8" />
+            android:textStyle="bold" />
+
         <Button
             android:id="@+id/userButton9"
-            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="8"
-            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/input_button"
+            android:stateListAnimator="@null"
+            android:text="9"
             android:textColor="#3063f7"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:stateListAnimator="@null"
-            android:text="9" />
+            android:textStyle="bold" />
     </GridLayout>
+
     <LinearLayout
-        android:layout_marginTop="25dp"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/makeNoteButton"
             android:layout_width="wrap_content"
@@ -153,30 +210,32 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
             android:background="@drawable/menu_button"
-            android:textColor="#ffffff"
-            android:text="CLEAR CELL" />
+            android:orientation="horizontal"
+            android:text="CLEAR CELL"
+            android:textColor="#ffffff" />
+
         <Button
-        android:id="@+id/checkSolutionButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        android:layout_weight="1"
-        android:orientation="horizontal"
-        android:textColor="#ffffff"
-        android:background="@drawable/menu_button"
-        android:text="Check solution" />
+            android:id="@+id/newGameButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/menu_button"
+            android:orientation="horizontal"
+            android:text="New Game"
+            android:textColor="#ffffff" />
+
         <Button
             android:id="@+id/preferencesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_weight="1"
-            android:orientation="horizontal"
-            android:textColor="#ffffff"
             android:background="@drawable/menu_button"
-            android:text="P" />
+            android:orientation="horizontal"
+            android:text="P"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 </LinearLayout>

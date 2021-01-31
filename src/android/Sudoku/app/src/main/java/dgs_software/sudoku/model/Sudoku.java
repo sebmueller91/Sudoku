@@ -12,7 +12,7 @@ import dgs_software.sudoku.utils.Utils;
 public class Sudoku {
     // region Enum Difficulty declaration
     public enum Difficulty {
-        EASY(1), MEDIUM(2), HARD(3), NONE(4); // Difficulty NONE is used for user created sudokus (in SudokuSolver)
+        EASY(1), MEDIUM(2), HARD(3), RELOAD_EXISTING(4); // Difficulty NONE is used for user created sudokus (in SudokuSolver)
 
         private int m_difficulty;
 
@@ -32,6 +32,8 @@ public class Sudoku {
                 return Difficulty.MEDIUM;
             } else if (value == Difficulty.HARD.getIntVal()) {
                 return Difficulty.HARD;
+            } else if (value == Difficulty.RELOAD_EXISTING.getIntVal()) {
+                return Difficulty.RELOAD_EXISTING;
             } else {
                 return null;
             }
@@ -64,16 +66,34 @@ public class Sudoku {
     }
 
     // endregion Difficulty
+
+    // region ElapsedSeconds
+    private int m_elapsedSeconds = 0;
+
+    public int getElapsedSeconds() {
+        return  m_elapsedSeconds;
+    }
+
+    public void setElapsedSeconds(int elapsedSeconds) {
+        m_elapsedSeconds = elapsedSeconds;
+    }
+    // endregion ElapsedSeconds
     // endregion Attributes
 
     // region Constructors
     public Sudoku(Cell[][] field) {
-        this(field, Difficulty.NONE);
+        this(field, Difficulty.RELOAD_EXISTING);
     }
 
     public Sudoku(Cell[][] field, Difficulty difficulty) {
         setDifficulty(difficulty);
         setField(field);
+    }
+
+    public Sudoku(Cell[][] field, Difficulty difficulty, int elapsedSeconds) {
+        setDifficulty(difficulty);
+        setField(field);
+        setElapsedSeconds(elapsedSeconds);
     }
 
     public Sudoku(Difficulty difficulty, Context context) {

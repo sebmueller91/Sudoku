@@ -36,6 +36,9 @@ public class MainMenuActivity extends AppCompatActivity {
                 } else {
                     // There is a saved sudoku -> Start SudokuPlay activity directly
                     Intent intent = new Intent(getApplicationContext(), SudokuPlayActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Sudoku.Difficulty.class.toString(), Sudoku.Difficulty.RELOAD_EXISTING.getIntVal());
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             }

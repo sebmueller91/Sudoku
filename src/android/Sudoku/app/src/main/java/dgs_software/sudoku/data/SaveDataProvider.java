@@ -180,6 +180,7 @@ public class SaveDataProvider {
     // (4) difficulty of the sudoku
     // The different values are separated by different sparators
     public static String sudokuToString(Sudoku sudoku, boolean includeNotes) {
+        // Write Cell Values
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < sudoku.getField().length; i++) {
             for (int j = 0; j < sudoku.getField()[i].length; j++) {
@@ -189,6 +190,7 @@ public class SaveDataProvider {
             stringBuilder.append(Constants.ROW_DELIMITER);
         }
 
+        // Write isFixedValue
         stringBuilder.append(Constants.SUDOKU_DELIMITER);
         for (int i = 0; i < sudoku.getField().length; i++) {
             for (int j = 0; j < sudoku.getField()[i].length; j++) {
@@ -198,6 +200,7 @@ public class SaveDataProvider {
             stringBuilder.append(Constants.ROW_DELIMITER);
         }
 
+        // Write NoteValues (if necessary)
         stringBuilder.append(Constants.SUDOKU_DELIMITER);
         if (includeNotes) {
             for (int i = 0; i < sudoku.getField().length; i++) {
@@ -216,8 +219,13 @@ public class SaveDataProvider {
             }
         }
 
+        // Write Difficulty
         stringBuilder.append(Constants.SUDOKU_DELIMITER);
         stringBuilder.append(sudoku.getDifficulty().toString());
+
+        // Write ElapsedSeconds
+        stringBuilder.append(Constants.SUDOKU_DELIMITER);
+        stringBuilder.append(sudoku.getElapsedSeconds());
 
         return stringBuilder.toString();
     }
@@ -228,62 +236,74 @@ public class SaveDataProvider {
         // parts[0] contains the sudoku
         // parts[1] contains information about each cell if the value is fixed
         // parts[3] (if != null) contains the 9 notes for each cell
-        String[] parts = string.split(Constants.SUDOKU_DELIMITER);
+        try {
+            String[] parts = string.split(Constants.SUDOKU_DELIMITER);
 
-        Cell[][] field = new Cell[9][9];
+            Cell[][] field = new Cell[9][9];
 
-        // Read the values for all cells from the string
-        if (parts != null && parts.length >= 1) {
-            String[] rows = parts[0].split(Constants.ROW_DELIMITER);
-            for (int i = 0; i < field.length; i++) {
-                String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
-                for (int j = 0; j < field[i].length; j++) {
-                    field[i][j] = new Cell(Integer.parseInt(entries[j]));
-                }
-            }
-        }
-
-        // Read the isFixedValue for each cell from the String
-        if (parts != null && parts.length >= 2) {
-            String[] rows = parts[1].split(Constants.ROW_DELIMITER);
-            for (int i = 0; i < field.length; i++) {
-                String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
-                for (int j = 0; j < field[i].length; j++) {
-                    field[i][j].setIsFixedValue(Boolean.parseBoolean(entries[j]));
-                }
-            }
-        }
-
-        // Read the Note values for all cells (if existent
-        if (parts != null && parts.length >= 3 && parts[2].isEmpty() == false) {
-            String[] rows = parts[2].split(Constants.ROW_DELIMITER);
-            for (int i = 0; i < field.length; i++) {
-                String[] cells = rows[i].split(Constants.NUMBER_DELIMITER);
-                for (int j = 0; j < field[i].length; j++) {
-                    String[] notes = cells[j].split(Constants.NOTES_DELIMITER);
-                    field[i][j].setActiveNotes(new boolean[9]);
-                    for (int k = 0; k < notes.length; k++) {
-                        field[i][j].getActiveNotes()[k] = Boolean.parseBoolean(notes[k]);
+            // Read the values for all cells from the string
+            if (parts != null && parts.length >= 1) {
+                String[] rows = parts[0].split(Constants.ROW_DELIMITER);
+                for (int i = 0; i < field.length; i++) {
+                    String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
+                    for (int j = 0; j < field[i].length; j++) {
+                        field[i][j] = new Cell(Integer.parseInt(entries[j]));
                     }
                 }
             }
-        }
 
-        // Read the difficulty for the sudoku
-        Sudoku.Difficulty difficulty = Sudoku.Difficulty.NONE;
-        if (parts != null && parts.length >= 4) {
-
-            if (parts[3].toUpperCase().equals(Sudoku.Difficulty.EASY.toString().toUpperCase())) {
-                difficulty = Sudoku.Difficulty.EASY;
-            } else if (parts[3].toUpperCase().equals(Sudoku.Difficulty.MEDIUM.toString().toUpperCase())) {
-                difficulty = Sudoku.Difficulty.MEDIUM;
-            } if (parts[3].toUpperCase().equals(Sudoku.Difficulty.HARD.toString().toUpperCase())) {
-                difficulty = Sudoku.Difficulty.HARD;
+            // Read the isFixedValue for each cell from the String
+            if (parts != null && parts.length >= 2) {
+                String[] rows = parts[1].split(Constants.ROW_DELIMITER);
+                for (int i = 0; i < field.length; i++) {
+                    String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
+                    for (int j = 0; j < field[i].length; j++) {
+                        field[i][j].setIsFixedValue(Boolean.parseBoolean(entries[j]));
+                    }
+                }
             }
 
-        }
+            // Read the Note values for all cells (if existent
+            if (parts != null && parts.length >= 3 && parts[2].isEmpty() == false) {
+                String[] rows = parts[2].split(Constants.ROW_DELIMITER);
+                for (int i = 0; i < field.length; i++) {
+                    String[] cells = rows[i].split(Constants.NUMBER_DELIMITER);
+                    for (int j = 0; j < field[i].length; j++) {
+                        String[] notes = cells[j].split(Constants.NOTES_DELIMITER);
+                        field[i][j].setActiveNotes(new boolean[9]);
+                        for (int k = 0; k < notes.length; k++) {
+                            field[i][j].getActiveNotes()[k] = Boolean.parseBoolean(notes[k]);
+                        }
+                    }
+                }
+            }
 
-        return new Sudoku(field, difficulty);
+            // Read the difficulty for the sudoku
+            Sudoku.Difficulty difficulty = Sudoku.Difficulty.RELOAD_EXISTING;
+            if (parts != null && parts.length >= 4) {
+
+                if (parts[3].toUpperCase().equals(Sudoku.Difficulty.EASY.toString().toUpperCase())) {
+                    difficulty = Sudoku.Difficulty.EASY;
+                } else if (parts[3].toUpperCase().equals(Sudoku.Difficulty.MEDIUM.toString().toUpperCase())) {
+                    difficulty = Sudoku.Difficulty.MEDIUM;
+                }
+                if (parts[3].toUpperCase().equals(Sudoku.Difficulty.HARD.toString().toUpperCase())) {
+                    difficulty = Sudoku.Difficulty.HARD;
+                }
+            }
+
+            // Read Elapsed Seconds of the sudoku
+            int elapsedSeconds = 0;
+            if (parts != null && parts.length >= 5) {
+                elapsedSeconds = Integer.parseInt(parts[4]);
+            }
+
+            return new Sudoku(field, difficulty, elapsedSeconds);
+
+        } catch (NumberFormatException e) {
+            // TODO: Log
+            return null;
+        }
     }
     // endregion Helper Methods
     // endregion Methods

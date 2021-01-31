@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/menu_button"
             android:clickable="true"
-            android:text="NORMAL"
+            android:text="MEDIUM"
             android:textColor="#ffffff"
             android:layout_weight="1"
             android:textStyle="bold" />
