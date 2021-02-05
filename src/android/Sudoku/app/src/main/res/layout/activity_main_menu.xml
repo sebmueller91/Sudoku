@@ -45,27 +45,28 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:text="Solve existing Sudoku" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <Button
-                android:id="@+id/infoButton"
-                style="@style/menu_button_style"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:text="i" />
-        </LinearLayout>
     </LinearLayout>
 
-    <TextView
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
-        android:paddingRight="10dp"
-        android:paddingBottom="5dp"
-        android:text="\u00A9 DGS_Software" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="\u00A9 DGS_Software" />
+        <ImageButton
+            android:id="@+id/infoButton"
+            android:src="@drawable/ic_information"
+            android:gravity="right"
+            android:background="#00748FE1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
@@ -22,7 +23,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         Button playSudokuButton = (Button) findViewById(R.id.PlaySudokuButton);
         Button solveSudokuButton = (Button) findViewById(R.id.solveSudokuButton);
-        Button infoButton = (Button) findViewById(R.id.infoButton);
+        ImageButton infoButton = (ImageButton) findViewById(R.id.infoButton);
 
         playSudokuButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -226,16 +226,14 @@
             android:text="New Game"
             android:textColor="#ffffff" />
 
-        <Button
+        <ImageButton
             android:id="@+id/preferencesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
+            android:background="#00748FE1"
             android:layout_weight="1"
-            android:background="@drawable/menu_button"
             android:orientation="horizontal"
-            android:text="P"
-            android:textColor="#ffffff" />
+            android:src="@drawable/ic_settings"/>
     </LinearLayout>
 
 </LinearLayout>

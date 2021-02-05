@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -232,7 +233,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         });
 
         // PREFERENCES BUTTON
-        Button preferencesButton = (Button) findViewById(R.id.preferencesButton);
+        ImageButton preferencesButton = (ImageButton) findViewById(R.id.preferencesButton);
         final SudokuPlayActivity activity = this;
         preferencesButton.setOnClickListener(new View.OnClickListener() {
             @Override
