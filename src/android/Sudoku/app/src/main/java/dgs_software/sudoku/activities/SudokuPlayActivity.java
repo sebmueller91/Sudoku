@@ -14,6 +14,8 @@ import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
@@ -116,6 +118,34 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region Methods
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
+        // If you don't have res/menu, just create a directory named "menu" inside res
+        getMenuInflater().inflate(R.menu.menu_sudoku_play, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // handle button activities
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.settings_button) {
+            SudokuPlayPreferencesDialog preferencesDialog = new SudokuPlayPreferencesDialog(SudokuPlayActivity.this, this);
+            preferencesDialog.show();
+        } else if (item.getItemId() == R.id.newGameButton) {
+            ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(this);
+            chooseDifficultyDialog.show();
+        } else if (item.getItemId() == R.id.restartButton) {
+            getSudokuModel().setElapsedSeconds(0);
+            getSudokuModel().deleteNonFixedValues();
+            refreshUI();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -147,11 +177,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         TextView difficultyTextView = (TextView) findViewById(R.id.DifficultyTextView);
 
         if (getSudokuModel().getDifficulty() == Sudoku.Difficulty.EASY) {
-            difficultyTextView.setText("Easy"); // TODO: use language ressource
+            difficultyTextView.setText(R.string.difficulty_easy); // TODO: use language ressource
         } else if (getSudokuModel().getDifficulty() == Sudoku.Difficulty.MEDIUM) {
-            difficultyTextView.setText("Medium");
+            difficultyTextView.setText(R.string.difficulty_medium);
         } else if (getSudokuModel().getDifficulty() == Sudoku.Difficulty.HARD) {
-            difficultyTextView.setText("Hard");
+            difficultyTextView.setText(R.string.difficulty_hard);
         }
 
         // Create Timer to count seconds
@@ -215,31 +245,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         });
 
         // CLEAR CELL BUTTON
-        Button clearCellButton = (Button) findViewById(R.id.clearCellButton);
+        ImageButton clearCellButton = (ImageButton) findViewById(R.id.clearCellButton);
         clearCellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 clearCellButtonClicked();
-            }
-        });
-
-        // NEW GAME BUTTON
-        Button newGameButton = (Button) findViewById(R.id.newGameButton);
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newGameButtonClicked();
-            }
-        });
-
-        // PREFERENCES BUTTON
-        ImageButton preferencesButton = (ImageButton) findViewById(R.id.preferencesButton);
-        final SudokuPlayActivity activity = this;
-        preferencesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SudokuPlayPreferencesDialog preferencesDialog = new SudokuPlayPreferencesDialog(SudokuPlayActivity.this, activity);
-                preferencesDialog.show();
             }
         });
     }
@@ -356,11 +366,6 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
             refreshUI();
         }
-    }
-
-    public void newGameButtonClicked() {
-        ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(this);
-        chooseDifficultyDialog.show();
     }
     // endregion Button OnClickHandlers
 

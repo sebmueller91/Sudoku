@@ -6,67 +6,58 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
     android:orientation="vertical">
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="SUDOKU"
-        android:textSize="50sp" />
+        android:textSize="50sp"/>
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:grid="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1"
+        android:orientation="vertical"
         android:gravity="center_vertical"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
         <Space
             android:layout_width="10dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            />
 
         <Button
             android:id="@+id/PlaySudokuButton"
-            style="@style/menu_button_style"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Play Sudoku"
-            grid:layout_constraintBottom_toTopOf="@+id/solveSudokuButton">
+            style="@style/menu_button_style"
+            android:text="@string/button_text_sudoku_play"
+            app:layout_constraintBottom_toTopOf="@+id/solveSudokuButton" >
 
         </Button>
 
         <Button
             android:id="@+id/solveSudokuButton"
-            style="@style/menu_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            android:text="Solve existing Sudoku" />
+            style="@style/menu_button_style"
+            android:text="@string/button_text_sudoku_solve"
+            />
+
     </LinearLayout>
 
-    <LinearLayout
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:paddingRight="10dp"
-            android:paddingBottom="5dp"
-            android:text="\u00A9 DGS_Software" />
-        <ImageButton
-            android:id="@+id/infoButton"
-            android:src="@drawable/ic_information"
-            android:gravity="right"
-            android:background="#00748FE1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
+        android:text="\u00A9 DGS_Software"
+        android:gravity="right"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"/>
 
 </LinearLayout>

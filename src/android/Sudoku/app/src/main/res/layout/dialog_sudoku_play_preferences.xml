@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SETTINGS"
+        android:text="@string/settings_dialog_name"
         android:layout_margin="10dp"/>
 
     <Switch
@@ -15,7 +15,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Show faulty cells: "
+        android:text="@string/settings_dialog_faulty"
         android:layout_marginHorizontal="10dp"/>
 
     <Space
@@ -26,7 +26,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Highlight relevant cells: "
+        android:text="@string/settings_dialog_highlight"
         android:layout_marginHorizontal="10dp"
         android:layout_marginBottom="10dp"/>
 </LinearLayout>

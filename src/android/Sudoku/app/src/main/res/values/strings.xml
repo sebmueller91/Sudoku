@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">Smart Sudoku</string>
+    <string name="app_name" translatable="false">Smart Sudoku</string>
+    <string name="button_text_sudoku_play">Play Sudoku</string>
+    <string name="button_text_sudoku_solve">Solve Sudoku</string>
+
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="difficulty_easy_upper">EASY</string>
+    <string name="difficulty_medium_upper">MEDIUM</string>
+    <string name="difficulty_hard_upper">HARD</string>
+
+    <string name="activity_sudoku_play_elapsed_time">Elapsed time:</string>
+    <string name="activity_sudoku_play_difficulty">Difficulty:</string>
+
+    <string name="difficulty_dialog_text">Please select the difficulty</string>
+
+    <string name="settings_dialog_name">SETTINGS</string>
+    <string name="settings_dialog_faulty">Highlight relevant cells</string>
+    <string name="settings_dialog_highlight">Show faulty cells</string>
+    <string name="new_game_button_text">New Game</string>
+    <string name="restart_button_text">Restart</string>
 </resources>

@@ -1,0 +1,22 @@
+<resources>
+    <string name="button_text_sudoku_play">Sudoku spielen</string>
+    <string name="button_text_sudoku_solve">"  Sudoku lösen  "</string>
+
+    <string name="difficulty_easy">Leicht</string>
+    <string name="difficulty_medium">Mittel</string>
+    <string name="difficulty_hard">Schwer</string>
+    <string name="difficulty_easy_upper">LEICHT</string>
+    <string name="difficulty_medium_upper">MITTEL</string>
+    <string name="difficulty_hard_upper">SCHWER</string>
+
+    <string name="activity_sudoku_play_elapsed_time">Spielzeit:</string>
+    <string name="activity_sudoku_play_difficulty">Schwierigkeit:</string>
+
+    <string name="difficulty_dialog_text">Bitte Schwierigkeitsstufe auswählen</string>
+
+    <string name="settings_dialog_name">EINSTELLUNGEN</string>
+    <string name="settings_dialog_faulty">Relevante Zellen hervorheben</string>
+    <string name="settings_dialog_highlight">Fehlerhafte Zellen markieren</string>
+    <string name="new_game_button_text">Neues Spiel</string>
+    <string name="restart_button_text">Neustart</string>
+</resources>

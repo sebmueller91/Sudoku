@@ -22,7 +22,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Elapsed time:"
+                android:text="@string/activity_sudoku_play_elapsed_time"
                 android:layout_marginHorizontal="5dp"
                 android:textSize="12sp" />
 
@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Difficulty:"
+                android:text="@string/activity_sudoku_play_difficulty"
                 android:textSize="12sp" />
 
             <TextView
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="Easy"
+                android:text=""
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -204,7 +204,7 @@
             android:textColor="#ffffff"
             android:textSize="20sp" />
 
-        <Button
+        <ImageButton
             android:id="@+id/clearCellButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -212,28 +212,7 @@
             android:layout_weight="1"
             android:background="@drawable/menu_button"
             android:orientation="horizontal"
-            android:text="CLEAR CELL"
-            android:textColor="#ffffff" />
-
-        <Button
-            android:id="@+id/newGameButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/menu_button"
-            android:orientation="horizontal"
-            android:text="New Game"
-            android:textColor="#ffffff" />
-
-        <ImageButton
-            android:id="@+id/preferencesButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="#00748FE1"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:src="@drawable/ic_settings"/>
+            android:src="@drawable/ic_emptycell" />
     </LinearLayout>
 
 </LinearLayout>
