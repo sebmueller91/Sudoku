@@ -19,4 +19,7 @@
     <string name="settings_dialog_highlight">Fehlerhafte Zellen markieren</string>
     <string name="new_game_button_text">Neues Spiel</string>
     <string name="restart_button_text">Neustart</string>
+    <string name="dialog_sudoku_play_restart">Möchten Sie Ihren Fortschritt zurücksetzen und das Spiel neu starten?</string>
+    <string name="Yes">Ja</string>
+    <string name="No">Nein</string>
 </resources>

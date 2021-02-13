@@ -20,4 +20,7 @@
     <string name="settings_dialog_highlight">Show faulty cells</string>
     <string name="new_game_button_text">New Game</string>
     <string name="restart_button_text">Restart</string>
+    <string name="dialog_sudoku_play_restart">Do you really want to restart the game and discard your progress?</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
 </resources>

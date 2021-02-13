@@ -37,6 +37,7 @@ import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
 import dgs_software.sudoku.dialogs.InfoDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
+import dgs_software.sudoku.dialogs.SudokuPlayRestartDialog;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
@@ -136,14 +137,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(this);
             chooseDifficultyDialog.show();
         } else if (item.getItemId() == R.id.restartButton) {
-            getSudokuModel().setElapsedSeconds(0);
-            getSudokuModel().deleteNonFixedValues();
-            refreshUI();
+            SudokuPlayRestartDialog restartDialog = new SudokuPlayRestartDialog(this);
+            restartDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     protected void onResume() {
@@ -299,6 +297,12 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         return getNoteButtons()[row][col];
     }
     // endregion CreateNestedGridLayout
+
+    public void restartGame() {
+        getSudokuModel().setElapsedSeconds(0);
+        getSudokuModel().deleteNonFixedValues();
+        refreshUI();
+    }
 
     // region Button OnClickHandlers
     // region OnClickListener methods
