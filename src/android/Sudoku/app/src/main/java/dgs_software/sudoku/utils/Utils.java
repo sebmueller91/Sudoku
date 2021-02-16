@@ -1,7 +1,10 @@
 package dgs_software.sudoku.utils;
 
+import android.content.Context;
 import android.os.Build;
 import android.util.Pair;
+import android.widget.TextView;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +17,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.Constants;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
@@ -83,6 +87,32 @@ public class Utils {
             return false;
         } else {
             return defaultValue;
+        }
+    }
+
+    // Returns the given seconds as a time string in the format hh:mm:ss
+    public static String formatSecondsAsTime(int numberSeconds) {
+        int hours = numberSeconds / 3600;
+        int minutes = (numberSeconds % 3600) / 60;
+        int seconds = (numberSeconds % 3600) % 60;
+
+        if (hours == 0) {
+            return String.format("%02d:%02d", minutes, seconds);
+        } else {
+            return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        }
+    }
+
+    // Returns a string represenation of the given difficulty, depending on the current language ressource
+    public static String getDifficultyAsString(Context context, Sudoku.Difficulty difficulty) {
+        if (difficulty == Sudoku.Difficulty.EASY) {
+            return context.getResources().getString(R.string.difficulty_easy);
+        } else if (difficulty == Sudoku.Difficulty.MEDIUM) {
+            return context.getResources().getString(R.string.difficulty_medium);
+        } else if (difficulty == Sudoku.Difficulty.HARD) {
+            return context.getResources().getString(R.string.difficulty_hard);
+        } else {
+            return null;
         }
     }
     // endregion Methods

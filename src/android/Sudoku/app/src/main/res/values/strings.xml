@@ -16,11 +16,17 @@
     <string name="difficulty_dialog_text">Please select the difficulty</string>
 
     <string name="settings_dialog_name">SETTINGS</string>
-    <string name="settings_dialog_faulty">Highlight relevant cells</string>
-    <string name="settings_dialog_highlight">Show faulty cells</string>
+    <string name="settings_dialog_faulty">Show faulty cells</string>
+    <string name="settings_dialog_highlight">Highlight relevant cells</string>
     <string name="new_game_button_text">New Game</string>
     <string name="restart_button_text">Restart</string>
     <string name="dialog_sudoku_play_restart">Do you really want to restart the game and discard your progress?</string>
     <string name="Yes">Yes</string>
     <string name="No">No</string>
+    <string name="dialog_sudoku_play_gamewon_congrats">Congratulations! You have solved the Sudoku!</string>
+    <string name="dialog_sudoku_play_gamewon_newgame">Do you want to start a new game?</string>
+    <string name="dialog_sudoku_play_sudokuwrong">The sudoku is incorrect!</string>
+    <string name="Close">Close</string>
+    <string name="dialog_sudoku_play_gamewon_timeneeded">Time needed:</string>
+    <string name="dialog_sudoku_play_gamewon_difficulty">Difficulty:</string>
 </resources>

@@ -230,7 +230,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
 
     // Sets all values of the User Interface according to the model of the sudoku
-    protected void refreshUI(boolean markFaultyCells, boolean highlightCells) {
+    public void refreshUI(boolean markFaultyCells, boolean highlightCells) {
         SudokuCellStates[][] cellStates = getCellStates(markFaultyCells, highlightCells);
 
         for (int i = 0; i < 9; i++) {

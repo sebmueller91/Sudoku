@@ -108,6 +108,12 @@ public class Sudoku {
         int randomIndex = (int) (Math.random() * numberSudokus);
         int[][] sudoku = sudokuList.get(randomIndex);
         setField(Utils.intToCellArray(sudoku, true));
+
+        // TODO: Remove
+        // Use this for testing to no have to solve sudoku each time
+        /*getSolution();
+        getField()[0][0].setValue(0);
+        getField()[0][0].setIsFixedValue(false);*/
     }
 
     // endregion Constructors

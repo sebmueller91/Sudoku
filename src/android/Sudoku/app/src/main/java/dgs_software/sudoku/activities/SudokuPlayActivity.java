@@ -1,19 +1,11 @@
 package dgs_software.sudoku.activities;
 
 import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,21 +16,15 @@ import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-
 import java.security.InvalidParameterException;
-import java.util.Hashtable;
-import java.util.Set;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.Constants;
-import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
-import dgs_software.sudoku.dialogs.InfoDialog;
+import dgs_software.sudoku.dialogs.SudokuPlayWonDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayRestartDialog;
-import dgs_software.sudoku.model.Cell;
+import dgs_software.sudoku.dialogs.SudokuPlayWrongDialog;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
 
@@ -174,13 +160,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         TextView elapsedTimeTextView = (TextView) findViewById(R.id.ElapsedTimeTextView);
         TextView difficultyTextView = (TextView) findViewById(R.id.DifficultyTextView);
 
-        if (getSudokuModel().getDifficulty() == Sudoku.Difficulty.EASY) {
-            difficultyTextView.setText(R.string.difficulty_easy); // TODO: use language ressource
-        } else if (getSudokuModel().getDifficulty() == Sudoku.Difficulty.MEDIUM) {
-            difficultyTextView.setText(R.string.difficulty_medium);
-        } else if (getSudokuModel().getDifficulty() == Sudoku.Difficulty.HARD) {
-            difficultyTextView.setText(R.string.difficulty_hard);
-        }
+        difficultyTextView.setText(Utils.getDifficultyAsString(getApplicationContext(), getSudokuModel().getDifficulty()));
 
         // Create Timer to count seconds
         int secondsToRun = 359999 - getSudokuModel().getElapsedSeconds(); // The will stop at 99:59:59
@@ -199,16 +179,8 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                     int elapsedSeconds = getSudokuModel().getElapsedSeconds() + animatedValueDiff;
                     getSudokuModel().setElapsedSeconds(elapsedSeconds);
 
-                    int hours = elapsedSeconds / 3600;
-                    int minutes = (elapsedSeconds % 3600) / 60;
-                    int seconds = (elapsedSeconds % 3600) % 60;
-
                     TextView elapsedTimeTextView = (TextView) findViewById(R.id.ElapsedTimeTextView);
-                    if (hours == 0) {
-                        elapsedTimeTextView.setText(String.format("%02d:%02d", minutes, seconds));
-                    } else {
-                        elapsedTimeTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-                    }
+                    elapsedTimeTextView.setText(Utils.formatSecondsAsTime(elapsedSeconds));
                 }
             });
         }
@@ -220,8 +192,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     @Override
     protected void onPause() {
-        getSaveDataProvider().saveSudokuPlay_sudoku(getSudokuModel());
         getTimer().pause();
+        // Save the game if it is not finished yet
+        if (getSudokuModel().isSolved() == false) {
+            getSaveDataProvider().saveSudokuPlay_sudoku(getSudokuModel());
+        }
 
         super.onPause();
     }
@@ -343,6 +318,17 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         if (getMakeNotes() == false) {
             getSudokuModel().getField()[row][col].setValue(number);
             getSudokuModel().getField()[row][col].setIsFixedValue(false);
+
+            // Check if sudoku is completely filled
+            if (getSudokuModel().isCompletelyFilled()) {
+                if (getSudokuModel().isSolved()) {
+                    SudokuPlayWonDialog gameWonDialog = new SudokuPlayWonDialog(this);
+                    gameWonDialog.show();
+                } else {
+                    SudokuPlayWrongDialog sudokuWrongDialog = new SudokuPlayWrongDialog(this);
+                    sudokuWrongDialog.show();
+                }
+            }
         } else {
             if (getSudokuModel().getField()[row][col].getIsEmpty() == false) {
                 return; // It is not possible to overwrite a filled cell with a note
@@ -379,9 +365,13 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // Refresh the note Buttons of the User Interface
     @Override
-    protected void refreshUI() {
-        super.refreshUI(getShowFaultyCells(), getHighlightCells());
-        SudokuCellStates[][] cellStates = getCellStates(getShowFaultyCells(), getHighlightCells());
+    public void refreshUI() {
+        // If all cells are filled, faulty cells are always displayed - otherwise only according to user preferences
+        boolean showFaultyCells = getSudokuModel().isCompletelyFilled() ? true : getShowFaultyCells();
+
+        super.refreshUI(showFaultyCells, getHighlightCells());
+        SudokuCellStates[][] cellStates = getCellStates(showFaultyCells, getHighlightCells());
+
         for (int i = 0; i < getNoteButtons().length; i++) {
             for (int j = 0; j < getNoteButtons()[i].length; j++) {
                 // Only if the cell is empty, the note fields must be drawn

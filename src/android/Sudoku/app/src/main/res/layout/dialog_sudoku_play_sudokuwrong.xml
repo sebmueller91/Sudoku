@@ -11,12 +11,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="10dp"
-        android:text="@string/dialog_sudoku_play_restart"
+        android:text="@string/dialog_sudoku_play_sudokuwrong"
         android:textColor="@android:color/black"
         android:textSize="20dp"
         android:textStyle="bold"
         android:gravity="center"/>
-
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -27,25 +26,12 @@
             android:layout_width="10dp"
             android:layout_height="match_parent"/>
         <Button
-            android:id="@+id/button_restart_yes"
+            android:id="@+id/button_gamewrong_close"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/menu_button"
             android:clickable="true"
-            android:text="@string/Yes"
-            android:textColor="#ffffff"
-            android:layout_weight="1"
-            android:textStyle="bold" />
-        <Space
-            android:layout_width="10dp"
-            android:layout_height="match_parent"/>
-        <Button
-            android:id="@+id/button_restart_no"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/menu_button"
-            android:clickable="true"
-            android:text="@string/No"
+            android:text="@string/Close"
             android:textColor="#ffffff"
             android:layout_weight="1"
             android:textStyle="bold" />

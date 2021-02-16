@@ -73,6 +73,10 @@ public class SaveDataProvider {
         return saveStringToFile(sudokuString, SUDOKUPLAY_FILENAME_SUDOKU);
     }
 
+    public boolean deleteSudokuPlay_sudoku() {
+        return deleteFile(SUDOKUPLAY_FILENAME_SUDOKU);
+    }
+
     public Sudoku loadSudokuPlay_sudoku() {
         String fileContent = loadStringFromFile(SUDOKUPLAY_FILENAME_SUDOKU);
         if (fileContent == null) {
@@ -167,6 +171,12 @@ public class SaveDataProvider {
         }
 
         return fileContent;
+    }
+
+    private boolean deleteFile(String filename) {
+        // TODO: Log
+        File file = new File(getContext().getFilesDir(), filename);
+        return file.exists() && file.isFile() && file.delete();
     }
     // endregion IOMethods
 

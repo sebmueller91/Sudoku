@@ -15,11 +15,17 @@
     <string name="difficulty_dialog_text">Bitte Schwierigkeitsstufe auswählen</string>
 
     <string name="settings_dialog_name">EINSTELLUNGEN</string>
-    <string name="settings_dialog_faulty">Relevante Zellen hervorheben</string>
-    <string name="settings_dialog_highlight">Fehlerhafte Zellen markieren</string>
+    <string name="settings_dialog_faulty">Fehlerhafte Zellen markieren</string>
     <string name="new_game_button_text">Neues Spiel</string>
     <string name="restart_button_text">Neustart</string>
     <string name="dialog_sudoku_play_restart">Möchten Sie Ihren Fortschritt zurücksetzen und das Spiel neu starten?</string>
     <string name="Yes">Ja</string>
     <string name="No">Nein</string>
+    <string name="dialog_sudoku_play_gamewon_newgame">Möchten Sie ein neues Spiel starten?</string>
+    <string name="dialog_sudoku_play_gamewon_congrats">Glückwunsch! Sie haben das Sudoku gelöst!</string>
+    <string name="dialog_sudoku_play_sudokuwrong">Das Sudoku ist fehlerhaft!</string>
+    <string name="Close">Okay</string>
+    <string name="settings_dialog_highlight">Relevante Zellen hervorheben</string>
+    <string name="dialog_sudoku_play_gamewon_timeneeded">"Benötigte Zeit: "</string>
+    <string name="dialog_sudoku_play_gamewon_difficulty">"Schwierigkeit: "</string>
 </resources>
