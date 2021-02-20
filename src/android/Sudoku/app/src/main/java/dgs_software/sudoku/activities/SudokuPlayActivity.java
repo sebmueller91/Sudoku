@@ -285,9 +285,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         setMakeNotes(!getMakeNotes());
         Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
         if (getMakeNotes()) {
-            makeNoteButton.setBackgroundColor(Color.GREEN);
+            makeNoteButton.setBackgroundResource(R.drawable.ic_notes_active);
+            //makeNoteButton.setBackgroundColor(Color.GREEN);
         } else {
-            makeNoteButton.setBackgroundColor(Color.GRAY);
+            makeNoteButton.setBackgroundResource(R.drawable.ic_notes);
+            //makeNoteButton.setBackgroundColor(Color.GRAY);
         }
     }
 

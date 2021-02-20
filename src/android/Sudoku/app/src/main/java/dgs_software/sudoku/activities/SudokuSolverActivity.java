@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageButton;
 
 import java.util.Hashtable;
 import java.util.Set;
@@ -69,7 +70,7 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         });
 
         // CLEAR CELL BUTTON
-        Button clearCellButton = (Button) findViewById(R.id.clearCellButton);
+        ImageButton clearCellButton = (ImageButton) findViewById(R.id.clearCellButton);
         clearCellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
