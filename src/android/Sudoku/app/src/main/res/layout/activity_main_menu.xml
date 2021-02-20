@@ -6,12 +6,24 @@
     android:layout_height="fill_parent"
     android:layout_gravity="center_horizontal"
     android:orientation="vertical">
+
+    <Space
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        grid:srcCompat="@drawable/ic_icon" />
+
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="SUDOKU"
-        android:textSize="50sp"/>
+        android:textSize="50sp" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
