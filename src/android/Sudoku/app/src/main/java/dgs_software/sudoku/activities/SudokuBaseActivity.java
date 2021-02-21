@@ -123,13 +123,9 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     // region Methods
     // When back key pressed -> Return to main menu instead of the previous dialogs
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
-            startActivity(intent);
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainMenuActivity.class);
+        startActivity(intent);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +181,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
                 // Create nested Grid for Sudoku Play only that will take the buttons with the notes
                 // Will be null for SudokuSolver and not-null for Sudoku PLay
-                GridLayout nestedGridLayout = createNestedGridLayout(i,j, Math.round(buttonSize/3));
+                GridLayout nestedGridLayout = createNestedGridLayout(i, j, Math.round(buttonSize / 3));
 
                 // First add nestedGrid (if existent) and then the button to the relative layout wrapper
                 if (nestedGridLayout != null) {

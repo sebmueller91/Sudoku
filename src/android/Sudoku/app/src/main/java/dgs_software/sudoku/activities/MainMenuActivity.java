@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,16 @@ import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
 import dgs_software.sudoku.model.Sudoku;
 
 public class MainMenuActivity extends AppCompatActivity {
+
+    // region Methods
+    // When back key pressed -> Return to home screen instead of the previous acitities
+    @Override
+    public void onBackPressed() {
+        Intent startMain = new Intent(Intent.ACTION_MAIN);
+        startMain.addCategory(Intent.CATEGORY_HOME);
+        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(startMain);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
