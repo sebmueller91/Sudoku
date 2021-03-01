@@ -1,14 +1,20 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:grid="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#ffffff">
+
     <LinearLayout
+        android:id="@+id/sudokuLinearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/buttonsLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <GridLayout
             android:id="@+id/SudokuGridLayout"
@@ -144,43 +150,54 @@
             android:id="@+id/clearCellButton"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="center"
             android:layout_marginHorizontal="5dp"
             android:background="@drawable/ic_emptycell"
-            android:orientation="horizontal"
-            android:layout_gravity="center"/>
+            android:orientation="horizontal" />
 
 
     </LinearLayout>
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:id="@+id/buttonsLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="30dp"
-        android:orientation="horizontal">
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/sudokuLinearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
             android:id="@+id/solveSudokuButton"
+            style="@style/menu_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/menu_button"
             android:orientation="horizontal"
-            android:text="Solve Sudoku"
-            android:textColor="#ffffff" />
+            android:text="@string/activity_sudoku_solve_solve"/>
 
 
         <Button
             android:id="@+id/resetSolutionButton"
+            style="@style/menu_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/menu_button"
             android:orientation="horizontal"
-            android:text="RESET SOLUTION"
-            android:textColor="#ffffff" />
+            android:text="@string/activity_sudoku_solve_resetSolution" />
+
+        <Button
+            android:id="@+id/resetButton"
+            style="@style/menu_button_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:orientation="horizontal"
+            android:text="@string/activity_sudoku_solve_reset" />
     </LinearLayout>
 
-</RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

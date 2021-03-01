@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="menu_button_style">
-        <item name="android:padding">10dp</item>
+        <item name="android:padding">5dp</item>
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:background">@drawable/menu_button</item>

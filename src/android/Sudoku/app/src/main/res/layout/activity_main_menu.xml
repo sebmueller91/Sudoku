@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:grid="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,69 +7,86 @@
     android:layout_gravity="center_horizontal"
     android:orientation="vertical">
 
-    <Space
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        grid:srcCompat="@drawable/ic_icon" />
-
     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="SUDOKU"
-        android:textSize="50sp" />
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:grid="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/appNameTextView"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="SMART\nSUDOKU"
+        android:textSize="50sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/iconImageView"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
+        android:layout_marginTop="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_icon"
+        app:civ_border_color="@color/colorPrimary"
+        app:civ_border_width="4dp"
+        app:civ_shadow="false"
+        app:civ_shadow_color="#ffffff"
+        app:civ_shadow_radius="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appNameTextView" />
+
+
+    <LinearLayout
+        android:id="@+id/buttonsLinearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
         android:gravity="center_vertical"
-        android:layout_weight="1">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iconImageView"
+        app:layout_constraintVertical_bias="0.78">
 
         <Space
             android:layout_width="10dp"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/PlaySudokuButton"
+            style="@style/menu_button_style"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            style="@style/menu_button_style"
             android:text="@string/button_text_sudoku_play"
-            app:layout_constraintBottom_toTopOf="@+id/solveSudokuButton" >
+            grid:layout_constraintBottom_toTopOf="@+id/solveSudokuButton">
 
         </Button>
 
         <Button
             android:id="@+id/solveSudokuButton"
+            style="@style/menu_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
-            style="@style/menu_button_style"
-            android:text="@string/button_text_sudoku_solve"
-            />
+            android:text="@string/button_text_sudoku_solve" />
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="\u00A9 DGS_Software"
         android:gravity="right"
         android:paddingRight="10dp"
-        android:paddingBottom="5dp"/>
+        android:paddingBottom="5dp"
+        android:text="\u00A9 DGS_Software"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

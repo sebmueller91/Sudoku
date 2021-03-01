@@ -28,4 +28,7 @@
     <string name="settings_dialog_highlight">Relevante Zellen hervorheben</string>
     <string name="dialog_sudoku_play_gamewon_timeneeded">"Benötigte Zeit: "</string>
     <string name="dialog_sudoku_play_gamewon_difficulty">"Schwierigkeit: "</string>
+    <string name="activity_sudoku_solve_solve">Lösen</string>
+    <string name="activity_sudoku_solve_resetSolution">Lösung zurücksetzen</string>
+    <string name="activity_sudoku_solve_reset">Zurücksetzen</string>
 </resources>

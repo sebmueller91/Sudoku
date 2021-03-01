@@ -29,4 +29,7 @@
     <string name="Close">Close</string>
     <string name="dialog_sudoku_play_gamewon_timeneeded">Time needed:</string>
     <string name="dialog_sudoku_play_gamewon_difficulty">Difficulty:</string>
+    <string name="activity_sudoku_solve_solve">Solve Sudoku</string>
+    <string name="activity_sudoku_solve_resetSolution">Reset Solution</string>
+    <string name="activity_sudoku_solve_reset">Reset</string>
 </resources>

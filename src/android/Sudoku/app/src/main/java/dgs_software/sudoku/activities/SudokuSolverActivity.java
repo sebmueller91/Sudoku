@@ -86,6 +86,21 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
                 resetSolutionButtonClicked();
             }
         });
+
+        // RESET SOLUTION BUTTON
+        Button resetButton = (Button) findViewById(R.id.resetButton);
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 0; i < getSudokuModel().getField().length; i++) {
+                    for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+                        getSudokuModel().getField()[i][j].setValue(0);
+                        getSudokuModel().getField()[i][j].setIsFixedValue(false);
+                    }
+                }
+                refreshUI();
+            }
+        });
     }
 
     @Override
