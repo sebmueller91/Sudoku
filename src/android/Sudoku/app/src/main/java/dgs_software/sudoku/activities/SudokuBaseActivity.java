@@ -1,38 +1,28 @@
 package dgs_software.sudoku.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.util.Pair;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.view.ViewCompat;
-
-import org.w3c.dom.Text;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Set;
 
 import dgs_software.sudoku.R;
-import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.config.GlobalConfig;
+import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
@@ -131,17 +121,18 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         // Initializations
         super.onCreate(savedInstanceState);
+        LanguageConfig.setAppLanguage(this);
         setContentView();
         GridLayout sudokuGrid = (GridLayout) findViewById(R.id.SudokuGridLayout);
 
-        Constants.applyDisplaySizeToConstants(getResources().getDisplayMetrics());
+        GlobalConfig.applyDisplaySizeToConstants(getResources().getDisplayMetrics());
 
         // Create Sudoku Grid for the UI
         ViewGroup.LayoutParams gridLayoutParams = sudokuGrid.getLayoutParams();
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         float screenWidth = displayMetrics.widthPixels; // Screen width in pixels
         float screenHeight = displayMetrics.heightPixels; // Screen height in pixels
-        float sudokuGridPixelSize = Constants.SUDOKU_GRID_SIZE_PERCENTAGE * Math.min(screenWidth, screenHeight); // Sudoku grid shall fill the screen, either in horizontal or vertical layout
+        float sudokuGridPixelSize = GlobalConfig.SUDOKU_GRID_SIZE_PERCENTAGE * Math.min(screenWidth, screenHeight); // Sudoku grid shall fill the screen, either in horizontal or vertical layout
         gridLayoutParams.height = Math.round(sudokuGridPixelSize);
         gridLayoutParams.width = Math.round(sudokuGridPixelSize);
         sudokuGrid.setLayoutParams(gridLayoutParams);
@@ -166,7 +157,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
                 // Create button for the current cell
                 Button button = new Button(getApplicationContext());
-                button.setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.SUDOKU_BUTTON_TEXT_SIZE);
+                button.setTextSize(TypedValue.COMPLEX_UNIT_SP, GlobalConfig.SUDOKU_BUTTON_TEXT_SIZE);
                 button.setStateListAnimator(null);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -352,7 +343,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
             GradientDrawable drawableInner = new GradientDrawable();
             GradientDrawable drawableBorders = new GradientDrawable();
             drawableInner.setColor(backgroundColor);
-            drawableBorders.setColor(Constants.SUDOKU_BORDER_COLOR);
+            drawableBorders.setColor(GlobalConfig.SUDOKU_BORDER_COLOR);
 
             Drawable[] layers = {drawableBorders, drawableInner};
             LayerDrawable layerDrawable = new LayerDrawable(layers);
@@ -370,38 +361,38 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
         // Set Left Border Thickness
         if (col == 0) {
-            borders[0] = Constants.STROKE_WIDTH_BIG_BORDER;
+            borders[0] = GlobalConfig.STROKE_WIDTH_BIG_BORDER;
         } else if (col % 3 == 0) {
-            borders[0] = Constants.STROKE_WIDTH_MID_BORDER;
+            borders[0] = GlobalConfig.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[0] = Constants.STROKE_WIDTH_SMALL_BORDER;
+            borders[0] = GlobalConfig.STROKE_WIDTH_SMALL_BORDER;
         }
 
         // Set Top Border Thickness
         if (row == 0) {
-            borders[1] = Constants.STROKE_WIDTH_BIG_BORDER;
+            borders[1] = GlobalConfig.STROKE_WIDTH_BIG_BORDER;
         } else if (row % 3 == 0) {
-            borders[1] = Constants.STROKE_WIDTH_MID_BORDER;
+            borders[1] = GlobalConfig.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[1] = Constants.STROKE_WIDTH_SMALL_BORDER;
+            borders[1] = GlobalConfig.STROKE_WIDTH_SMALL_BORDER;
         }
 
         // Set Right Border Thickness
         if (col == 8) {
-            borders[2] = Constants.STROKE_WIDTH_BIG_BORDER;
+            borders[2] = GlobalConfig.STROKE_WIDTH_BIG_BORDER;
         } else if (col % 3 == 2) {
-            borders[2] = Constants.STROKE_WIDTH_MID_BORDER;
+            borders[2] = GlobalConfig.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[2] = Constants.STROKE_WIDTH_SMALL_BORDER;
+            borders[2] = GlobalConfig.STROKE_WIDTH_SMALL_BORDER;
         }
 
         // Set Bottom Border Thickness
         if (row == 8) {
-            borders[3] = Constants.STROKE_WIDTH_BIG_BORDER;
+            borders[3] = GlobalConfig.STROKE_WIDTH_BIG_BORDER;
         } else if (row % 3 == 2) {
-            borders[3] = Constants.STROKE_WIDTH_MID_BORDER;
+            borders[3] = GlobalConfig.STROKE_WIDTH_MID_BORDER;
         } else {
-            borders[3] = Constants.STROKE_WIDTH_SMALL_BORDER;
+            borders[3] = GlobalConfig.STROKE_WIDTH_SMALL_BORDER;
         }
 
         return borders;

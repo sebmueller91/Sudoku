@@ -1,21 +1,20 @@
 package dgs_software.sudoku.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import dgs_software.sudoku.R;
+import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
-import dgs_software.sudoku.R;
 import dgs_software.sudoku.dialogs.InfoDialog;
-import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
+import dgs_software.sudoku.dialogs.MainMenuSettingsDialog;
 import dgs_software.sudoku.model.Sudoku;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -30,20 +29,22 @@ public class MainMenuActivity extends AppCompatActivity {
         startActivity(startMain);
     }
 
+    // Create the buttons in the menu bar at the top
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
-        // If you don't have res/menu, just create a directory named "menu" inside res
         getMenuInflater().inflate(R.menu.menu_main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    // handle button activities
+    // Handle button activities of menu bar at the top
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.infoButton) {
             InfoDialog infoDialog = new InfoDialog(MainMenuActivity.this);
             infoDialog.show();
+        } else if (item.getItemId() == R.id.settings_button) {
+            MainMenuSettingsDialog settingsDialog = new MainMenuSettingsDialog(MainMenuActivity.this, this);
+            settingsDialog.show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -51,6 +52,9 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        LanguageConfig.setAppLanguage(this);
+
         setContentView(R.layout.activity_main_menu);
 
         Button playSudokuButton = (Button) findViewById(R.id.PlaySudokuButton);

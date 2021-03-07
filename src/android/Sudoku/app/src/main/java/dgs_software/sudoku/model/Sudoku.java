@@ -1,7 +1,6 @@
 package dgs_software.sudoku.model;
 
 import android.content.Context;
-
 import android.util.Pair;
 
 import java.util.LinkedList;

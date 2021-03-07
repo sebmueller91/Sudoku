@@ -32,4 +32,7 @@
     <string name="activity_sudoku_solve_solve">Solve Sudoku</string>
     <string name="activity_sudoku_solve_resetSolution">Reset Solution</string>
     <string name="activity_sudoku_solve_reset">Reset</string>
+    <string name="dialog_mainmenu_settings_language">App language</string>
+    <string name="language_german" translatable="false">Deutsch</string>
+    <string name="language_english" translatable="false">English</string>
 </resources>

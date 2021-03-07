@@ -2,13 +2,10 @@ package dgs_software.sudoku.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.Window;
-
-import androidx.annotation.NonNull;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.config.LanguageConfig;
 
 public class InfoDialog extends Dialog {
 
@@ -21,7 +18,7 @@ public class InfoDialog extends Dialog {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_info);
+        LanguageConfig.setAppLanguage(getContext());
+        setContentView(R.layout.dialog_mainmenu_info);
     }
-
 }

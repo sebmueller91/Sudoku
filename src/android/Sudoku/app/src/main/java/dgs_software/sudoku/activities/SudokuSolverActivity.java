@@ -1,24 +1,12 @@
 package dgs_software.sudoku.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Pair;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 
-import java.util.Hashtable;
-import java.util.Set;
-
 import dgs_software.sudoku.R;
-import dgs_software.sudoku.data.SaveDataProvider;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;

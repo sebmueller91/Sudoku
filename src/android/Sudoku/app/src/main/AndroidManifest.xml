@@ -12,15 +12,18 @@
         <activity
             android:name=".activities.SudokuSolverActivity"
             android:parentActivityName=".activities.MainMenuActivity"
+            android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".activities.SudokuPlayActivity"
             android:parentActivityName=".activities.MainMenuActivity"
+            android:configChanges="layoutDirection|locale"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name=".activities.MainMenuActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:configChanges="layoutDirection|locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

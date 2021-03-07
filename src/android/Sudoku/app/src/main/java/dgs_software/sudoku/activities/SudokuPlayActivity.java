@@ -19,11 +19,11 @@ import android.widget.TextView;
 import java.security.InvalidParameterException;
 
 import dgs_software.sudoku.R;
-import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
-import dgs_software.sudoku.dialogs.SudokuPlayWonDialog;
-import dgs_software.sudoku.dialogs.SudokuPlayPreferencesDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayRestartDialog;
+import dgs_software.sudoku.dialogs.SudokuPlaySettingsDialog;
+import dgs_software.sudoku.dialogs.SudokuPlayWonDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayWrongDialog;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
@@ -117,7 +117,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.settings_button) {
-            SudokuPlayPreferencesDialog preferencesDialog = new SudokuPlayPreferencesDialog(SudokuPlayActivity.this, this);
+            SudokuPlaySettingsDialog preferencesDialog = new SudokuPlaySettingsDialog(SudokuPlayActivity.this, this);
             preferencesDialog.show();
         } else if (item.getItemId() == R.id.newGameButton) {
             ChooseDifficultyDialog chooseDifficultyDialog = new ChooseDifficultyDialog(this);
@@ -238,7 +238,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         Button[] noteButtons = createNoteButtons(row, col);
         for (int k = 0; k < noteButtons.length; k++) {
             ViewGroup.LayoutParams noteButtonLayoutParams = new ViewGroup.LayoutParams(buttonSize, (int) buttonSize);
-            noteButtons[k].setTextSize(TypedValue.COMPLEX_UNIT_SP, Constants.SUDOKU_NOTE_BUTTON_TEXT_SIZE);
+            noteButtons[k].setTextSize(TypedValue.COMPLEX_UNIT_SP, GlobalConfig.SUDOKU_NOTE_BUTTON_TEXT_SIZE);
             noteButtons[k].setPadding(0, 0, 0, 0);
             noteButtons[k].setTypeface(null, Typeface.BOLD);
             noteButtons[k].setStateListAnimator(null);
@@ -324,6 +324,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             // Check if sudoku is completely filled
             if (getSudokuModel().isCompletelyFilled()) {
                 if (getSudokuModel().isSolved()) {
+                    getTimer().pause();
                     SudokuPlayWonDialog gameWonDialog = new SudokuPlayWonDialog(this);
                     gameWonDialog.show();
                 } else {

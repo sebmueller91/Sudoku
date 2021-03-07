@@ -1,10 +1,9 @@
 package dgs_software.sudoku.config;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.util.DisplayMetrics;
 
-public class Constants {
+public class GlobalConfig {
     public static final float SUDOKU_GRID_SIZE_PERCENTAGE = 0.98f;
     public static int SUDOKU_BUTTON_TEXT_SIZE = 20;
     public static int SUDOKU_NOTE_BUTTON_TEXT_SIZE = 8;

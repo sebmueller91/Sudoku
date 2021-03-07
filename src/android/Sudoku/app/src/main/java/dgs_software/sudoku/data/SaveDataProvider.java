@@ -1,6 +1,5 @@
 package dgs_software.sudoku.data;
 
-import android.app.Application;
 import android.content.Context;
 
 import java.io.File;
@@ -8,15 +7,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
-import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.config.GlobalConfig;
+import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
-
-import static android.content.Context.MODE_PRIVATE;
 
 // Provides methods to save and load app data to files in the internal storage
 public class SaveDataProvider {
@@ -26,6 +22,8 @@ public class SaveDataProvider {
     private static final String SUDOKUPLAY_FILENAME_SUDOKU = "save_sudokuplay_sudoku.save";
 
     private static final String SUDOKUSOLVER_FILENAME_SUDOKU = "save_sudokusolver_sudoku.save";
+
+    private static final String LANGUAGEOVERRIDE_FILENAME = "save_languageoverride.save";
     // endregion Filenames
 
     // region Attributes
@@ -100,6 +98,26 @@ public class SaveDataProvider {
         return stringToSudoku(fileContent);
     }
     // endregion SudokuSolver Methods
+
+    // region common methods
+    public boolean save_languageOverride(LanguageConfig.SUPPORTED_LANGUAGES  language) {
+        String languageString = language.toString();
+        return saveStringToFile(languageString, LANGUAGEOVERRIDE_FILENAME);
+    }
+
+    public LanguageConfig.SUPPORTED_LANGUAGES load_languageOverride() {
+        String fileContent = loadStringFromFile(LANGUAGEOVERRIDE_FILENAME);
+        if (fileContent == null) {
+            return null;
+        }
+
+        return LanguageConfig.stringToSupportedLanguage(fileContent);
+    }
+
+    public boolean delete_LanguageOverride() {
+        return deleteFile(LANGUAGEOVERRIDE_FILENAME);
+    }
+    // endregion common methods
 
     // region IOMethods
     // Saves a boolean to a file "filename" in the internal storage
@@ -195,23 +213,23 @@ public class SaveDataProvider {
         for (int i = 0; i < sudoku.getField().length; i++) {
             for (int j = 0; j < sudoku.getField()[i].length; j++) {
                 stringBuilder.append(sudoku.getField()[i][j].getValue());
-                stringBuilder.append(Constants.NUMBER_DELIMITER);
+                stringBuilder.append(GlobalConfig.NUMBER_DELIMITER);
             }
-            stringBuilder.append(Constants.ROW_DELIMITER);
+            stringBuilder.append(GlobalConfig.ROW_DELIMITER);
         }
 
         // Write isFixedValue
-        stringBuilder.append(Constants.SUDOKU_DELIMITER);
+        stringBuilder.append(GlobalConfig.SUDOKU_DELIMITER);
         for (int i = 0; i < sudoku.getField().length; i++) {
             for (int j = 0; j < sudoku.getField()[i].length; j++) {
                 stringBuilder.append(sudoku.getField()[i][j].getIsFixedValue());
-                stringBuilder.append(Constants.NUMBER_DELIMITER);
+                stringBuilder.append(GlobalConfig.NUMBER_DELIMITER);
             }
-            stringBuilder.append(Constants.ROW_DELIMITER);
+            stringBuilder.append(GlobalConfig.ROW_DELIMITER);
         }
 
         // Write NoteValues (if necessary)
-        stringBuilder.append(Constants.SUDOKU_DELIMITER);
+        stringBuilder.append(GlobalConfig.SUDOKU_DELIMITER);
         if (includeNotes) {
             for (int i = 0; i < sudoku.getField().length; i++) {
                 for (int j = 0; j < sudoku.getField()[i].length; j++) {
@@ -221,20 +239,20 @@ public class SaveDataProvider {
                         } else {
                             stringBuilder.append(false);
                         }
-                        stringBuilder.append(Constants.NOTES_DELIMITER);
+                        stringBuilder.append(GlobalConfig.NOTES_DELIMITER);
                     }
-                    stringBuilder.append(Constants.NUMBER_DELIMITER);
+                    stringBuilder.append(GlobalConfig.NUMBER_DELIMITER);
                 }
-                stringBuilder.append(Constants.ROW_DELIMITER);
+                stringBuilder.append(GlobalConfig.ROW_DELIMITER);
             }
         }
 
         // Write Difficulty
-        stringBuilder.append(Constants.SUDOKU_DELIMITER);
+        stringBuilder.append(GlobalConfig.SUDOKU_DELIMITER);
         stringBuilder.append(sudoku.getDifficulty().toString());
 
         // Write ElapsedSeconds
-        stringBuilder.append(Constants.SUDOKU_DELIMITER);
+        stringBuilder.append(GlobalConfig.SUDOKU_DELIMITER);
         stringBuilder.append(sudoku.getElapsedSeconds());
 
         return stringBuilder.toString();
@@ -247,15 +265,15 @@ public class SaveDataProvider {
         // parts[1] contains information about each cell if the value is fixed
         // parts[3] (if != null) contains the 9 notes for each cell
         try {
-            String[] parts = string.split(Constants.SUDOKU_DELIMITER);
+            String[] parts = string.split(GlobalConfig.SUDOKU_DELIMITER);
 
             Cell[][] field = new Cell[9][9];
 
             // Read the values for all cells from the string
             if (parts != null && parts.length >= 1) {
-                String[] rows = parts[0].split(Constants.ROW_DELIMITER);
+                String[] rows = parts[0].split(GlobalConfig.ROW_DELIMITER);
                 for (int i = 0; i < field.length; i++) {
-                    String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
+                    String[] entries = rows[i].split(GlobalConfig.NUMBER_DELIMITER);
                     for (int j = 0; j < field[i].length; j++) {
                         field[i][j] = new Cell(Integer.parseInt(entries[j]));
                     }
@@ -264,9 +282,9 @@ public class SaveDataProvider {
 
             // Read the isFixedValue for each cell from the String
             if (parts != null && parts.length >= 2) {
-                String[] rows = parts[1].split(Constants.ROW_DELIMITER);
+                String[] rows = parts[1].split(GlobalConfig.ROW_DELIMITER);
                 for (int i = 0; i < field.length; i++) {
-                    String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
+                    String[] entries = rows[i].split(GlobalConfig.NUMBER_DELIMITER);
                     for (int j = 0; j < field[i].length; j++) {
                         field[i][j].setIsFixedValue(Boolean.parseBoolean(entries[j]));
                     }
@@ -275,11 +293,11 @@ public class SaveDataProvider {
 
             // Read the Note values for all cells (if existent
             if (parts != null && parts.length >= 3 && parts[2].isEmpty() == false) {
-                String[] rows = parts[2].split(Constants.ROW_DELIMITER);
+                String[] rows = parts[2].split(GlobalConfig.ROW_DELIMITER);
                 for (int i = 0; i < field.length; i++) {
-                    String[] cells = rows[i].split(Constants.NUMBER_DELIMITER);
+                    String[] cells = rows[i].split(GlobalConfig.NUMBER_DELIMITER);
                     for (int j = 0; j < field[i].length; j++) {
-                        String[] notes = cells[j].split(Constants.NOTES_DELIMITER);
+                        String[] notes = cells[j].split(GlobalConfig.NOTES_DELIMITER);
                         field[i][j].setActiveNotes(new boolean[9]);
                         for (int k = 0; k < notes.length; k++) {
                             field[i][j].getActiveNotes()[k] = Boolean.parseBoolean(notes[k]);

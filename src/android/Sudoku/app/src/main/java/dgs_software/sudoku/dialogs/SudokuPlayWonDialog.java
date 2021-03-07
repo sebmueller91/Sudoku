@@ -14,6 +14,7 @@ import android.widget.TextView;
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.activities.MainMenuActivity;
 import dgs_software.sudoku.activities.SudokuPlayActivity;
+import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
 
@@ -34,6 +35,7 @@ public class SudokuPlayWonDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
+        LanguageConfig.setAppLanguage(getContext());
         setContentView(R.layout.dialog_sudoku_play_gamewon);
 
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

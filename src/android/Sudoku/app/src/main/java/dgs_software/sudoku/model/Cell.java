@@ -1,8 +1,5 @@
 package dgs_software.sudoku.model;
 
-import android.view.View;
-import android.widget.Button;
-
 public class Cell {
     // region Attributes
     // region Value

@@ -1,23 +1,18 @@
 package dgs_software.sudoku.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.activities.SudokuPlayActivity;
-import dgs_software.sudoku.data.SaveDataProvider;
-import dgs_software.sudoku.model.Sudoku;
+import dgs_software.sudoku.config.LanguageConfig;
 
-public class SudokuPlayPreferencesDialog extends Dialog {
+public class SudokuPlaySettingsDialog extends Dialog {
 
     // region Attributes
     private SudokuPlayActivity m_activity;
@@ -30,14 +25,15 @@ public class SudokuPlayPreferencesDialog extends Dialog {
     }
     // endregion Attributes
 
-    public SudokuPlayPreferencesDialog(@NonNull Context context, SudokuPlayActivity activity) {
+    public SudokuPlaySettingsDialog(@NonNull Context context, SudokuPlayActivity activity) {
         super(context);
         setActivity(activity);
     }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_sudoku_play_preferences);
+        LanguageConfig.setAppLanguage(getContext());
+        setContentView(R.layout.dialog_sudoku_play_settings);
 
         final Switch showFaultyCellsSwitch = (Switch) findViewById(R.id.showFaultyCellsSwitch);
         final Switch highlightCellsSwitch = (Switch) findViewById(R.id.highlightCellsSwitch);

@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.activities.SudokuPlayActivity;
+import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.model.Sudoku;
 
 public class ChooseDifficultyDialog extends Dialog {
@@ -30,6 +31,7 @@ public class ChooseDifficultyDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
+        LanguageConfig.setAppLanguage(getContext());
         setContentView(R.layout.dialog_choose_difficulty);
 
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

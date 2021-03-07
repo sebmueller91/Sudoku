@@ -1,7 +1,6 @@
 package dgs_software.sudoku.data;
 
 import android.content.Context;
-import android.os.Build;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,9 +12,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 
 import dgs_software.sudoku.R;
-import dgs_software.sudoku.config.Constants;
+import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.model.Sudoku;
-import dgs_software.sudoku.utils.Utils;
 
 public class RessourcesDataProvider {
 
@@ -81,7 +79,7 @@ public class RessourcesDataProvider {
     // Returns a list of 2d int array sudokus
     private static LinkedList<int[][]> stringToSudokuList(String fileContent) {
         LinkedList<int[][]> sudokuList = new LinkedList<int[][]>();
-        String[] sudokus = fileContent.split(Constants.SUDOKU_DELIMITER);
+        String[] sudokus = fileContent.split(GlobalConfig.SUDOKU_DELIMITER);
         for (int s = 0; s < sudokus.length; s++) {
             int[][] sudoku = stringToSudoku(sudokus[s]);
             sudokuList.add(sudoku);
@@ -93,9 +91,9 @@ public class RessourcesDataProvider {
     // Converts a string into a sudoku
     private static int[][] stringToSudoku(String string) {
         int[][] sudoku = new int[9][9];
-        String[] rows = string.split(Constants.ROW_DELIMITER);
+        String[] rows = string.split(GlobalConfig.ROW_DELIMITER);
         for (int i = 0; i < rows.length; i++) {
-            String[] entries = rows[i].split(Constants.NUMBER_DELIMITER);
+            String[] entries = rows[i].split(GlobalConfig.NUMBER_DELIMITER);
             for (int j = 0; j < entries.length; j++) {
                 sudoku[i][j] = Integer.parseInt(entries[j]);
             }
