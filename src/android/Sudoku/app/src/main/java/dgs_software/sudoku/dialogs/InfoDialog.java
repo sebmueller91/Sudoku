@@ -2,6 +2,8 @@ package dgs_software.sudoku.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import dgs_software.sudoku.R;
@@ -20,5 +22,6 @@ public class InfoDialog extends Dialog {
         super.onCreate(savedInstanceState);
         LanguageConfig.setAppLanguage(getContext());
         setContentView(R.layout.dialog_mainmenu_info);
+        this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }

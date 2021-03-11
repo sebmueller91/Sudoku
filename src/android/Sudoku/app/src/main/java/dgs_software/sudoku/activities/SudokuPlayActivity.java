@@ -160,7 +160,14 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         TextView elapsedTimeTextView = (TextView) findViewById(R.id.ElapsedTimeTextView);
         TextView difficultyTextView = (TextView) findViewById(R.id.DifficultyTextView);
 
-        difficultyTextView.setText(Utils.getDifficultyAsString(getApplicationContext(), getSudokuModel().getDifficulty()));
+        difficultyTextView.setText(Utils.getDifficultyAsString(this, getSudokuModel().getDifficulty()));
+//        if (difficulty == Sudoku.Difficulty.EASY) {
+//            difficultyTextView.setText(getResources().getString(R.string.difficulty_easy);
+//        } else if (difficulty == Sudoku.Difficulty.MEDIUM) {
+//            difficultyTextView.setText(getResources().getString(R.string.difficulty_medium);
+//        } else if (difficulty == Sudoku.Difficulty.HARD) {
+//            difficultyTextView.setText(getResources().getString(R.string.difficulty_hard);
+//        }
 
         // Create Timer to count seconds
         int secondsToRun = 359999 - getSudokuModel().getElapsedSeconds(); // The will stop at 99:59:59

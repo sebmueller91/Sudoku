@@ -2,6 +2,8 @@ package dgs_software.sudoku.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Switch;
@@ -34,6 +36,7 @@ public class SudokuPlaySettingsDialog extends Dialog {
         super.onCreate(savedInstanceState);
         LanguageConfig.setAppLanguage(getContext());
         setContentView(R.layout.dialog_sudoku_play_settings);
+        this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         final Switch showFaultyCellsSwitch = (Switch) findViewById(R.id.showFaultyCellsSwitch);
         final Switch highlightCellsSwitch = (Switch) findViewById(R.id.highlightCellsSwitch);

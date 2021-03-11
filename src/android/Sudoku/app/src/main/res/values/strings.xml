@@ -35,4 +35,6 @@
     <string name="dialog_mainmenu_settings_language">App language</string>
     <string name="language_german" translatable="false">Deutsch</string>
     <string name="language_english" translatable="false">English</string>
+    <string name="dialog_info_version">App version:</string>
+    <string name="dialog_info_contact">Contact:</string>
 </resources>

@@ -29,6 +29,7 @@ public class SudokuPlayRestartDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_OPTIONS_PANEL);
         LanguageConfig.setAppLanguage(getContext());
         setContentView(R.layout.dialog_sudoku_play_restart);
+        this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 

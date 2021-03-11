@@ -32,4 +32,6 @@
     <string name="activity_sudoku_solve_resetSolution">Lösung zurücksetzen</string>
     <string name="activity_sudoku_solve_reset">Zurücksetzen</string>
     <string name="dialog_mainmenu_settings_language">Sprache der App</string>
+    <string name="dialog_info_version">"Version der App: "</string>
+    <string name="dialog_info_contact">"Kontakt: "</string>
 </resources>
