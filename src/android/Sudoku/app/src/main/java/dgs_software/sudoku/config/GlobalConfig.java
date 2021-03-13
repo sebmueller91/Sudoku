@@ -10,7 +10,7 @@ public class GlobalConfig {
     public static final boolean defaultShowFaultyCells = true;
     public static final boolean defaultHighlightCells = true;
 
-    public static final float SUDOKU_GRID_SIZE_PERCENTAGE = 0.98f;
+    public static final float SUDOKU_GRID_SIZE_PERCENTAGE = 0.98f; // Percentage of the screen width that the sudoku grid fills
     public static int SUDOKU_BUTTON_TEXT_SIZE = 20;
     public static int SUDOKU_NOTE_BUTTON_TEXT_SIZE = 8;
 

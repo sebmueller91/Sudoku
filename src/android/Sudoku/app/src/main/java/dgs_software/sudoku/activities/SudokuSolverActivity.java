@@ -45,7 +45,6 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         refreshUI();
     }
 
-
     @Override
     protected void instantiateButtons() {
         // SOLVE SUDOKU BUTTON
@@ -89,11 +88,6 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
                 refreshUI();
             }
         });
-    }
-
-    @Override
-    protected GridLayout createNestedGridLayout(int row, int col, int buttonSize) {
-        return null; // No nested grid needed for the solver
     }
 
     public void sudokuButtonClickedAction(int row, int col) {

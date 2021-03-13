@@ -15,6 +15,7 @@ import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.model.Sudoku;
 
+// Provides the data that is saved in  text files in the raw vaues folder
 public class RessourcesDataProvider {
 
     // region Attributes

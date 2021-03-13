@@ -1,17 +1,19 @@
 package dgs_software.sudoku.model;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.Pair;
 
 import java.util.LinkedList;
 
+import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.data.RessourcesDataProvider;
 import dgs_software.sudoku.utils.Utils;
 
 public class Sudoku {
     // region Enum Difficulty declaration
     public enum Difficulty {
-        EASY(1), MEDIUM(2), HARD(3), RELOAD_EXISTING(4); // Difficulty NONE is used for user created sudokus (in SudokuSolver)
+        EASY(1), MEDIUM(2), HARD(3), RELOAD_EXISTING(4); // Difficulty RELOAD_EXISTING is used for user created sudokus (in SudokuSolver)
 
         private int m_difficulty;
 
@@ -95,7 +97,13 @@ public class Sudoku {
         setElapsedSeconds(elapsedSeconds);
     }
 
+    // Loads a sudoku with given difficulty from the raw value files
     public Sudoku(Difficulty difficulty, Context context) {
+        if (difficulty == Difficulty.RELOAD_EXISTING) {
+            Log.e(GlobalConfig.LOGTAG, "Sudoku consutuctor: Difficulty is invalid!");
+            return;
+        }
+
         setDifficulty(difficulty);
 
         // Retrieve list of sudokus from data file
@@ -271,7 +279,7 @@ public class Sudoku {
                     continue;
                 }
                 boolean[] possibleNumbers = getPossibleNumbers(i, j);
-                if (possibleNumbers[getField()[i][j].getValue() - 1] == false) { // The entered number is not possible
+                if (possibleNumbers[getField()[i][j].getValue() - 1] == false) { // The entered number is not valid
                     wrongCells.add(new Pair<Integer, Integer>(i, j));
                 }
             }

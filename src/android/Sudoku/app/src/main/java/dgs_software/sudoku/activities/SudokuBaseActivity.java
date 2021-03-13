@@ -88,6 +88,26 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         this.m_sudokuButtonArray = sudokuButtonArray;
     }
     // endregion sudokuButtonArray
+
+    // region frameLayoutGrid
+    private FrameLayout[][] m_frameLayoutGrid;
+    public FrameLayout[][] getFrameLayoutGrid() {
+        return m_frameLayoutGrid;
+    }
+    public void setFrameLayoutGrid(FrameLayout[][] frameLayoutGrid) {
+        m_frameLayoutGrid = frameLayoutGrid;
+    }
+    // endregion frameLayoutGrid
+
+    // region buttonSize
+    private int m_buttonSize;
+    public int getButtonSize() {
+        return m_buttonSize;
+    }
+    public void setButtonSize(int buttonSize) {
+        m_buttonSize = buttonSize;
+    }
+    // endregion buttonSize
     // endregion Attributes
 
     //region Abstract method signatures
@@ -104,9 +124,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
     // Event Handler for the input buttons (1-9)
     public abstract void inputButtonClickedAction(int number);
-
-    // Create the nested GridLayout for one Button (used for the notes) if it is used by the subclass
-    protected abstract GridLayout createNestedGridLayout(int row, int col, int buttonSize);
     //endregion
 
     // region Methods
@@ -135,6 +152,8 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         gridLayoutParams.height = Math.round(sudokuGridPixelSize);
         gridLayoutParams.width = Math.round(sudokuGridPixelSize);
         sudokuGrid.setLayoutParams(gridLayoutParams);
+        setFrameLayoutGrid(new FrameLayout[9][9]);
+        setButtonSize((int) (sudokuGridPixelSize / 9.0f));
 
         // Fill Sudoku Grids
         setSudokuButtonArray(new Button[9][9]);
@@ -142,17 +161,16 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
             for (int j = 0; j < sudokuGrid.getColumnCount(); j++) {
                 final int row = i;
                 final int col = j;
-                int buttonSize = (int) (sudokuGridPixelSize / 9.0f);
 
                 // Create Frame Layout (Used as wrapper to place the regular Sudoku Button and the 3x3 note-Buttons above each other
-                ViewGroup.LayoutParams frameLayoutWrapperParams = new ViewGroup.LayoutParams(buttonSize, buttonSize);
+                ViewGroup.LayoutParams frameLayoutWrapperParams = new ViewGroup.LayoutParams(getButtonSize(), getButtonSize());
                 //sudokuGrid.addView(relativeLayoutWrapper, i * sudokuGrid.getColumnCount() + j, relativeLayoutWrapperParams);
 
                 // Create FrameLayout params and place Button and nested grid on top of each other
-                FrameLayout frameLayout = new FrameLayout(getApplicationContext());
-                frameLayout.setClipChildren(false);
+                getFrameLayoutGrid()[i][j] = new FrameLayout(getApplicationContext());
+                getFrameLayoutGrid()[i][j].setClipChildren(false);
 
-                sudokuGrid.addView(frameLayout, i * sudokuGrid.getColumnCount() + j, frameLayoutWrapperParams);
+                sudokuGrid.addView(getFrameLayoutGrid()[i][j], i * sudokuGrid.getColumnCount() + j, frameLayoutWrapperParams);
 
                 // Create button for the current cell
                 Button button = new Button(getApplicationContext());
@@ -164,19 +182,9 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
                         sudokuButtonClickedAction(row, col);
                     }
                 });
-                ViewGroup.LayoutParams buttonLayoutParams = new ViewGroup.LayoutParams(buttonSize, buttonSize);
+                ViewGroup.LayoutParams buttonLayoutParams = new ViewGroup.LayoutParams(getButtonSize(), getButtonSize());
                 getSudokuButtonArray()[i][j] = button;
-                frameLayout.addView(button);
-
-
-                // Create nested Grid for Sudoku Play only that will take the buttons with the notes
-                // Will be null for SudokuSolver and not-null for Sudoku PLay
-                GridLayout nestedGridLayout = createNestedGridLayout(i, j, Math.round(buttonSize / 3));
-
-                // First add nestedGrid (if existent) and then the button to the relative layout wrapper
-                if (nestedGridLayout != null) {
-                    frameLayout.addView(nestedGridLayout);
-                }
+                getFrameLayoutGrid()[i][j].addView(button);
             }
         }
 
@@ -211,11 +219,9 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         setSaveDataProvider(new SaveDataProvider(getApplicationContext()));
     }
 
-    // region Refresh UI Methods
-    // Refreshes the complete UI
+    // region RefreshUI Methods
 
-
-    // Sets all values of the User Interface according to the model of the sudoku
+    // Refreshes the complete and updates all values of the User Interface according to the model of the sudoku
     public void refreshUI(boolean markFaultyCells, boolean highlightCells) {
         SudokuCellStates[][] cellStates = getCellStates(markFaultyCells, highlightCells);
 
@@ -410,6 +416,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         }
         return list;
     }
-    // endregion Refresh UI Methods
+    // endregion
     // endregion Methods
 }

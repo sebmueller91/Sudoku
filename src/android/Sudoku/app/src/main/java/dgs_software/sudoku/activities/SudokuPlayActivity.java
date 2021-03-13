@@ -103,7 +103,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     // endregion lastAnimatedValue
-    // endregion Attributes
+    // endregion
 
     // region Methods
 
@@ -129,6 +129,26 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             restartDialog.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Add nested grid views for each button the represent the note Buttons
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                final int row = i;
+                final int col = j;
+
+                GridLayout nestedGridLayout = createNestedGridLayout(i, j, Math.round(getButtonSize() / 3));
+
+                // First add nestedGrid (if existent) and then the button to the relative layout wrapper
+                if (nestedGridLayout != null) {
+                    getFrameLayoutGrid()[i][j].addView(nestedGridLayout);
+                }
+            }
+        }
     }
 
     @Override
@@ -162,14 +182,14 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         TextView elapsedTimeTextView = (TextView) findViewById(R.id.ElapsedTimeTextView);
         TextView difficultyTextView = (TextView) findViewById(R.id.DifficultyTextView);
 
-        difficultyTextView.setText(Utils.getDifficultyAsString(this, getSudokuModel().getDifficulty()));
-//        if (difficulty == Sudoku.Difficulty.EASY) {
-//            difficultyTextView.setText(getResources().getString(R.string.difficulty_easy);
-//        } else if (difficulty == Sudoku.Difficulty.MEDIUM) {
-//            difficultyTextView.setText(getResources().getString(R.string.difficulty_medium);
-//        } else if (difficulty == Sudoku.Difficulty.HARD) {
-//            difficultyTextView.setText(getResources().getString(R.string.difficulty_hard);
-//        }
+        difficulty = getSudokuModel().getDifficulty();
+        if (difficulty == Sudoku.Difficulty.EASY) {
+            difficultyTextView.setText(getResources().getString(R.string.difficulty_easy));
+        } else if (difficulty == Sudoku.Difficulty.MEDIUM) {
+            difficultyTextView.setText(getResources().getString(R.string.difficulty_medium));
+        } else if (difficulty == Sudoku.Difficulty.HARD) {
+            difficultyTextView.setText(getResources().getString(R.string.difficulty_hard));
+        }
 
         // Create Timer to count seconds
         int secondsToRun = 359999 - getSudokuModel().getElapsedSeconds(); // The will stop at 99:59:59
@@ -236,9 +256,10 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         });
     }
 
-    // region CreateNestedGridLayout
-    @Override
-    protected GridLayout createNestedGridLayout(int row, int col, int buttonSize) {
+    // region Helper Methods
+
+    // Creates the 3x3 grid of noteButtons for a given Button
+    private GridLayout createNestedGridLayout(int row, int col, int buttonSize) {
         GridLayout nestedGridLayout = new GridLayout(getApplicationContext());
         nestedGridLayout.setRowCount(3);
         nestedGridLayout.setColumnCount(3);
@@ -280,7 +301,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         // Return the note button array only for the given cell
         return getNoteButtons()[row][col];
     }
-    // endregion CreateNestedGridLayout
+    // endregion
 
     public void restartGame() {
         getSudokuModel().setElapsedSeconds(0);
@@ -289,7 +310,6 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     // region Button OnClickHandlers
-    // region OnClickListener methods
     public void makeNoteButtonClickedAction() {
         setMakeNotes(!getMakeNotes());
         Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
@@ -371,8 +391,6 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
     // endregion Button OnClickHandlers
 
-    // endregion OnClickListener methods
-
     // region Refresh UI methods
 
     // Refresh the note Buttons of the User Interface
@@ -419,6 +437,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         }
     }
 
+    // Moves the given view behind other view elements that are at the same place
     private void moveToBack(View myCurrentView) {
         ViewGroup myViewGroup = ((ViewGroup) myCurrentView.getParent());
         int index = myViewGroup.indexOfChild(myCurrentView);
@@ -429,6 +448,6 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         myViewGroup.invalidate();
     }
 
-    // endregion Refresh UI methods
-    // endregion Methods
+    // endregion
+    // endregion
 }

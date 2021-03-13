@@ -10,6 +10,7 @@ import dgs_software.sudoku.data.SaveDataProvider;
 public class LanguageConfig {
     // region Definition of supported languages
     public enum SUPPORTED_LANGUAGES {GERMAN, ENGLISH}
+
     public static SUPPORTED_LANGUAGES stringToSupportedLanguage(String string) {
         if (string.toUpperCase().equals("ENGLISH") || string.toUpperCase().equals("ENGLISCH")) {
             return SUPPORTED_LANGUAGES.ENGLISH;
@@ -21,6 +22,8 @@ public class LanguageConfig {
     }
     // endregion Definition of supported languages
 
+    // Sets the language of the given context (e.g. Activity or Dialog) to the currently active language
+    // Language is based on user preferences if available and os settings otherwise
     public static void setAppLanguage(Context context) {
         SaveDataProvider saveDataProvider = new SaveDataProvider(context);
         SUPPORTED_LANGUAGES languageOverride = saveDataProvider.load_languageOverride();

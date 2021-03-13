@@ -42,7 +42,7 @@ public class SaveDataProvider {
     // region Constructor
     public SaveDataProvider(Context context) {
         if (context == null) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider: context is zero");
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider: context is null");
         }
         this.m_context = context;
     }
