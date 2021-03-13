@@ -4,6 +4,8 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -32,7 +34,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region Attributes
     // region showFaultyCells
-    private boolean m_showFaultyCells = true; // TODO Default value
+    private boolean m_showFaultyCells = GlobalConfig.defaultShowFaultyCells;
     public boolean getShowFaultyCells() {
         return m_showFaultyCells;
     }
@@ -44,7 +46,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     // endregion showFaultyCells
 
     // region highlightCells
-    private boolean m_highlightCells = true; // TODO Default value
+    private boolean m_highlightCells = GlobalConfig.defaultHighlightCells;
     public boolean getHighlightCells() {
         return m_highlightCells;
     }
@@ -140,8 +142,8 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             int value = b.getInt(Sudoku.Difficulty.class.toString());
             difficulty = Sudoku.Difficulty.intValToDifficulty(value);
         } else {
+            Log.e(GlobalConfig.LOGTAG, "SudokuPlay Activity was called without mandatory bundle parameter " + Sudoku.Difficulty.class.toString());
             throw new InvalidParameterException(this.getClass().toString() + "Cannote create Sudoku Model: No bundle with key " + Sudoku.Difficulty.class.toString() + "found!");
-            // TODO: Log and return
         }
 
         // Load or create new sudoku
@@ -410,7 +412,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     // Updates all properties of one note-cell in the UI
     private void SetNoteButtonProperties(Button noteButton, String buttonText) {
         if (noteButton != null) {
-            noteButton.setTextColor(Color.BLACK); // TODO: Variabel machen
+            noteButton.setTextColor(getResources().getColor(R.color.sudoku_notebutton_text_color));
             noteButton.setText(buttonText);
 
             noteButton.setBackgroundColor(Color.TRANSPARENT);

@@ -91,7 +91,6 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     // endregion Attributes
 
     //region Abstract method signatures
-    // TODO: Comment
     protected abstract void refreshUI();
 
     // Each subclass must set it's own content view

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +19,7 @@ import java.util.Locale;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.activities.MainMenuActivity;
+import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.data.SaveDataProvider;
 
@@ -25,11 +27,9 @@ public class MainMenuSettingsDialog extends Dialog {
 
     // region Attributes
     private MainMenuActivity m_activity;
-
     public MainMenuActivity getActivity() {
         return this.m_activity;
     }
-
     public void setActivity(MainMenuActivity activity) {
         this.m_activity = activity;
     }
@@ -75,7 +75,6 @@ public class MainMenuSettingsDialog extends Dialog {
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View selectedItemView, int position, long id) {
-                // your code here
                 String selectedItemText = (String) adapterView.getItemAtPosition(position);
                 LanguageConfig.SUPPORTED_LANGUAGES selectedLanguage = LanguageConfig.stringToSupportedLanguage(selectedItemText); // selected language in the dropdown
                 LanguageConfig.SUPPORTED_LANGUAGES languageOverride = saveDataProvider.load_languageOverride(); // currently active language override
@@ -97,7 +96,7 @@ public class MainMenuSettingsDialog extends Dialog {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                // Should not happen TODO: LOG
+                Log.w(GlobalConfig.LOGTAG, "MainMenuSettingsDialog: onNothingSelected called on LanguageDialog which should not happen!");
             }
         });
     }

@@ -4,6 +4,12 @@ import android.graphics.Color;
 import android.util.DisplayMetrics;
 
 public class GlobalConfig {
+    public static final String LOGTAG = "SMARTSUDOKU";
+
+    // Default values for SudookuPlay if no user preferences are set
+    public static final boolean defaultShowFaultyCells = true;
+    public static final boolean defaultHighlightCells = true;
+
     public static final float SUDOKU_GRID_SIZE_PERCENTAGE = 0.98f;
     public static int SUDOKU_BUTTON_TEXT_SIZE = 20;
     public static int SUDOKU_NOTE_BUTTON_TEXT_SIZE = 8;

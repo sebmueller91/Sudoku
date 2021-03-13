@@ -1,6 +1,7 @@
 package dgs_software.sudoku.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,7 @@ public class SaveDataProvider {
     // region Constructor
     public SaveDataProvider(Context context) {
         if (context == null) {
-            // TODO: Write Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider: context is zero");
         }
         this.m_context = context;
     }
@@ -137,7 +138,7 @@ public class SaveDataProvider {
         try {
             fileOutputStream = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
         } catch (FileNotFoundException e) {
-            // TODO: Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider saveStringToFile: file <" + filename + "> does not exist");
             return false;
         }
 
@@ -145,7 +146,7 @@ public class SaveDataProvider {
             fileOutputStream.write(value.getBytes());
             fileOutputStream.close();
         } catch (IOException e) {
-            // TODO: Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider saveStringToFile: error when writing to file", e);
             return false;
         }
 
@@ -157,7 +158,7 @@ public class SaveDataProvider {
     private boolean loadBooleanFromFile(boolean defaultValue, String filename) {
         String fileContent = loadStringFromFile(filename);
         if (fileContent == null) {
-            // TODO: Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider loadBooleanFromFile: file <" + filename + "> does not exist");
             return defaultValue;
         }
 
@@ -171,7 +172,7 @@ public class SaveDataProvider {
         try {
             fileInputStream = getContext().openFileInput(filename);
         } catch (FileNotFoundException e) {
-            // TODO: Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider loadStringFromFile: File " + filename + " could not be found");
             return null;
         }
 
@@ -184,7 +185,7 @@ public class SaveDataProvider {
 
             fileInputStream.close();
         } catch (IOException e) {
-            // TODO: Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider loadStringFromFile: Error when reading from file " + filename + " ", e);
             return null;
         }
 
@@ -192,7 +193,7 @@ public class SaveDataProvider {
     }
 
     private boolean deleteFile(String filename) {
-        // TODO: Log
+        Log.d(GlobalConfig.LOGTAG, "Deleting file " + filename);
         File file = new File(getContext().getFilesDir(), filename);
         return file.exists() && file.isFile() && file.delete();
     }
@@ -329,7 +330,7 @@ public class SaveDataProvider {
             return new Sudoku(field, difficulty, elapsedSeconds);
 
         } catch (NumberFormatException e) {
-            // TODO: Log
+            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider stringToSudoku: Error when parsing save data", e);
             return null;
         }
     }
