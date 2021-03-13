@@ -87,27 +87,21 @@
             android:layout_height="match_parent"/>
         <Button
             android:id="@+id/button_gamewon_yes"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/menu_button"
-            android:clickable="true"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            style="@style/dialog_button_style"
             android:text="@string/Yes"
-            android:textColor="#ffffff"
-            android:layout_weight="1"
-            android:textStyle="bold" />
+            android:layout_weight="1" />
         <Space
             android:layout_width="10dp"
             android:layout_height="match_parent"/>
         <Button
             android:id="@+id/button_gamewon_no"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/menu_button"
-            android:clickable="true"
+            android:layout_width="60dp"
+            android:layout_height="35dp"
+            style="@style/dialog_button_style"
             android:text="@string/No"
-            android:textColor="#ffffff"
-            android:layout_weight="1"
-            android:textStyle="bold" />
+            android:layout_weight="1"/>
         <Space
             android:layout_width="10dp"
             android:layout_height="match_parent"/>

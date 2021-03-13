@@ -11,17 +11,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/buttonsLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <GridLayout
             android:id="@+id/SudokuGridLayout"
             android:layout_width="405dp"
             android:layout_height="405dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
             android:columnCount="9"
             android:orientation="horizontal"
             android:rowCount="9"
@@ -32,7 +31,6 @@
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:columnCount="9"
             android:rowCount="1">
 
@@ -163,20 +161,20 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="12dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/sudokuLinearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="12dp">
 
         <Button
             android:id="@+id/solveSudokuButton"
             style="@style/menu_button_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
+            android:textSize="13sp"
             android:text="@string/activity_sudoku_solve_solve"/>
 
 
@@ -184,18 +182,20 @@
             android:id="@+id/resetSolutionButton"
             style="@style/menu_button_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
+            android:textSize="13sp"
             android:text="@string/activity_sudoku_solve_resetSolution" />
 
         <Button
             android:id="@+id/resetButton"
             style="@style/menu_button_style"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
+            android:textSize="13sp"
             android:text="@string/activity_sudoku_solve_reset" />
     </LinearLayout>
 
