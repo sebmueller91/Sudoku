@@ -171,31 +171,31 @@
             android:id="@+id/solveSudokuButton"
             style="@style/menu_button_style"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
-            android:textSize="13sp"
-            android:text="@string/activity_sudoku_solve_solve"/>
+            android:text="@string/activity_sudoku_solve_solve"
+            android:textSize="13sp"/>
 
 
         <Button
             android:id="@+id/resetSolutionButton"
             style="@style/menu_button_style"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
-            android:textSize="13sp"
-            android:text="@string/activity_sudoku_solve_resetSolution" />
+            android:text="@string/activity_sudoku_solve_resetSolution"
+            android:textSize="13sp"/>
 
         <Button
             android:id="@+id/resetButton"
             style="@style/menu_button_style"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:layout_marginHorizontal="5dp"
-            android:orientation="horizontal"
             android:textSize="13sp"
+            android:orientation="horizontal"
             android:text="@string/activity_sudoku_solve_reset" />
     </LinearLayout>
 
