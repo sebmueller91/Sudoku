@@ -6,5 +6,7 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/repos/GDS_Software/external/java/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/repos/GDS_Software/external/java/SudokuFileWriter.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
