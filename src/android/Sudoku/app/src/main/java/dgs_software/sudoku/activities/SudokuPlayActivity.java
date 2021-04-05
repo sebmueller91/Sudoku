@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,9 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.TextViewCompat;
 
 import java.security.InvalidParameterException;
 
@@ -69,16 +73,16 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
     // endregion makeNotes
 
-    // region NoteButtonsField
-    private Button[][][] m_noteButtonsField;
-    public Button[][][] getNoteButtons() {
-        return this.m_noteButtonsField;
+    // region NoteFieldsField
+    private TextView[][][] m_noteFieldsField;
+    public TextView[][][] getNoteFields() {
+        return this.m_noteFieldsField;
     }
 
-    public void setNoteButtons(Button[][][] noteButtonsField) {
-        this.m_noteButtonsField = noteButtonsField;
+    public void setNoteFields(TextView[][][] noteFieldsField) {
+        this.m_noteFieldsField = noteFieldsField;
     }
-    // endregion NoteButtonsField
+    // endregion NoteFieldsField
 
     // region Timer
     private ValueAnimator m_timer = null;
@@ -258,48 +262,52 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region Helper Methods
 
-    // Creates the 3x3 grid of noteButtons for a given Button
-    private GridLayout createNestedGridLayout(int row, int col, int buttonSize) {
+    // Creates the 3x3 grid of noteFields for a given Button
+    private GridLayout createNestedGridLayout(final int row, final int col, int buttonSize) {
         GridLayout nestedGridLayout = new GridLayout(getApplicationContext());
         nestedGridLayout.setRowCount(3);
         nestedGridLayout.setColumnCount(3);
 
         // Fill 3x3 Grid
-        Button[] noteButtons = createNoteButtons(row, col);
-        for (int k = 0; k < noteButtons.length; k++) {
+        TextView[] noteFields = createNoteFields(row, col);
+        for (int k = 0; k < noteFields.length; k++) {
             ViewGroup.LayoutParams noteButtonLayoutParams = new ViewGroup.LayoutParams(buttonSize, (int) buttonSize);
-            noteButtons[k].setTextSize(TypedValue.COMPLEX_UNIT_SP, GlobalConfig.SUDOKU_NOTE_BUTTON_TEXT_SIZE);
-            noteButtons[k].setPadding(0, 0, 0, 0);
-            noteButtons[k].setTypeface(null, Typeface.BOLD);
-            noteButtons[k].setStateListAnimator(null);
-            final int rowFinal = row, colFinal = col;
-            noteButtons[k].setOnClickListener(new View.OnClickListener() {
+
+            // Maximize notebutton text and then decrease it by a fixed factor
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(noteFields[k],TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+            int[] uniformSize = new int[]{(int) (noteFields[k].getTextSize() * GlobalConfig.NOTES_TEXTSIZE)};
+            TextViewCompat.setAutoSizeTextTypeUniformWithPresetSizes(noteFields[k],uniformSize, TypedValue.COMPLEX_UNIT_PX);
+
+            noteFields[k].setGravity(Gravity.CENTER);
+            noteFields[k].setTypeface(null, Typeface.BOLD);
+            noteFields[k].setStateListAnimator(null);
+            noteFields[k].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sudokuButtonClickedAction(rowFinal, colFinal);
+                    sudokuButtonClickedAction(row, col);
                 }
             });
-            nestedGridLayout.addView(noteButtons[k], k, noteButtonLayoutParams);
-            nestedGridLayout.bringChildToFront(noteButtons[k]);
+            nestedGridLayout.addView(noteFields[k], k, noteButtonLayoutParams);
+            nestedGridLayout.bringChildToFront(noteFields[k]);
         }
 
         return nestedGridLayout;
     }
 
     // Creates a button array of length 9 to fill the 3x3 nestedGridLayout with the note buttons
-    private  Button[] createNoteButtons(int row, int col) {
+    private  TextView[] createNoteFields(int row, int col) {
         // If not button Field not yet existent, create it
-        if (getNoteButtons() == null) {
-            setNoteButtons(new Button[9][9][9]);
+        if (getNoteFields() == null) {
+            setNoteFields(new TextView[9][9][9]);
         }
 
         // Fill the note button field for the given cell
-        for (int k = 0; k < getNoteButtons().length; k++) {
-            getNoteButtons()[row][col][k] = new Button(getApplicationContext());
+        for (int k = 0; k < getNoteFields().length; k++) {
+            getNoteFields()[row][col][k] = new TextView(getApplicationContext());
         }
 
         // Return the note button array only for the given cell
-        return getNoteButtons()[row][col];
+        return getNoteFields()[row][col];
     }
     // endregion
 
@@ -402,12 +410,12 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         super.refreshUI(showFaultyCells, getHighlightCells());
         SudokuCellStates[][] cellStates = getCellStates(showFaultyCells, getHighlightCells());
 
-        for (int i = 0; i < getNoteButtons().length; i++) {
-            for (int j = 0; j < getNoteButtons()[i].length; j++) {
+        for (int i = 0; i < getNoteFields().length; i++) {
+            for (int j = 0; j < getNoteFields()[i].length; j++) {
                 // Only if the cell is empty, the note fields must be drawn
-                if (getNoteButtons() != null) {
+                if (getNoteFields() != null) {
                     boolean[] activeNotes = getSudokuModel().getField()[i][j].getActiveNotes();
-                    for (int k = 0; k < getNoteButtons()[i][j].length; k++) {
+                    for (int k = 0; k < getNoteFields()[i][j].length; k++) {
                         String noteButtonText = "";
                         if (activeNotes[k] == true) {
                             noteButtonText = new Integer(k + 1).toString();
@@ -420,7 +428,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                             backgroundColor = getResources().getColor(R.color.sudoku_button_active_background);
                         }
                         
-                        SetNoteButtonProperties(getNoteButtons()[i][j][k], noteButtonText);
+                        SetNoteButtonProperties(getNoteFields()[i][j][k], noteButtonText);
                     }
                 }
             }
@@ -428,7 +436,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     // Updates all properties of one note-cell in the UI
-    private void SetNoteButtonProperties(Button noteButton, String buttonText) {
+    private void SetNoteButtonProperties(TextView noteButton, String buttonText) {
         if (noteButton != null) {
             noteButton.setTextColor(getResources().getColor(R.color.sudoku_notebutton_text_color));
             noteButton.setText(buttonText);

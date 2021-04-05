@@ -43,7 +43,7 @@
                 android:stateListAnimator="@null"
                 android:text="1"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -55,7 +55,7 @@
                 android:stateListAnimator="@null"
                 android:text="2"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -67,7 +67,7 @@
                 android:stateListAnimator="@null"
                 android:text="3"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -79,7 +79,7 @@
                 android:stateListAnimator="@null"
                 android:text="4"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -91,7 +91,7 @@
                 android:stateListAnimator="@null"
                 android:text="5"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -103,7 +103,7 @@
                 android:stateListAnimator="@null"
                 android:text="6"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -115,7 +115,7 @@
                 android:stateListAnimator="@null"
                 android:text="7"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -127,7 +127,7 @@
                 android:stateListAnimator="@null"
                 android:text="8"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
 
             <Button
@@ -140,7 +140,7 @@
                 android:stateListAnimator="@null"
                 android:text="9"
                 android:textColor="#3063f7"
-                android:textSize="30sp"
+                android:textSize="30dp"
                 android:textStyle="bold" />
         </GridLayout>
 
@@ -155,10 +155,10 @@
 
 
     </LinearLayout>
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/buttonsLinearLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
@@ -166,38 +166,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="12dp">
-
         <Button
             android:id="@+id/solveSudokuButton"
             style="@style/menu_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/resetSolutionButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
             android:text="@string/activity_sudoku_solve_solve"
-            android:textSize="13sp"/>
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"/>
 
 
         <Button
             android:id="@+id/resetSolutionButton"
+            app:layout_constraintLeft_toRightOf="@id/solveSudokuButton"
+            app:layout_constraintRight_toLeftOf="@id/resetButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             style="@style/menu_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_marginHorizontal="5dp"
             android:orientation="horizontal"
             android:text="@string/activity_sudoku_solve_resetSolution"
-            android:textSize="13sp"/>
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="10sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"/>
 
         <Button
             android:id="@+id/resetButton"
+            app:layout_constraintLeft_toRightOf="@id/resetSolutionButton"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             style="@style/menu_button_style"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="match_parent"
+            android:layout_width="0dp"
             android:layout_marginHorizontal="5dp"
-            android:textSize="13sp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="5sp"
+            android:autoSizeStepGranularity="1sp"
             android:orientation="horizontal"
             android:text="@string/activity_sudoku_solve_reset" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

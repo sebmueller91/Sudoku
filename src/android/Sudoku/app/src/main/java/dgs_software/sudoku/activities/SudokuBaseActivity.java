@@ -1,6 +1,7 @@
 package dgs_software.sudoku.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
@@ -13,8 +14,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.util.Pair;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.TextViewCompat;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -174,7 +177,8 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
                 // Create button for the current cell
                 Button button = new Button(getApplicationContext());
-                button.setTextSize(TypedValue.COMPLEX_UNIT_SP, GlobalConfig.SUDOKU_BUTTON_TEXT_SIZE);
+                TextViewCompat.setAutoSizeTextTypeWithDefaults(button, TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+                TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(button, 10,25, 1, TypedValue.COMPLEX_UNIT_DIP);
                 button.setStateListAnimator(null);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override

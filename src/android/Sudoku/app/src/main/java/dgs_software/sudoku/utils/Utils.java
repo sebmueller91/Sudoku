@@ -1,7 +1,14 @@
 package dgs_software.sudoku.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.Pair;
+import android.util.TypedValue;
+import android.view.View;
+import android.widget.Button;
+
+import androidx.annotation.RequiresApi;
+import androidx.core.widget.TextViewCompat;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -103,6 +110,27 @@ public class Utils {
             return context.getResources().getString(R.string.difficulty_hard);
         } else {
             return null;
+        }
+    }
+
+    // Changes the text size of all given buttons to the smallest of the text sizes
+    // The paramter decides if the custom user font scaling shall be ignored or taked into account
+    public static void synchronizeButtonTextSizes(List<Button> synchronizedButtons, Context context, boolean ignoreUserScaling) {
+        float minTextSize = Float.MAX_VALUE;
+        for (Button button : synchronizedButtons) {
+            if (button.getTextSize() < minTextSize) {
+                minTextSize = button.getTextSize();
+            }
+        }
+        if (ignoreUserScaling) {
+            float userScaling = context.getResources().getConfiguration().fontScale;
+            minTextSize = (int) (((float) minTextSize) / userScaling);
+        }
+
+        int[] uniformSize = new int[]{(int) minTextSize};
+        for (Button button : synchronizedButtons) {
+            TextViewCompat.setAutoSizeTextTypeUniformWithPresetSizes(button, uniformSize, TypedValue.COMPLEX_UNIT_PX);
+            button.requestLayout();
         }
     }
     // endregion Methods

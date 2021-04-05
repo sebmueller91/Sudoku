@@ -1,10 +1,17 @@
 package dgs_software.sudoku.activities;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridLayout;
 import android.widget.ImageButton;
+
+import androidx.annotation.RequiresApi;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.model.Cell;
@@ -12,6 +19,20 @@ import dgs_software.sudoku.model.Sudoku;
 import dgs_software.sudoku.utils.Utils;
 
 public class SudokuSolverActivity extends SudokuBaseActivity {
+
+    // region Attributes
+    // region synchronizedButtons: Buttons that will synchronize it's text sizes to the smallest of text size in this group
+    private List<Button> m_synchronizedButtons = new ArrayList<Button>();
+
+    public List<Button> getSynchronizedButtons() {
+        return m_synchronizedButtons;
+    }
+
+    public void setSynchronizedButtons(List<Button> synchronizedButtons) {
+        m_synchronizedButtons = synchronizedButtons;
+    }
+    // endregion
+    // endregion
 
     @Override
     protected void setContentView() {
@@ -41,6 +62,8 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
         } else {
             setSudokuModel(savedSudoku);
         }
+
+        Utils.synchronizeButtonTextSizes(getSynchronizedButtons(), getApplicationContext(), true);
 
         refreshUI();
     }
@@ -88,6 +111,11 @@ public class SudokuSolverActivity extends SudokuBaseActivity {
                 refreshUI();
             }
         });
+
+        setSynchronizedButtons(new ArrayList<Button>());
+        getSynchronizedButtons().add(solveSudokuButton);
+        getSynchronizedButtons().add(resetSolutionButton);
+        getSynchronizedButtons().add(resetButton);
     }
 
     public void sudokuButtonClickedAction(int row, int col) {

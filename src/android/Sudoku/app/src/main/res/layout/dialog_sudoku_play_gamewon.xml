@@ -14,7 +14,7 @@
         android:layout_marginHorizontal="10dp"
         android:text="@string/dialog_sudoku_play_gamewon_congrats"
         android:textColor="@android:color/black"
-        android:textSize="20dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:gravity="center"/>
 
@@ -30,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:text="@string/dialog_sudoku_play_gamewon_difficulty"/>
         <TextView
@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
     </LinearLayout>
     <Space
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:text="@string/dialog_sudoku_play_gamewon_timeneeded"/>
         <TextView
@@ -61,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
     </LinearLayout>
     <Space
@@ -74,7 +74,7 @@
         android:layout_margin="10dp"
         android:text="@string/dialog_sudoku_play_gamewon_newgame"
         android:textColor="@android:color/black"
-        android:textSize="15dp"
+        android:textSize="15sp"
         android:textStyle="bold"/>
 
     <LinearLayout
@@ -87,8 +87,6 @@
             android:layout_height="match_parent"/>
         <Button
             android:id="@+id/button_gamewon_yes"
-            android:layout_width="60dp"
-            android:layout_height="35dp"
             style="@style/dialog_button_style"
             android:text="@string/Yes"
             android:layout_weight="1" />
@@ -97,8 +95,6 @@
             android:layout_height="match_parent"/>
         <Button
             android:id="@+id/button_gamewon_no"
-            android:layout_width="60dp"
-            android:layout_height="35dp"
             style="@style/dialog_button_style"
             android:text="@string/No"
             android:layout_weight="1"/>

@@ -19,11 +19,14 @@ public class GlobalConfig {
     public static int STROKE_WIDTH_SMALL_BORDER = 2;
     public static final int SUDOKU_BORDER_COLOR = Color.BLACK;
 
+    public static float NOTES_TEXTSIZE= 0.65f;
+
     // Indirect intermediate constants used to calculate public constants
-    private static final float SUDOKU_BUTTON_TEXT_SIZE_FACTOR = 7.6f;
+    private static final float SUDOKU_BUTTON_TEXT_SIZE_FACTOR = 6.5f;
     private static final float SUDOKU_NOTE_BUTTON_TEXT_SIZE_FACTOR = 3.3f;
     private static final float STROKE_WIDTH_MID_BORDER_FACTOR = 1.63f;
     private static final float STROKE_WIDTH_SMALL_BORDER_FACTOR = 0.81f;
+    private static final float NOTES_TEXTSIZE_FACTOR = 0.26f;
 
     // Delimiters used for storing sudokus in files
     public static final String SUDOKU_DELIMITER = ";", ROW_DELIMITER = "-", NUMBER_DELIMITER = ",", NOTES_DELIMITER="!";
@@ -37,5 +40,6 @@ public class GlobalConfig {
         STROKE_WIDTH_SMALL_BORDER = (Math.round(STROKE_WIDTH_SMALL_BORDER_FACTOR * displayWidthFactor));
         STROKE_WIDTH_MID_BORDER = (Math.round(STROKE_WIDTH_MID_BORDER_FACTOR * displayWidthFactor));
         STROKE_WIDTH_BIG_BORDER = STROKE_WIDTH_MID_BORDER * 2;
+        NOTES_TEXTSIZE = NOTES_TEXTSIZE_FACTOR * displayWidthFactor;
     }
 }

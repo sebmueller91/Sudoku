@@ -13,7 +13,7 @@
         android:layout_margin="10dp"
         android:text="@string/dialog_sudoku_play_sudokuwrong"
         android:textColor="@android:color/black"
-        android:textSize="20dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         android:gravity="center"/>
 
@@ -27,8 +27,6 @@
             android:layout_height="match_parent"/>
         <Button
             android:id="@+id/button_gamewrong_close"
-            android:layout_width="100dp"
-            android:layout_height="35dp"
             style="@style/dialog_button_style"
             android:text="@string/Close"
             android:layout_weight="1" />
