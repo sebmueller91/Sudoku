@@ -21,6 +21,7 @@ public class SaveDataProvider {
     // region Filenames
     private static final String SUDOKUPLAY_FILENAME_SHOWFAULTYCELLS = "save_sudokuplay_showfaultycells.save";
     private static final String SUDOKUPLAY_FILENAME_HIGHLIGHTCELLS = "save_sudokuplay_highlightcells.save";
+    private static final String SUDOKUPLAY_FILENAME_DELETENOTES = "save_sudokuplay_deleteNotes.save";
     private static final String SUDOKUPLAY_FILENAME_SUDOKU = "save_sudokuplay_sudoku.save";
 
     private static final String SUDOKUSOLVER_FILENAME_SUDOKU = "save_sudokusolver_sudoku.save";
@@ -66,6 +67,14 @@ public class SaveDataProvider {
 
     public boolean loadSudokuPlayPreferences_highlightCells(boolean defaultValue) {
         return loadBooleanFromFile(defaultValue, SUDOKUPLAY_FILENAME_HIGHLIGHTCELLS);
+    }
+
+    public boolean saveSudokuPlayPreferences_deleteNotes(boolean deleteNotes) {
+        return saveBooleanToFile(deleteNotes, SUDOKUPLAY_FILENAME_DELETENOTES);
+    }
+
+    public boolean loadSudokuPlayPreferences_deleteNotes(boolean defaultValue) {
+        return loadBooleanFromFile(defaultValue, SUDOKUPLAY_FILENAME_DELETENOTES);
     }
 
     public boolean saveSudokuPlay_sudoku(Sudoku sudoku) {

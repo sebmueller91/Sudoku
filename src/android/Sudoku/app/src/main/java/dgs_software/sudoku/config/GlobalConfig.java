@@ -9,6 +9,7 @@ public class GlobalConfig {
     // Default values for SudookuPlay if no user preferences are set
     public static final boolean defaultShowFaultyCells = true;
     public static final boolean defaultHighlightCells = true;
+    public static final boolean defaultDeleteNotes = true;
 
     public static final float SUDOKU_GRID_SIZE_PERCENTAGE = 0.98f; // Percentage of the screen width that the sudoku grid fills
     public static int SUDOKU_BUTTON_TEXT_SIZE = 20;

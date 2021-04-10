@@ -40,9 +40,11 @@ public class SudokuPlaySettingsDialog extends Dialog {
 
         final Switch showFaultyCellsSwitch = (Switch) findViewById(R.id.showFaultyCellsSwitch);
         final Switch highlightCellsSwitch = (Switch) findViewById(R.id.highlightCellsSwitch);
+        final Switch deleteNotesSwitch = (Switch) findViewById(R.id.deleteNotesSwitch);
 
         showFaultyCellsSwitch.setChecked(getActivity().getShowFaultyCells());
         highlightCellsSwitch.setChecked(getActivity().getHighlightCells());
+        deleteNotesSwitch.setChecked(getActivity().getDeleteNotes());
 
         showFaultyCellsSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +61,15 @@ public class SudokuPlaySettingsDialog extends Dialog {
                 getActivity().setHighlightCells(!getActivity().getHighlightCells());
                 highlightCellsSwitch.setChecked(getActivity().getHighlightCells());
                 getActivity().getSaveDataProvider().saveSudokuPlayPreferences_highlightCells(getActivity().getHighlightCells());
+            }
+        });
+
+        deleteNotesSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().setDeleteNotes(!getActivity().getDeleteNotes());
+                deleteNotesSwitch.setChecked(getActivity().getDeleteNotes());
+                getActivity().getSaveDataProvider().saveSudokuPlayPreferences_deleteNotes(getActivity().getDeleteNotes());
             }
         });
     }

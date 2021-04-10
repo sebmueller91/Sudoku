@@ -34,4 +34,5 @@
     <string name="dialog_mainmenu_settings_language">Sprache der App</string>
     <string name="dialog_info_version">"Version der App: "</string>
     <string name="dialog_info_contact">"Kontakt: "</string>
+    <string name="settings_dialog_deletenotes">Notizen löschen bei Konflikten</string>
 </resources>

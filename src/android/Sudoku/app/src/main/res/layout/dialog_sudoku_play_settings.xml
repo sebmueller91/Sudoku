@@ -29,6 +29,18 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="@string/settings_dialog_highlight"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginHorizontal="10dp" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="5dp"/>
+    <Switch
+        android:id="@+id/deleteNotesSwitch"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/settings_dialog_deletenotes"
+        android:layout_marginHorizontal="10dp"/>
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
 </LinearLayout>

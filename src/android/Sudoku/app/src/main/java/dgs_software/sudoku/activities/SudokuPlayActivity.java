@@ -63,6 +63,18 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         this.m_highlightCells = highlightCells;
         refreshUI();
     }
+
+    // region deleteNotes
+    private boolean m_deleteNotes = GlobalConfig.defaultHighlightCells;
+
+    public boolean getDeleteNotes() {
+        return m_deleteNotes;
+    }
+
+    public void setDeleteNotes(boolean deleteNotes) {
+        this.m_deleteNotes = deleteNotes;
+        refreshUI();
+    }
     // endregion highlightCells
 
     // region makeNotes
@@ -185,8 +197,9 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         }
 
         // Load saved preferences
-        setShowFaultyCells(getSaveDataProvider().loadSudokuPlayPreferences_showFaultyCells(true));
-        setHighlightCells(getSaveDataProvider().loadSudokuPlayPreferences_highlightCells(true));
+        setShowFaultyCells(getSaveDataProvider().loadSudokuPlayPreferences_showFaultyCells(GlobalConfig.defaultShowFaultyCells));
+        setHighlightCells(getSaveDataProvider().loadSudokuPlayPreferences_highlightCells(GlobalConfig.defaultHighlightCells));
+        setDeleteNotes(getSaveDataProvider().loadSudokuPlayPreferences_deleteNotes(GlobalConfig.defaultDeleteNotes));
 
         // Set text fields in UI
         TextView elapsedTimeTextView = (TextView) findViewById(R.id.ElapsedTimeTextView);
@@ -367,6 +380,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         refreshUI();
     }
 
+    // One of the buttons 1-9 is clicked
     @Override
     public void inputButtonClickedAction(int number) {
         if (getActiveCell() == null) {
@@ -377,7 +391,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         Pair<Integer, Integer> activeCellPosition = Utils.getPositionOfCell(getActiveCell(), getSudokuModel());
         int row = activeCellPosition.first, col = activeCellPosition.second;
 
-        if (getMakeNotes() == false) {
+        if (getMakeNotes() == false) { // Regular number is entered into the cell
             getSudokuModel().getField()[row][col].setValue(number);
             getSudokuModel().getField()[row][col].setIsFixedValue(false);
 
@@ -392,7 +406,21 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                     sudokuWrongDialog.show();
                 }
             }
-        } else {
+
+            // If a number is entered, all notes that are in conflict with this new number get deleted
+            if (getDeleteNotes()) {
+                for (int i = 0; i < getSudokuModel().getField().length; i++) {
+                    for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+                        if (!(i == row && j == col) && // Check if the cell is in the same row, column or block as the clicked cell, but is not the clicked cell itself
+                                (row == i || col == j || (row / 3 == i && col / 3 == j))) {
+                            getSudokuModel().getField()[i][j].getActiveNotes()[number-1] = false;
+                        }
+                    }
+                }
+            }
+
+
+        } else { // Note is entered into the cell
             if (getSudokuModel().getField()[row][col].getIsEmpty() == false) {
                 return; // It is not possible to overwrite a filled cell with a note
             }
