@@ -10,8 +10,8 @@ public class Convert {
 	private static final String SUDOKU_DELIMITER = ";", ROW_DELIMITER = "-", NUMBER_DELIMITER = ",";
 	private static final String NEWLINE = "\n", COMMA = ",", DOT = ".";
 	
-	private static String inputFile = ""; // e.g. "/home/sebastian/repos/DGS_Software/src/java/SudokuGenerator/raw_files/expert_unprocessed.csv"
-	private static String outputFile = ""; // e.g. "/home/sebastian/Desktop/hard.txt"
+	private static String inputFile = "C:\\repos\\GDS_Software\\src\\java\\SudokuGenerator\\raw_files\\intermediate_unprocessed.csv"; // e.g. "C:\repos\GDS_Software\src\java\SudokuGenerator\raw_files\simple_unprocessed.csv"
+	private static String outputFile = "C:\\Users\\sebmu\\Desktop\\sudokus_hard.txt"; // e.g. "C:\Users\sebmu\Dekstop\easy.txt"
 	
 	public static void main(String[] args) {
 		if (args.length == 2) {
