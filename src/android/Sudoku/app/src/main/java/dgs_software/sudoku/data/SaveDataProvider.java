@@ -13,6 +13,7 @@ import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.model.Cell;
 import dgs_software.sudoku.model.Sudoku;
+import dgs_software.sudoku.utils.Logger;
 import dgs_software.sudoku.utils.Utils;
 
 // Provides methods to save and load app data to files in the internal storage
@@ -42,7 +43,7 @@ public class SaveDataProvider {
     // region Constructor
     public SaveDataProvider(Context context) {
         if (context == null) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider: context is null");
+            Logger.LogError("SaveDataProvider: context is null");
         }
         this.m_context = context;
     }
@@ -138,7 +139,7 @@ public class SaveDataProvider {
         try {
             fileOutputStream = getContext().openFileOutput(filename, Context.MODE_PRIVATE);
         } catch (FileNotFoundException e) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider saveStringToFile: file <" + filename + "> does not exist");
+            Logger.LogError("SaveDataProvider saveStringToFile: file <" + filename + "> does not exist");
             return false;
         }
 
@@ -146,7 +147,7 @@ public class SaveDataProvider {
             fileOutputStream.write(value.getBytes());
             fileOutputStream.close();
         } catch (IOException e) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider saveStringToFile: error when writing to file", e);
+            Logger.LogError("SaveDataProvider saveStringToFile: error when writing to file", e);
             return false;
         }
 
@@ -158,7 +159,7 @@ public class SaveDataProvider {
     private boolean loadBooleanFromFile(boolean defaultValue, String filename) {
         String fileContent = loadStringFromFile(filename);
         if (fileContent == null) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider loadBooleanFromFile: file <" + filename + "> does not exist");
+            Logger.LogError("SaveDataProvider loadBooleanFromFile: file <" + filename + "> does not exist");
             return defaultValue;
         }
 
@@ -172,7 +173,7 @@ public class SaveDataProvider {
         try {
             fileInputStream = getContext().openFileInput(filename);
         } catch (FileNotFoundException e) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider loadStringFromFile: File " + filename + " could not be found");
+            Logger.LogError("SaveDataProvider loadStringFromFile: File " + filename + " could not be found");
             return null;
         }
 
@@ -185,7 +186,7 @@ public class SaveDataProvider {
 
             fileInputStream.close();
         } catch (IOException e) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider loadStringFromFile: Error when reading from file " + filename + " ", e);
+            Logger.LogError("SaveDataProvider loadStringFromFile: Error when reading from file " + filename + " ", e);
             return null;
         }
 
@@ -193,7 +194,7 @@ public class SaveDataProvider {
     }
 
     private boolean deleteFile(String filename) {
-        Log.d(GlobalConfig.LOGTAG, "Deleting file " + filename);
+        Logger.LogDebug("Deleting file " + filename);
         File file = new File(getContext().getFilesDir(), filename);
         return file.exists() && file.isFile() && file.delete();
     }
@@ -330,7 +331,7 @@ public class SaveDataProvider {
             return new Sudoku(field, difficulty, elapsedSeconds);
 
         } catch (NumberFormatException e) {
-            Log.e(GlobalConfig.LOGTAG, "SaveDataProvider stringToSudoku: Error when parsing save data", e);
+            Logger.LogError("SaveDataProvider stringToSudoku: Error when parsing save data", e);
             return null;
         }
     }

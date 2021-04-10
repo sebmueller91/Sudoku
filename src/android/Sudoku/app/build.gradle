@@ -19,6 +19,8 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "boolean", "LOG_DEBUG_MODE", "false"
     }
 
     buildTypes {
@@ -26,6 +28,8 @@ android {
             versionNameSuffix ".debug"
             resValue "string", "app_version",
                     "${defaultConfig.versionName}${versionNameSuffix}"
+
+            buildConfigField "boolean", "LOG_DEBUG_MODE", "true"
         }
         release {
             minifyEnabled false

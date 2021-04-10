@@ -32,6 +32,7 @@ import dgs_software.sudoku.dialogs.SudokuPlaySettingsDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayWonDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayWrongDialog;
 import dgs_software.sudoku.model.Sudoku;
+import dgs_software.sudoku.utils.Logger;
 import dgs_software.sudoku.utils.Utils;
 
 public class SudokuPlayActivity extends SudokuBaseActivity {
@@ -166,7 +167,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             int value = b.getInt(Sudoku.Difficulty.class.toString());
             difficulty = Sudoku.Difficulty.intValToDifficulty(value);
         } else {
-            Log.e(GlobalConfig.LOGTAG, "SudokuPlay Activity was called without mandatory bundle parameter " + Sudoku.Difficulty.class.toString());
+            Logger.LogError("SudokuPlay Activity was called without mandatory bundle parameter " + Sudoku.Difficulty.class.toString());
             throw new InvalidParameterException(this.getClass().toString() + "Cannote create Sudoku Model: No bundle with key " + Sudoku.Difficulty.class.toString() + "found!");
         }
 

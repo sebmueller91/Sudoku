@@ -22,6 +22,7 @@ import dgs_software.sudoku.activities.MainMenuActivity;
 import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.data.SaveDataProvider;
+import dgs_software.sudoku.utils.Logger;
 
 public class MainMenuSettingsDialog extends Dialog {
 
@@ -96,7 +97,7 @@ public class MainMenuSettingsDialog extends Dialog {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                Log.w(GlobalConfig.LOGTAG, "MainMenuSettingsDialog: onNothingSelected called on LanguageDialog which should not happen!");
+                Logger.LogWarning( "MainMenuSettingsDialog: onNothingSelected called on LanguageDialog which should not happen!");
             }
         });
     }

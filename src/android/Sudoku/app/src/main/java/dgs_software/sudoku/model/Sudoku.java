@@ -8,6 +8,7 @@ import java.util.LinkedList;
 
 import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.data.RessourcesDataProvider;
+import dgs_software.sudoku.utils.Logger;
 import dgs_software.sudoku.utils.Utils;
 
 public class Sudoku {
@@ -100,7 +101,7 @@ public class Sudoku {
     // Loads a sudoku with given difficulty from the raw value files
     public Sudoku(Difficulty difficulty, Context context) {
         if (difficulty == Difficulty.RELOAD_EXISTING) {
-            Log.e(GlobalConfig.LOGTAG, "Sudoku consutuctor: Difficulty is invalid!");
+            Logger.LogError("Sudoku consutuctor: Difficulty is invalid!");
             return;
         }
 
