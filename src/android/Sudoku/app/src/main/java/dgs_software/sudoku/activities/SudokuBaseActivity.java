@@ -179,6 +179,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
                 Button button = new Button(getApplicationContext());
                 TextViewCompat.setAutoSizeTextTypeWithDefaults(button, TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
                 TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(button, 10,25, 1, TypedValue.COMPLEX_UNIT_DIP);
+                button.setTypeface(null, Typeface.BOLD);
                 button.setStateListAnimator(null);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -365,7 +366,7 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     }
 
     // Returns an array of the border thickness values for the given cell in the order [left,top,right,bottom]
-    private static int[] getBorderThicknessValues(int row, int col) {
+    protected static int[] getBorderThicknessValues(int row, int col) {
         int[] borders = new int[4];
 
         // Set Left Border Thickness

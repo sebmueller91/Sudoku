@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     // region Attributes
     // region showFaultyCells
     private boolean m_showFaultyCells = GlobalConfig.defaultShowFaultyCells;
+
     public boolean getShowFaultyCells() {
         return m_showFaultyCells;
     }
@@ -52,6 +54,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region highlightCells
     private boolean m_highlightCells = GlobalConfig.defaultHighlightCells;
+
     public boolean getHighlightCells() {
         return m_highlightCells;
     }
@@ -76,6 +79,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region NoteFieldsField
     private TextView[][][] m_noteFieldsField;
+
     public TextView[][][] getNoteFields() {
         return this.m_noteFieldsField;
     }
@@ -87,6 +91,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // region Timer
     private ValueAnimator m_timer = null;
+
     public ValueAnimator getTimer() {
         return m_timer;
     }
@@ -146,7 +151,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                 final int row = i;
                 final int col = j;
 
-                GridLayout nestedGridLayout = createNestedGridLayout(i, j, Math.round(getButtonSize() / 3));
+                GridLayout nestedGridLayout = createNestedGridLayout(i, j, getButtonSize());
 
                 // First add nestedGrid (if existent) and then the button to the relative layout wrapper
                 if (nestedGridLayout != null) {
@@ -202,11 +207,9 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         if (getTimer() == null) {
             setTimer(ValueAnimator.ofInt(secondsToRun));
             getTimer().setDuration(secondsToRun * 1000).setInterpolator(new LinearInterpolator());
-            getTimer().addUpdateListener(new ValueAnimator.AnimatorUpdateListener()
-            {
+            getTimer().addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
-                public void onAnimationUpdate(ValueAnimator animation)
-                {
+                public void onAnimationUpdate(ValueAnimator animation) {
 
                     int animatedValueDiff = (int) animation.getAnimatedValue() - getLastAnimatedValue(); // difference between last method call in seconds
                     setLastAnimatedValue(getLastAnimatedValue() + animatedValueDiff);
@@ -265,19 +268,36 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     // Creates the 3x3 grid of noteFields for a given Button
     private GridLayout createNestedGridLayout(final int row, final int col, int buttonSize) {
+        int[] borderThicknessValues = getBorderThicknessValues(row, col);
+        int nestedGridLayoutWidth = buttonSize - borderThicknessValues[0] - borderThicknessValues[2];
+        int nestedGridLayoutHeight = buttonSize - borderThicknessValues[1] - borderThicknessValues[3];
+
         GridLayout nestedGridLayout = new GridLayout(getApplicationContext());
         nestedGridLayout.setRowCount(3);
         nestedGridLayout.setColumnCount(3);
 
+        FrameLayout.LayoutParams frameLayoutParams = new FrameLayout.LayoutParams(nestedGridLayoutWidth, nestedGridLayoutHeight);
+        nestedGridLayout.setLayoutParams(frameLayoutParams);
+
+        GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+        layoutParams.setMargins(borderThicknessValues[0], borderThicknessValues[1], borderThicknessValues[2], borderThicknessValues[3]);
+
+        nestedGridLayout.setLayoutParams(layoutParams);
+        nestedGridLayout.setUseDefaultMargins(false);
+        nestedGridLayout.setAlignmentMode(GridLayout.ALIGN_MARGINS);
+        nestedGridLayout.setRowOrderPreserved(false);
+
         // Fill 3x3 Grid
+        int noteFieldWidth = Math.round(((float)nestedGridLayoutWidth) / 3f);
+        int noteFieldHeight = Math.round(((float)nestedGridLayoutHeight) / 3f);
         TextView[] noteFields = createNoteFields(row, col);
         for (int k = 0; k < noteFields.length; k++) {
-            ViewGroup.LayoutParams noteButtonLayoutParams = new ViewGroup.LayoutParams(buttonSize, (int) buttonSize);
+            ViewGroup.LayoutParams noteButtonLayoutParams = new ViewGroup.LayoutParams(noteFieldWidth, noteFieldHeight);
 
             // Maximize notebutton text and then decrease it by a fixed factor
-            TextViewCompat.setAutoSizeTextTypeWithDefaults(noteFields[k],TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(noteFields[k], TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
             int[] uniformSize = new int[]{(int) (noteFields[k].getTextSize() * GlobalConfig.NOTES_TEXTSIZE)};
-            TextViewCompat.setAutoSizeTextTypeUniformWithPresetSizes(noteFields[k],uniformSize, TypedValue.COMPLEX_UNIT_PX);
+            TextViewCompat.setAutoSizeTextTypeUniformWithPresetSizes(noteFields[k], uniformSize, TypedValue.COMPLEX_UNIT_PX);
 
             noteFields[k].setGravity(Gravity.CENTER);
             noteFields[k].setTypeface(null, Typeface.BOLD);
@@ -296,7 +316,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     // Creates a button array of length 9 to fill the 3x3 nestedGridLayout with the note buttons
-    private  TextView[] createNoteFields(int row, int col) {
+    private TextView[] createNoteFields(int row, int col) {
         // If not button Field not yet existent, create it
         if (getNoteFields() == null) {
             setNoteFields(new TextView[9][9][9]);
@@ -305,6 +325,10 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         // Fill the note button field for the given cell
         for (int k = 0; k < getNoteFields().length; k++) {
             getNoteFields()[row][col][k] = new TextView(getApplicationContext());
+            GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
+            layoutParams.width = GridLayout.LayoutParams.WRAP_CONTENT;
+            layoutParams.height = GridLayout.LayoutParams.WRAP_CONTENT;
+            getNoteFields()[row][col][k].setLayoutParams(layoutParams);
         }
 
         // Return the note button array only for the given cell
@@ -324,10 +348,8 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
         if (getMakeNotes()) {
             makeNoteButton.setBackgroundResource(R.drawable.ic_notes_active);
-            //makeNoteButton.setBackgroundColor(Color.GREEN);
         } else {
             makeNoteButton.setBackgroundResource(R.drawable.ic_notes);
-            //makeNoteButton.setBackgroundColor(Color.GRAY);
         }
     }
 
@@ -379,7 +401,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
             if (activeNotes == null) {
                 activeNotes = new boolean[9];
             }
-            activeNotes[number-1] = !activeNotes[number-1];
+            activeNotes[number - 1] = !activeNotes[number - 1];
             getSudokuModel().getField()[row][col].setActiveNotes(activeNotes);
         }
         refreshUI();
@@ -428,7 +450,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                         } else if (cellStates[i][j] == SudokuCellStates.ACTIVE_FIXED || cellStates[i][j] == SudokuCellStates.ACTIVE_NONFIXED) {
                             backgroundColor = getResources().getColor(R.color.sudoku_button_active_background);
                         }
-                        
+
                         SetNoteButtonProperties(getNoteFields()[i][j][k], noteButtonText);
                     }
                 }

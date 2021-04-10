@@ -9,9 +9,11 @@
     <color name="sudoku_button_active_font">#6495ED</color>
     <color name="sudoku_button_inactive_background">#FFFFFF</color>
     <color name="sudoku_button_inactive_font_fixed">#000000</color>
-    <color name="sudoku_button_inactive_font_nonfixed">#3CB371</color>
+
+    <color name="sudoku_button_inactive_font_nonfixed">#2330CC</color>
+
     <color name="sudoku_button_highlighted_background">#dfdfea</color>
     <color name="sudoku_button_error_background">#f57d7d</color>
 
-    <color name="sudoku_notebutton_text_color">#000000</color>
+    <color name="sudoku_notebutton_text_color">#6D7B93</color>
 </resources>
