@@ -352,6 +352,11 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     public void restartGame() {
         getSudokuModel().setElapsedSeconds(0);
         getSudokuModel().deleteNonFixedValues();
+        for (int i = 0; i < getSudokuModel().getField().length; i++) {
+            for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+                getSudokuModel().getField()[i][j].setActiveNotes(new boolean[9]);
+            }
+        }
         refreshUI();
     }
 
