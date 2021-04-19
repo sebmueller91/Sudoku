@@ -229,6 +229,9 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
     // Refreshes the complete and updates all values of the User Interface according to the model of the sudoku
     public void refreshUI(boolean markFaultyCells, boolean highlightCells) {
         SudokuCellStates[][] cellStates = getCellStates(markFaultyCells, highlightCells);
+        if (cellStates == null) {
+            return;
+        }
 
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
@@ -289,10 +292,14 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
     // Returns a 9x9 list of cell states that assigns each sudoku cell it's current state
     protected SudokuCellStates[][] getCellStates(boolean markFaultyCells, boolean highlightCells) {
-        SudokuCellStates[][] cellStates = new SudokuCellStates[9][9];
+        if (getSudokuModel() == null && getSudokuModel().getField() == null) {
+            return null;
+        }
 
+        SudokuCellStates[][] cellStates = new SudokuCellStates[9][9];
         LinkedList<Pair<Integer, Integer>> cellsToHighlight = new LinkedList<Pair<Integer, Integer>>();
         LinkedList<Pair<Integer, Integer>> faultyCells = getSudokuModel().getListOfWrongValues();
+
         if (getActiveCell() != null) {
             Pair<Integer, Integer> activeCellPosition = Utils.getPositionOfCell(getActiveCell(), getSudokuModel());
             cellsToHighlight = getListOfCellsToHighlight(activeCellPosition.first, activeCellPosition.second);
@@ -300,6 +307,10 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
 
         for (int i = 0; i < getSudokuModel().getField().length; i++) {
             for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
+                if (getSudokuModel().getField()[i][j] == null) {
+                    return null;
+                }
+
                 // Inactive Cell
                 if (getSudokuModel().getField()[i][j].getIsFixedValue()) {
                     cellStates[i][j] = SudokuCellStates.INACTIVE_FIXED;
