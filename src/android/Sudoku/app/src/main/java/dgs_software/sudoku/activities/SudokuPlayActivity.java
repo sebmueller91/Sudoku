@@ -205,14 +205,8 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         TextView elapsedTimeTextView = (TextView) findViewById(R.id.ElapsedTimeTextView);
         TextView difficultyTextView = (TextView) findViewById(R.id.DifficultyTextView);
 
-        difficulty = getSudokuModel().getDifficulty();
-        if (difficulty == Sudoku.Difficulty.EASY) {
-            difficultyTextView.setText(getResources().getString(R.string.difficulty_easy));
-        } else if (difficulty == Sudoku.Difficulty.MEDIUM) {
-            difficultyTextView.setText(getResources().getString(R.string.difficulty_medium));
-        } else if (difficulty == Sudoku.Difficulty.HARD) {
-            difficultyTextView.setText(getResources().getString(R.string.difficulty_hard));
-        }
+        String difficultyText = Utils.getDifficultyAsString(getResources(), getSudokuModel().getDifficulty());
+        difficultyTextView.setText(difficultyText);
 
         // Create Timer to count seconds
         int secondsToRun = 359999 - getSudokuModel().getElapsedSeconds(); // The will stop at 99:59:59
@@ -417,7 +411,7 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                 for (int i = 0; i < getSudokuModel().getField().length; i++) {
                     for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
                         if (!(i == row && j == col) && // Check if the cell is in the same row, column or block as the clicked cell, but is not the clicked cell itself
-                                (row == i || col == j || (row / 3 == i && col / 3 == j))) {
+                                (row == i || col == j || (row / 3 == i / 3 && col / 3 == j / 3))) {
                             getSudokuModel().getField()[i][j].getActiveNotes()[number-1] = false;
                         }
                     }

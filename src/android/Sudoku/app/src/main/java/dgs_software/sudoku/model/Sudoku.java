@@ -119,9 +119,9 @@ public class Sudoku {
 
         // TODO: Remove
         // Use this for testing to no have to solve sudoku each time
-        //getSolution();
-        //getField()[0][0].setValue(0);
-        //getField()[0][0].setIsFixedValue(false);
+//        getSolution();
+//        getField()[0][0].setValue(0);
+//        getField()[0][0].setIsFixedValue(false);
     }
 
     // endregion Constructors

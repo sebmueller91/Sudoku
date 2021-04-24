@@ -47,7 +47,7 @@ public class SudokuPlayWonDialog extends Dialog {
         TextView difficultyTextView = (TextView) findViewById(R.id.dialogGameWon_difficulty);
         TextView timeneededTextView = (TextView) findViewById(R.id.dialogGameWon_timeneeded);
 
-        difficultyTextView.setText(Utils.getDifficultyAsString(context, sudokuPlayActivity.getSudokuModel().getDifficulty()));
+        difficultyTextView.setText(Utils.getDifficultyAsString(context.getResources(), sudokuPlayActivity.getSudokuModel().getDifficulty()));
         timeneededTextView.setText(Utils.formatSecondsAsTime(sudokuPlayActivity.getSudokuModel().getElapsedSeconds()));
 
         yesButton.setOnClickListener(new View.OnClickListener() {

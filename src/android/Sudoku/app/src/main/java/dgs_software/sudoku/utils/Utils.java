@@ -1,6 +1,7 @@
 package dgs_software.sudoku.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Build;
 import android.util.Pair;
 import android.util.TypedValue;
@@ -101,15 +102,16 @@ public class Utils {
     }
 
     // Returns a string represenation of the given difficulty, depending on the current language ressource
-    public static String getDifficultyAsString(Context context, Sudoku.Difficulty difficulty) {
+    public static String getDifficultyAsString(Resources resources, Sudoku.Difficulty difficulty) {
         if (difficulty == Sudoku.Difficulty.EASY) {
-            return context.getResources().getString(R.string.difficulty_easy);
+            return resources.getString(R.string.difficulty_easy);
         } else if (difficulty == Sudoku.Difficulty.MEDIUM) {
-            return context.getResources().getString(R.string.difficulty_medium);
+            return resources.getString(R.string.difficulty_medium);
         } else if (difficulty == Sudoku.Difficulty.HARD) {
-            return context.getResources().getString(R.string.difficulty_hard);
+            return resources.getString(R.string.difficulty_hard);
         } else {
-            return null;
+            Logger.LogWarning("Utils.getDifficultyAsString(): Could not retrieve language ressource for difficulty");
+            return "";
         }
     }
 

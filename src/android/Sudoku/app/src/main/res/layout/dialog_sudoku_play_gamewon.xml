@@ -39,7 +39,8 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginLeft="3dp"/>
     </LinearLayout>
     <Space
         android:layout_width="10dp"
@@ -62,7 +63,8 @@
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
             android:textSize="20sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginLeft="3dp"/>
     </LinearLayout>
     <Space
         android:layout_width="fill_parent"
