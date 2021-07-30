@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.action.ActionStack;
 import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.config.LanguageConfig;
 import dgs_software.sudoku.data.SaveDataProvider;
@@ -222,6 +223,13 @@ public abstract class SudokuBaseActivity extends AppCompatActivity {
         instantiateButtons();
 
         setSaveDataProvider(new SaveDataProvider(getApplicationContext()));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        ActionStack.getInstance().resetActions();
     }
 
     // region RefreshUI Methods

@@ -24,8 +24,15 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.widget.TextViewCompat;
 
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import dgs_software.sudoku.R;
+import dgs_software.sudoku.action.Action;
+import dgs_software.sudoku.action.ActionStack;
+import dgs_software.sudoku.action.SetCellNotesAction;
+import dgs_software.sudoku.action.SetCellValueAction;
 import dgs_software.sudoku.config.GlobalConfig;
 import dgs_software.sudoku.dialogs.ChooseDifficultyDialog;
 import dgs_software.sudoku.dialogs.SudokuPlayRestartDialog;
@@ -125,6 +132,16 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
     }
 
     // endregion lastAnimatedValue
+    // endregion
+
+    // region undoActionButton
+    private Button m_undoActionButton;
+    public Button getUndoActionButton() {
+        return m_undoActionButton;
+    }
+    public void setUndoActionButton(Button undoActionButton) {
+        m_undoActionButton = undoActionButton;
+    }
     // endregion
 
     // region Methods
@@ -252,6 +269,15 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
 
     @Override
     protected void instantiateButtons() {
+        // UNDO ACTION BUTTON
+        setUndoActionButton((Button) findViewById(R.id.undoActionButton));
+        getUndoActionButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                undoActionButtonClickedAction();
+            }
+        });
+
         // MAKE NOTES BUTTON
         Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
         makeNoteButton.setOnClickListener(new View.OnClickListener() {
@@ -351,10 +377,17 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                 getSudokuModel().getField()[i][j].setActiveNotes(new boolean[9]);
             }
         }
+
+        ActionStack.getInstance().resetActions();
         refreshUI();
     }
 
     // region Button OnClickHandlers
+    public void undoActionButtonClickedAction() {
+        ActionStack.getInstance().rollbackActions();
+        refreshUI();
+    }
+
     public void makeNoteButtonClickedAction() {
         setMakeNotes(!getMakeNotes());
         Button makeNoteButton = (Button) findViewById(R.id.makeNoteButton);
@@ -389,10 +422,13 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
         // Get row and column of active cell
         Pair<Integer, Integer> activeCellPosition = Utils.getPositionOfCell(getActiveCell(), getSudokuModel());
         int row = activeCellPosition.first, col = activeCellPosition.second;
+        List<Action> actions = new ArrayList<Action>();
 
         if (getMakeNotes() == false) { // Regular number is entered into the cell
-            getSudokuModel().getField()[row][col].setValue(number);
-            getSudokuModel().getField()[row][col].setIsFixedValue(false);
+            actions.add(new SetCellValueAction(getSudokuModel().getField()[row][col], number, false));
+            if (Arrays.asList(getSudokuModel().getField()[row][col]).contains(true)) {
+                actions.add(new SetCellNotesAction(getSudokuModel().getField()[row][col], new boolean[9]));
+            }
 
             // Check if sudoku is completely filled
             if (getSudokuModel().isCompletelyFilled()) {
@@ -412,38 +448,44 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                     for (int j = 0; j < getSudokuModel().getField()[i].length; j++) {
                         if (!(i == row && j == col) && // Check if the cell is in the same row, column or block as the clicked cell, but is not the clicked cell itself
                                 (row == i || col == j || (row / 3 == i / 3 && col / 3 == j / 3))) {
-                            getSudokuModel().getField()[i][j].getActiveNotes()[number-1] = false;
+                            if (getSudokuModel().getField()[i][j].getActiveNotes()[number-1] == true) {
+                                boolean[] updatedNotesField = Utils.createCopyOfBoolArray(getSudokuModel().getField()[i][j].getActiveNotes());
+                                updatedNotesField[number - 1] = false;
+                                actions.add(new SetCellNotesAction(getSudokuModel().getField()[i][j], updatedNotesField));
+                            }
                         }
                     }
                 }
             }
-
-
         } else { // Note is entered into the cell
             if (getSudokuModel().getField()[row][col].getIsEmpty() == false) {
                 return; // It is not possible to overwrite a filled cell with a note
             }
-            getSudokuModel().getField()[row][col].setValue(0);
+            actions.add(new SetCellValueAction(getSudokuModel().getField()[row][col], 0, false));
             boolean[] activeNotes = getSudokuModel().getField()[row][col].getActiveNotes();
             if (activeNotes == null) {
                 activeNotes = new boolean[9];
             }
-            activeNotes[number - 1] = !activeNotes[number - 1];
-            getSudokuModel().getField()[row][col].setActiveNotes(activeNotes);
+            boolean [] updatedNotesField = Utils.createCopyOfBoolArray(activeNotes);
+            updatedNotesField[number-1] = !activeNotes[number - 1];
+            actions.add(new SetCellNotesAction(getSudokuModel().getField()[row][col], updatedNotesField));
         }
+
+        ActionStack.getInstance().doMultipleActions(actions);
         refreshUI();
     }
 
     public void clearCellButtonClicked() {
         if (getActiveCell() != null && getSudokuModel() != null && getSudokuModel().getField() != null) {
+            List<Action> actions = new ArrayList<Action>();
             Pair<Integer, Integer> activeCellPosition = Utils.getPositionOfCell(getActiveCell(), getSudokuModel());
             int row = activeCellPosition.first, col = activeCellPosition.second;
             if (getSudokuModel().getField()[row][col].getIsFixedValue() == false) {
-                getActiveCell().setValue(0);
-                getActiveCell().setIsFixedValue(false);
+                actions.add(new SetCellValueAction(getActiveCell(), 0, false));
             }
-            getSudokuModel().getField()[row][col].resetActiveNotes();
+            actions.add(new SetCellNotesAction(getActiveCell(), new boolean[9]));
 
+            ActionStack.getInstance().doMultipleActions(actions);
             refreshUI();
         }
     }
@@ -482,6 +524,13 @@ public class SudokuPlayActivity extends SudokuBaseActivity {
                     }
                 }
             }
+        }
+
+        // Set color of undoActionButton depending on if there are actions which can be undone
+        if (ActionStack.getInstance().actionsHistoryNotEmpty()) {
+            getUndoActionButton().setBackgroundResource(R.drawable.ic_undoaction);
+        } else {
+            getUndoActionButton().setBackgroundResource(R.drawable.ic_undoaction_greyedout);
         }
     }
 

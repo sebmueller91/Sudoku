@@ -17,7 +17,6 @@ public class Cell {
         } else if (value >= 1 && value <= 9) {
             this.m_value = value;
             this.SetIsEmpty(false);
-            resetActiveNotes();
         } else {
             // Do nothing, should not happen
         }
@@ -68,15 +67,6 @@ public class Cell {
 
     public void setActiveNotes(boolean[] activeNotes) {
         this.m_activeNotes = activeNotes;
-    }
-
-    public void resetActiveNotes() {
-        boolean[] activeNotes = getActiveNotes();
-        if (activeNotes != null) {
-            for (int i = 0; i < activeNotes.length; i++) {
-                activeNotes[i] = false;
-            }
-        }
     }
 
     // endregion activeNotes

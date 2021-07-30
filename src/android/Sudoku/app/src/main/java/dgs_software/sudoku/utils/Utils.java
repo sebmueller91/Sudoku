@@ -11,6 +11,7 @@ import android.widget.Button;
 import androidx.annotation.RequiresApi;
 import androidx.core.widget.TextViewCompat;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -134,6 +135,15 @@ public class Utils {
             TextViewCompat.setAutoSizeTextTypeUniformWithPresetSizes(button, uniformSize, TypedValue.COMPLEX_UNIT_PX);
             button.requestLayout();
         }
+    }
+
+    public static boolean[] createCopyOfBoolArray(boolean[] src) {
+        if (src == null) {
+            return null;
+        }
+        boolean[] arrayClone = new boolean[src.length];
+        System.arraycopy(src, 0, arrayClone, 0, src.length);
+        return arrayClone;
     }
     // endregion Methods
 }
