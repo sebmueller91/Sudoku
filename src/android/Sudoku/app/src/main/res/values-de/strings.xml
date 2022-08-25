@@ -34,5 +34,7 @@
     <string name="dialog_mainmenu_settings_language">Sprache der App</string>
     <string name="dialog_info_version">"Version der App: "</string>
     <string name="dialog_info_contact">"Kontakt: "</string>
+    <string name="dialog_info_opensource">Dies ist ein Open Source Projekt.</string>
+    <string name="dialog_info_weblink"><a href="https://github.com/sebmueller91/Sudoku/">Source Code auf GitHub anzeigen</a></string>
     <string name="settings_dialog_deletenotes">Notizen löschen bei Konflikten</string>
 </resources>

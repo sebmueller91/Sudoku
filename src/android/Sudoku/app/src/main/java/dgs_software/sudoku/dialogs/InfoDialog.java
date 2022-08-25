@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
+import android.widget.TextView;
 
 import dgs_software.sudoku.R;
 import dgs_software.sudoku.config.LanguageConfig;
@@ -23,5 +25,10 @@ public class InfoDialog extends Dialog {
         LanguageConfig.setAppLanguage(getContext());
         setContentView(R.layout.dialog_mainmenu_info);
         this.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        // Make link clickable
+        TextView linkTextView = findViewById(R.id.TextviewGithubLink);
+        linkTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        linkTextView.setLinkTextColor(Color.BLUE);
     }
 }

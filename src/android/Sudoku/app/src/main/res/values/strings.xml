@@ -37,5 +37,7 @@
     <string name="language_english" translatable="false">English</string>
     <string name="dialog_info_version">App version:</string>
     <string name="dialog_info_contact">Contact:</string>
+    <string name="dialog_info_opensource">This is an open source project.</string>
+    <string name="dialog_info_weblink"><a href="https://github.com/sebmueller91/Sudoku/">View source code on GitHub</a></string>
     <string name="settings_dialog_deletenotes">Delete note number in case of conflict</string>
 </resources>
