@@ -1,20 +1,15 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Overview 
+Simple Sudoku app for Android. 
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Features:
+- Play Sudokus in three levels of difficulty
+    - Easy
+    - Normal
+    - Hard
+- A Sudoku solver lets you enter a Sudoku and provides you the solution
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Main Menu            |  Play Sudoku 
+:-------------------------:|:-------------------------:
+![image](https://user-images.githubusercontent.com/19948723/186749083-f8fc760d-9724-4546-8466-fb5db24b7afd.png) | ![image](https://user-images.githubusercontent.com/19948723/186749659-20344da3-4871-4710-99f7-f65dc26192c8.png)
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
