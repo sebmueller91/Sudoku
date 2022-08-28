@@ -39,7 +39,7 @@ public class MainMenuSettingsDialog extends Dialog {
     public MainMenuSettingsDialog(@NonNull Context context, MainMenuActivity activity) {
         super(context);
         setActivity(activity);
-    }
+    } // This is a meaningless comment
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
