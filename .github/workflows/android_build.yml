@@ -16,7 +16,7 @@ jobs:
           java-version: 1.8
 
       - name: Run Tests
-        run: src/android/Sudoku/gradlew test
+        run: ./src/android/Sudoku/gradlew test
 
       - name: Build Project
-        run: src/android/Sudoku/gradlew assemble
+        run: ./src/android/Sudoku/gradlew assemble
