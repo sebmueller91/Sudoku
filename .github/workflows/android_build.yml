@@ -17,4 +17,4 @@ jobs:
 
       
       - name: Build Project
-        run: ./src/android/Sudoku/gradlew assemble
+        run: ./src/android/Sudoku/gradlew assembleRelease
